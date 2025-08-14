@@ -7,805 +7,1098 @@
     <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.4.0/css/all.min.css">
     <style>
-        .editable-cell {
-            min-width: 120px;
-            min-height: 40px;
-            resize: vertical;
-            border: 1px solid #e5e7eb;
-            border-radius: 4px;
-            padding: 8px;
-            background: white;
+        .category-card {
+            transition: all 0.3s ease;
         }
-        .editable-cell:focus {
-            border-color: #3b82f6;
-            outline: none;
+        .category-card.collapsed .category-content {
+            display: none;
+        }
+        .progress-ring {
+            transform: rotate(-90deg);
+        }
+        .progress-ring-circle {
+            transition: stroke-dashoffset 0.5s ease-in-out;
+        }
+        input[type="text"], input[type="number"], textarea {
+            transition: all 0.2s ease;
+        }
+        input[type="text"]:focus, input[type="number"]:focus, textarea:focus {
+            transform: scale(1.02);
             box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
         }
-        .category-header {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-        }
-        .biomarker-row:hover {
-            background-color: #f8fafc;
-        }
         .eliquis-warning {
-            background-color: #fef2f2;
+            background: linear-gradient(45deg, #fee2e2, #fef3c7);
             border-left: 4px solid #ef4444;
         }
         .safe-supplement {
-            background-color: #f0fdf4;
+            background: linear-gradient(45deg, #dcfce7, #f0fdf4);
             border-left: 4px solid #22c55e;
         }
         @media (max-width: 768px) {
-            .responsive-table {
-                display: block;
+            .table-container {
                 overflow-x: auto;
-                white-space: nowrap;
             }
             .mobile-stack {
-                display: block !important;
-                width: 100% !important;
-                margin-bottom: 1rem;
+                display: flex;
+                flex-direction: column;
+                gap: 0.5rem;
             }
-        }
-        .notes-field {
-            min-width: 150px;
-            min-height: 60px;
-        }
-        .supplement-field {
-            min-width: 140px;
-            background-color: #fef3c7;
+            .mobile-field {
+                min-width: 100%;
+                padding: 0.75rem;
+                font-size: 16px; /* Prevents zoom on iOS */
+            }
         }
     </style>
 </head>
-<body class="bg-gray-50 font-sans">
-    <div class="container mx-auto px-4 py-8 max-w-7xl">
+<body class="bg-gray-50 min-h-screen">
+    <div class="container mx-auto px-4 py-6 max-w-7xl">
         <!-- Header -->
-        <div class="bg-white rounded-lg shadow-lg mb-8 p-6">
-            <div class="flex items-center justify-between flex-wrap gap-4">
-                <div>
-                    <h1 class="text-3xl font-bold text-gray-900 mb-2">
-                        <i class="fas fa-microscope text-blue-600 mr-3"></i>
+        <div class="bg-white rounded-lg shadow-lg p-6 mb-6">
+            <div class="flex flex-col md:flex-row items-center justify-between">
+                <div class="text-center md:text-left mb-4 md:mb-0">
+                    <h1 class="text-3xl md:text-4xl font-bold text-gray-800 mb-2">
+                        <i class="fas fa-dna text-blue-600 mr-3"></i>
                         BLUEPRINT Health Optimizer
                     </h1>
                     <p class="text-gray-600">Komplette Biomarker Checkliste für systematische Gesundheits-Optimierung</p>
+                    <p class="text-sm text-gray-500 mt-1">115+ Parameter • Eliquis-sicher • Mobile-optimiert</p>
                 </div>
-                <div class="flex gap-3">
-                    <button onclick="saveData()" class="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition">
-                        <i class="fas fa-save mr-2"></i>Speichern
-                    </button>
-                    <button onclick="exportPDF()" class="bg-green-600 text-white px-4 py-2 rounded-lg hover:bg-green-700 transition">
-                        <i class="fas fa-file-pdf mr-2"></i>PDF Export
-                    </button>
+                
+                <!-- Progress Ring -->
+                <div class="relative w-24 h-24">
+                    <svg class="progress-ring w-24 h-24" viewBox="0 0 120 120">
+                        <circle class="progress-ring-bg" cx="60" cy="60" r="50" stroke="#e5e7eb" stroke-width="8" fill="transparent"/>
+                        <circle class="progress-ring-circle" cx="60" cy="60" r="50" stroke="#3b82f6" stroke-width="8" fill="transparent" 
+                                stroke-dasharray="314.16" stroke-dashoffset="314.16"/>
+                    </svg>
+                    <div class="absolute inset-0 flex items-center justify-center">
+                        <span id="progress-text" class="text-lg font-bold text-gray-800">0%</span>
+                    </div>
                 </div>
             </div>
             
-            <!-- Stats Dashboard -->
-            <div class="grid grid-cols-2 md:grid-cols-4 gap-4 mt-6">
-                <div class="bg-blue-50 p-4 rounded-lg text-center">
-                    <div class="text-2xl font-bold text-blue-600">115+</div>
+            <!-- Summary Stats -->
+            <div class="mt-6 grid grid-cols-2 md:grid-cols-4 gap-4">
+                <div class="bg-blue-50 p-3 rounded-lg text-center">
+                    <div class="text-2xl font-bold text-blue-600" id="total-fields">115</div>
                     <div class="text-sm text-gray-600">Biomarker</div>
                 </div>
-                <div class="bg-green-50 p-4 rounded-lg text-center">
-                    <div class="text-2xl font-bold text-green-600">9</div>
+                <div class="bg-green-50 p-3 rounded-lg text-center">
+                    <div class="text-2xl font-bold text-green-600" id="completed-fields">0</div>
+                    <div class="text-sm text-gray-600">Ausgefüllt</div>
+                </div>
+                <div class="bg-yellow-50 p-3 rounded-lg text-center">
+                    <div class="text-2xl font-bold text-yellow-600" id="category-count">8</div>
                     <div class="text-sm text-gray-600">Kategorien</div>
                 </div>
-                <div class="bg-yellow-50 p-4 rounded-lg text-center">
-                    <div class="text-2xl font-bold text-yellow-600">5</div>
+                <div class="bg-purple-50 p-3 rounded-lg text-center">
+                    <div class="text-2xl font-bold text-purple-600">5</div>
                     <div class="text-sm text-gray-600">Aktuelle Supplements</div>
                 </div>
-                <div class="bg-purple-50 p-4 rounded-lg text-center">
-                    <div class="text-2xl font-bold text-purple-600">100%</div>
-                    <div class="text-sm text-gray-600">Eliquis-sicher</div>
+            </div>
+        </div>
+
+        <!-- Current Supplement Stack Info -->
+        <div class="bg-gradient-to-r from-blue-50 to-indigo-50 rounded-lg p-6 mb-6 safe-supplement">
+            <h3 class="text-lg font-semibold text-gray-800 mb-3">
+                <i class="fas fa-pills text-green-600 mr-2"></i>
+                Dein aktueller Supplement-Stack
+            </h3>
+            <div class="grid grid-cols-1 md:grid-cols-5 gap-3">
+                <div class="bg-white p-3 rounded border-l-4 border-green-500">
+                    <div class="font-medium text-gray-800">Vitamin D3</div>
+                    <div class="text-sm text-gray-600">3000 IU täglich</div>
+                </div>
+                <div class="bg-white p-3 rounded border-l-4 border-yellow-500">
+                    <div class="font-medium text-gray-800">Vitamin K2</div>
+                    <div class="text-sm text-gray-600">60µg täglich</div>
+                    <div class="text-xs text-red-600">⚠️ Eliquis-relevant</div>
+                </div>
+                <div class="bg-white p-3 rounded border-l-4 border-blue-500">
+                    <div class="font-medium text-gray-800">Magnesium</div>
+                    <div class="text-sm text-gray-600">375mg täglich</div>
+                </div>
+                <div class="bg-white p-3 rounded border-l-4 border-purple-500">
+                    <div class="font-medium text-gray-800">Zink</div>
+                    <div class="text-sm text-gray-600">10mg täglich</div>
+                </div>
+                <div class="bg-white p-3 rounded border-l-4 border-indigo-500">
+                    <div class="font-medium text-gray-800">Vitamin B6</div>
+                    <div class="text-sm text-gray-600">1,4mg täglich</div>
                 </div>
             </div>
         </div>
 
-        <!-- Eliquis Warning Banner -->
-        <div class="bg-red-50 border-l-4 border-red-400 p-4 mb-6 rounded-r-lg">
-            <div class="flex">
-                <div class="flex-shrink-0">
-                    <i class="fas fa-exclamation-triangle text-red-400 text-xl"></i>
-                </div>
-                <div class="ml-3">
-                    <h3 class="text-sm font-medium text-red-800">ELIQUIS Sicherheitshinweis</h3>
-                    <p class="text-sm text-red-700 mt-1">
-                        Aktuelle Einnahme: Eliquis (Blutgerinnungshemmer). Alle Empfehlungen sind entsprechend angepasst. 
-                        <strong>Achtung:</strong> Vitamin K2 wird überwacht, keine hochdosierten Omega-3, kein Ginkgo, Kurkumin oder Knoblauch-Extrakte.
-                    </p>
-                </div>
-            </div>
-        </div>
-
-        <!-- Navigation Tabs -->
-        <div class="bg-white rounded-lg shadow mb-6">
-            <div class="border-b border-gray-200">
-                <nav class="-mb-px flex space-x-8 px-6" id="category-tabs">
-                    <button class="category-tab active border-b-2 border-blue-500 py-4 px-1 text-sm font-medium text-blue-600" data-category="sexual-health">
-                        <i class="fas fa-heart mr-2"></i>Sexual Health
-                    </button>
-                    <button class="category-tab border-b-2 border-transparent py-4 px-1 text-sm font-medium text-gray-500 hover:text-gray-700" data-category="longevity">
-                        <i class="fas fa-dna mr-2"></i>Longevity
-                    </button>
-                    <button class="category-tab border-b-2 border-transparent py-4 px-1 text-sm font-medium text-gray-500 hover:text-gray-700" data-category="cardiovascular">
-                        <i class="fas fa-heartbeat mr-2"></i>Herz-Kreislauf
-                    </button>
-                    <button class="category-tab border-b-2 border-transparent py-4 px-1 text-sm font-medium text-gray-500 hover:text-gray-700" data-category="neurological">
-                        <i class="fas fa-brain mr-2"></i>Neurologie
-                    </button>
-                    <button class="category-tab border-b-2 border-transparent py-4 px-1 text-sm font-medium text-gray-500 hover:text-gray-700" data-category="metabolic">
-                        <i class="fas fa-fire mr-2"></i>Metabolismus
-                    </button>
-                    <button class="category-tab border-b-2 border-transparent py-4 px-1 text-sm font-medium text-gray-500 hover:text-gray-700" data-category="immune">
-                        <i class="fas fa-shield-alt mr-2"></i>Immunsystem
-                    </button>
-                    <button class="category-tab border-b-2 border-transparent py-4 px-1 text-sm font-medium text-gray-500 hover:text-gray-700" data-category="detox">
-                        <i class="fas fa-leaf mr-2"></i>Entgiftung
-                    </button>
-                    <button class="category-tab border-b-2 border-transparent py-four px-1 text-sm font-medium text-gray-500 hover:text-gray-700" data-category="bone-muscle">
-                        <i class="fas fa-dumbbell mr-2"></i>Knochen & Muskel
-                    </button>
-                    <button class="category-tab border-b-2 border-transparent py-4 px-1 text-sm font-medium text-gray-500 hover:text-gray-700" data-category="eliquis-monitoring">
-                        <i class="fas fa-tint mr-2"></i>Eliquis Monitoring
-                    </button>
-                </nav>
-            </div>
-        </div>
-
-        <!-- Sexual Health Category -->
-        <div id="sexual-health" class="category-content">
-            <div class="bg-white rounded-lg shadow-lg overflow-hidden mb-8">
-                <div class="category-header text-white p-4">
-                    <h2 class="text-xl font-bold flex items-center">
-                        <i class="fas fa-heart mr-3"></i>
-                        SEXUAL HEALTH & HORMONE OPTIMIZATION
-                    </h2>
-                </div>
-                
-                <!-- Testosteron-Komplex -->
-                <div class="p-4 border-b">
-                    <h3 class="text-lg font-semibold text-gray-800 mb-4 flex items-center">
-                        <i class="fas fa-male mr-2 text-blue-600"></i>
-                        Testosteron-Komplex
-                    </h3>
-                    <div class="responsive-table overflow-x-auto">
-                        <table class="min-w-full table-auto">
-                            <thead class="bg-gray-50">
-                                <tr>
-                                    <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase">Parameter</th>
-                                    <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase">Hausarzt</th>
-                                    <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase">Kosten</th>
-                                    <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase">Zielwert</th>
-                                    <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase">Kritisch</th>
-                                    <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase">Mein Wert</th>
-                                    <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase">Aktuelle Einnahme</th>
-                                    <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase">Empfohlene Behandlung</th>
-                                    <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase">Notizen</th>
-                                </tr>
-                            </thead>
-                            <tbody class="bg-white divide-y divide-gray-200">
-                                <tr class="biomarker-row">
-                                    <td class="px-4 py-3 font-medium text-gray-900">Testosteron gesamt</td>
-                                    <td class="px-4 py-3"><input type="checkbox" checked class="h-4 w-4 text-blue-600"></td>
-                                    <td class="px-4 py-3"><textarea class="editable-cell">Hausarzt: €15-25
-Privatlabor: €23</textarea></td>
-                                    <td class="px-4 py-3"><textarea class="editable-cell">600-1000 ng/dl
-(20.8-34.7 nmol/l)</textarea></td>
-                                    <td class="px-4 py-3"><textarea class="editable-cell">< 300 ng/dl
-(< 10.4 nmol/l)</textarea></td>
-                                    <td class="px-4 py-3"><textarea class="editable-cell" placeholder="Laborwert eintragen"></textarea></td>
-                                    <td class="px-4 py-3"><textarea class="editable-cell supplement-field">Keine direkten T-Booster</textarea></td>
-                                    <td class="px-4 py-3"><textarea class="editable-cell safe-supplement">ELIQUIS-SICHER:
-• Kreatin 5g täglich
-• Vitamin D Optimierung
-• Zink (bereits optimal)
-• Krafttraining</textarea></td>
-                                    <td class="px-4 py-3"><textarea class="editable-cell notes-field" placeholder="Persönliche Notizen..."></textarea></td>
-                                </tr>
-                                <tr class="biomarker-row">
-                                    <td class="px-4 py-3 font-medium text-gray-900">Testosteron frei</td>
-                                    <td class="px-4 py-3"><input type="checkbox" class="h-4 w-4 text-blue-600"></td>
-                                    <td class="px-4 py-3"><textarea class="editable-cell">Privatlabor: €25-35
-Speziallabor nötig</textarea></td>
-                                    <td class="px-4 py-3"><textarea class="editable-cell">15-25 pg/ml
-(52-87 pmol/l)</textarea></td>
-                                    <td class="px-4 py-3"><textarea class="editable-cell">< 8 pg/ml
-(< 28 pmol/l)</textarea></td>
-                                    <td class="px-4 py-3"><textarea class="editable-cell" placeholder="Laborwert eintragen"></textarea></td>
-                                    <td class="px-4 py-3"><textarea class="editable-cell supplement-field">Keine</textarea></td>
-                                    <td class="px-4 py-3"><textarea class="editable-cell safe-supplement">• SHBG Optimierung
-• D3+K2 (bereits optimal)
-• Magnesium (bereits optimal)</textarea></td>
-                                    <td class="px-4 py-3"><textarea class="editable-cell notes-field" placeholder="Wichtigster Parameter..."></textarea></td>
-                                </tr>
-                                <tr class="biomarker-row">
-                                    <td class="px-4 py-3 font-medium text-gray-900">SHBG</td>
-                                    <td class="px-4 py-3"><input type="checkbox" checked class="h-4 w-4 text-blue-600"></td>
-                                    <td class="px-4 py-3"><textarea class="editable-cell">Hausarzt: €20-30
-Privatlabor: €30</textarea></td>
-                                    <td class="px-4 py-3"><textarea class="editable-cell">20-40 nmol/l
-(Männer 35+ Jahre)</textarea></td>
-                                    <td class="px-4 py-3"><textarea class="editable-cell">> 60 nmol/l
-(bindet zu viel freies T)</textarea></td>
-                                    <td class="px-4 py-3"><textarea class="editable-cell" placeholder="Laborwert eintragen"></textarea></td>
-                                    <td class="px-4 py-3"><textarea class="editable-cell supplement-field">Keine</textarea></td>
-                                    <td class="px-4 py-3"><textarea class="editable-cell safe-supplement">Bei erhöht:
-• Bor (eliquis-sicher)
-• Magnesium erhöhen
-• Intermittent Fasting</textarea></td>
-                                    <td class="px-4 py-3"><textarea class="editable-cell notes-field" placeholder="Bindeprotein für Hormone..."></textarea></td>
-                                </tr>
-                                <tr class="biomarker-row">
-                                    <td class="px-4 py-3 font-medium text-gray-900">DHT (Dihydrotestosteron)</td>
-                                    <td class="px-4 py-3"><input type="checkbox" class="h-4 w-4 text-blue-600"></td>
-                                    <td class="px-4 py-3"><textarea class="editable-cell">Privatlabor: €35-45
-Speziallabor</textarea></td>
-                                    <td class="px-4 py-3"><textarea class="editable-cell">30-85 ng/dl
-(1.0-2.9 nmol/l)</textarea></td>
-                                    <td class="px-4 py-3"><textarea class="editable-cell">< 20 ng/dl
-> 100 ng/dl</textarea></td>
-                                    <td class="px-4 py-3"><textarea class="editable-cell" placeholder="Laborwert eintragen"></textarea></td>
-                                    <td class="px-4 py-3"><textarea class="editable-cell supplement-field">Keine</textarea></td>
-                                    <td class="px-4 py-3"><textarea class="editable-cell safe-supplement">• Zink optimal (bereits)
-• Saw Palmetto (vorsichtig)
-• 5-Alpha-Reductase Balance</textarea></td>
-                                    <td class="px-4 py-3"><textarea class="editable-cell notes-field" placeholder="Potenteste Form von Testosteron..."></textarea></td>
-                                </tr>
-                            </tbody>
-                        </table>
-                    </div>
-                </div>
-
-                <!-- Zentrale Steuerung -->
-                <div class="p-4 border-b">
-                    <h3 class="text-lg font-semibold text-gray-800 mb-4 flex items-center">
-                        <i class="fas fa-brain mr-2 text-purple-600"></i>
-                        Zentrale Hormon-Steuerung
-                    </h3>
-                    <div class="responsive-table overflow-x-auto">
-                        <table class="min-w-full table-auto">
-                            <thead class="bg-gray-50">
-                                <tr>
-                                    <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase">Parameter</th>
-                                    <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase">Hausarzt</th>
-                                    <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase">Kosten</th>
-                                    <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase">Zielwert</th>
-                                    <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase">Kritisch</th>
-                                    <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase">Mein Wert</th>
-                                    <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase">Aktuelle Einnahme</th>
-                                    <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase">Empfohlene Behandlung</th>
-                                    <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase">Notizen</th>
-                                </tr>
-                            </thead>
-                            <tbody class="bg-white divide-y divide-gray-200">
-                                <tr class="biomarker-row">
-                                    <td class="px-4 py-3 font-medium text-gray-900">LH (Luteinisierendes Hormon)</td>
-                                    <td class="px-4 py-3"><input type="checkbox" checked class="h-4 w-4 text-blue-600"></td>
-                                    <td class="px-4 py-3"><textarea class="editable-cell">Hausarzt: €16-20
-Privatlabor: €17</textarea></td>
-                                    <td class="px-4 py-3"><textarea class="editable-cell">2-8 IU/l
-(Männer)</textarea></td>
-                                    <td class="px-4 py-3"><textarea class="editable-cell">< 1 IU/l
-> 12 IU/l</textarea></td>
-                                    <td class="px-4 py-3"><textarea class="editable-cell" placeholder="Laborwert eintragen"></textarea></td>
-                                    <td class="px-4 py-3"><textarea class="editable-cell supplement-field">Keine</textarea></td>
-                                    <td class="px-4 py-3"><textarea class="editable-cell safe-supplement">• D-Asparaginsäure
-• Schlafoptimierung
-• Stressreduktion</textarea></td>
-                                    <td class="px-4 py-3"><textarea class="editable-cell notes-field" placeholder="Steuert Testosteron-Produktion..."></textarea></td>
-                                </tr>
-                                <tr class="biomarker-row">
-                                    <td class="px-4 py-3 font-medium text-gray-900">FSH (Follikel-stimulierendes Hormon)</td>
-                                    <td class="px-4 py-3"><input type="checkbox" checked class="h-4 w-4 text-blue-600"></td>
-                                    <td class="px-4 py-3"><textarea class="editable-cell">Hausarzt: €16-20
-Privatlabor: €17</textarea></td>
-                                    <td class="px-4 py-3"><textarea class="editable-cell">1-8 IU/l
-(Männer)</textarea></td>
-                                    <td class="px-4 py-3"><textarea class="editable-cell">< 1 IU/l
-> 12 IU/l</textarea></td>
-                                    <td class="px-4 py-3"><textarea class="editable-cell" placeholder="Laborwert eintragen"></textarea></td>
-                                    <td class="px-4 py-3"><textarea class="editable-cell supplement-field">Keine</textarea></td>
-                                    <td class="px-4 py-3"><textarea class="editable-cell safe-supplement">• Ashwagandha (eliquis-sicher)
-• Schlafqualität verbessern
-• Zink optimal (bereits)</textarea></td>
-                                    <td class="px-4 py-3"><textarea class="editable-cell notes-field" placeholder="Spermatogenese und Hoden-Funktion..."></textarea></td>
-                                </tr>
-                                <tr class="biomarker-row">
-                                    <td class="px-4 py-3 font-medium text-gray-900">Prolaktin</td>
-                                    <td class="px-4 py-3"><input type="checkbox" checked class="h-4 w-4 text-blue-600"></td>
-                                    <td class="px-4 py-3"><textarea class="editable-cell">Hausarzt: €20-25
-Privatlabor: €23</textarea></td>
-                                    <td class="px-4 py-3"><textarea class="editable-cell">2-15 ng/ml
-(Männer)</textarea></td>
-                                    <td class="px-4 py-3"><textarea class="editable-cell">> 20 ng/ml
-(hemmt Testosteron)</textarea></td>
-                                    <td class="px-4 py-3"><textarea class="editable-cell" placeholder="Laborwert eintragen"></textarea></td>
-                                    <td class="px-4 py-3"><textarea class="editable-cell supplement-field">Keine</textarea></td>
-                                    <td class="px-4 py-3"><textarea class="editable-cell safe-supplement">Bei erhöht:
-• Vitamin B6 (bereits optimal!)
-• Zink (bereits optimal!)
-• Stressmanagement</textarea></td>
-                                    <td class="px-4 py-3"><textarea class="editable-cell notes-field" placeholder="Gegenspieler von Testosteron..."></textarea></td>
-                                </tr>
-                            </tbody>
-                        </table>
-                    </div>
-                </div>
-
-                <!-- Erektions-relevante Parameter -->
-                <div class="p-4">
-                    <h3 class="text-lg font-semibold text-gray-800 mb-4 flex items-center">
-                        <i class="fas fa-heartbeat mr-2 text-red-600"></i>
-                        Erektions-relevante Parameter
-                    </h3>
-                    <div class="responsive-table overflow-x-auto">
-                        <table class="min-w-full table-auto">
-                            <thead class="bg-gray-50">
-                                <tr>
-                                    <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase">Parameter</th>
-                                    <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase">Hausarzt</th>
-                                    <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase">Kosten</th>
-                                    <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase">Zielwert</th>
-                                    <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase">Kritisch</th>
-                                    <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase">Mein Wert</th>
-                                    <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase">Aktuelle Einnahme</th>
-                                    <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase">Empfohlene Behandlung</th>
-                                    <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase">Notizen</th>
-                                </tr>
-                            </thead>
-                            <tbody class="bg-white divide-y divide-gray-200">
-                                <tr class="biomarker-row">
-                                    <td class="px-4 py-3 font-medium text-gray-900">Stickstoffmonoxid (NO)</td>
-                                    <td class="px-4 py-3"><input type="checkbox" class="h-4 w-4 text-blue-600"></td>
-                                    <td class="px-4 py-3"><textarea class="editable-cell">Privatlabor: €35-45
-Spezialmessung</textarea></td>
-                                    <td class="px-4 py-3"><textarea class="editable-cell">20-40 µmol/l
-(Nitrit/Nitrat)</textarea></td>
-                                    <td class="px-4 py-3"><textarea class="editable-cell">< 15 µmol/l
-(Gefäßfunktion beeinträchtigt)</textarea></td>
-                                    <td class="px-4 py-3"><textarea class="editable-cell" placeholder="Laborwert eintragen"></textarea></td>
-                                    <td class="px-4 py-3"><textarea class="editable-cell supplement-field">Keine</textarea></td>
-                                    <td class="px-4 py-3"><textarea class="editable-cell safe-supplement">ELIQUIS-SICHER:
-• L-Arginin 3g täglich
-• L-Citrullin 6g täglich
-• Rote Beete Saft
-• Blattgemüse</textarea></td>
-                                    <td class="px-4 py-3"><textarea class="editable-cell notes-field" placeholder="Entscheidend für Durchblutung..."></textarea></td>
-                                </tr>
-                                <tr class="biomarker-row">
-                                    <td class="px-4 py-3 font-medium text-gray-900">Homocystein</td>
-                                    <td class="px-4 py-3"><input type="checkbox" checked class="h-4 w-4 text-blue-600"></td>
-                                    <td class="px-4 py-3"><textarea class="editable-cell">Hausarzt: €25-35
-Privatlabor: €32</textarea></td>
-                                    <td class="px-4 py-3"><textarea class="editable-cell">< 8 µmol/l
-(optimal für Gefäße)</textarea></td>
-                                    <td class="px-4 py-3"><textarea class="editable-cell">> 15 µmol/l
-(Gefäßschädigung)</textarea></td>
-                                    <td class="px-4 py-3"><textarea class="editable-cell" placeholder="Laborwert eintragen"></textarea></td>
-                                    <td class="px-4 py-3"><textarea class="editable-cell supplement-field">B6: 1,4mg täglich</textarea></td>
-                                    <td class="px-4 py-3"><textarea class="editable-cell safe-supplement">• B6 (bereits optimal!)
-• B12 (Methylcobalamin)
-• Folsäure (5-MTHF)
-• TMG (Trimethylglycin)</textarea></td>
-                                    <td class="px-4 py-3"><textarea class="editable-cell notes-field" placeholder="Gefäßalterung-Marker..."></textarea></td>
-                                </tr>
-                                <tr class="biomarker-row">
-                                    <td class="px-4 py-3 font-medium text-gray-900">CRP hochsensitiv</td>
-                                    <td class="px-4 py-3"><input type="checkbox" checked class="h-4 w-4 text-blue-600"></td>
-                                    <td class="px-4 py-3"><textarea class="editable-cell">Hausarzt: €10-15
-Privatlabor: €13</textarea></td>
-                                    <td class="px-4 py-3"><textarea class="editable-cell">< 1,0 mg/l
-(niedriges Entzündungsrisiko)</textarea></td>
-                                    <td class="px-4 py-3"><textarea class="editable-cell">> 3,0 mg/l
-(hohes CV-Risiko)</textarea></td>
-                                    <td class="px-4 py-3"><textarea class="editable-cell" placeholder="Laborwert eintragen"></textarea></td>
-                                    <td class="px-4 py-3"><textarea class="editable-cell supplement-field">Keine</textarea></td>
-                                    <td class="px-4 py-3"><textarea class="editable-cell safe-supplement">• Vitamin C 1g täglich
-• Magnesium (bereits optimal)
-• Anti-entzündliche Ernährung
-• Omega-3 (niedrig dosiert)</textarea></td>
-                                    <td class="px-4 py-3"><textarea class="editable-cell notes-field" placeholder="Entzündungsmarker..."></textarea></td>
-                                </tr>
-                            </tbody>
-                        </table>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <!-- Longevity Category -->
-        <div id="longevity" class="category-content hidden">
-            <div class="bg-white rounded-lg shadow-lg overflow-hidden mb-8">
-                <div class="category-header text-white p-4">
-                    <h2 class="text-xl font-bold flex items-center">
-                        <i class="fas fa-dna mr-3"></i>
-                        LONGEVITY & ANTI-AGING
-                    </h2>
-                </div>
-                
-                <div class="p-4">
-                    <div class="responsive-table overflow-x-auto">
-                        <table class="min-w-full table-auto">
-                            <thead class="bg-gray-50">
-                                <tr>
-                                    <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase">Parameter</th>
-                                    <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase">Hausarzt</th>
-                                    <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase">Kosten</th>
-                                    <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase">Zielwert</th>
-                                    <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase">Kritisch</th>
-                                    <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase">Mein Wert</th>
-                                    <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase">Aktuelle Einnahme</th>
-                                    <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase">Empfohlene Behandlung</th>
-                                    <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase">Notizen</th>
-                                </tr>
-                            </thead>
-                            <tbody class="bg-white divide-y divide-gray-200">
-                                <tr class="biomarker-row">
-                                    <td class="px-4 py-3 font-medium text-gray-900">Telomerlänge</td>
-                                    <td class="px-4 py-3"><input type="checkbox" class="h-4 w-4 text-blue-600"></td>
-                                    <td class="px-4 py-3"><textarea class="editable-cell">Speziallabor: €200-300
-Life Length o.ä.</textarea></td>
-                                    <td class="px-4 py-3"><textarea class="editable-cell">Top 50% für Alter
-> 6,5 kb (35+ Jahre)</textarea></td>
-                                    <td class="px-4 py-3"><textarea class="editable-cell">Bottom 10% für Alter
-< 5,5 kb</textarea></td>
-                                    <td class="px-4 py-3"><textarea class="editable-cell" placeholder="Laborwert eintragen"></textarea></td>
-                                    <td class="px-4 py-3"><textarea class="editable-cell supplement-field">Keine</textarea></td>
-                                    <td class="px-4 py-3"><textarea class="editable-cell safe-supplement">• Vitamin D (bereits optimal)
-• Magnesium (bereits optimal)
-• Omega-3 (niedrig dosiert)
-• Stress-Management</textarea></td>
-                                    <td class="px-4 py-3"><textarea class="editable-cell notes-field" placeholder="Zellalterung-Biomarker..."></textarea></td>
-                                </tr>
-                                <tr class="biomarker-row">
-                                    <td class="px-4 py-3 font-medium text-gray-900">DHEA-S</td>
-                                    <td class="px-4 py-3"><input type="checkbox" checked class="h-4 w-4 text-blue-600"></td>
-                                    <td class="px-4 py-3"><textarea class="editable-cell">Hausarzt: €20-30
-Privatlabor: €25</textarea></td>
-                                    <td class="px-4 py-3"><textarea class="editable-cell">300-500 µg/dl
-(Männer 35-45 Jahre)</textarea></td>
-                                    <td class="px-4 py-3"><textarea class="editable-cell">< 200 µg/dl
-(vorzeitige Alterung)</textarea></td>
-                                    <td class="px-4 py-3"><textarea class="editable-cell" placeholder="Laborwert eintragen"></textarea></td>
-                                    <td class="px-4 py-3"><textarea class="editable-cell supplement-field">Keine</textarea></td>
-                                    <td class="px-4 py-3"><textarea class="editable-cell safe-supplement">• DHEA 25-50mg (vorsichtig)
-• Pregnenolon 10-30mg
-• Stressreduktion
-• Ausreichend Schlaf</textarea></td>
-                                    <td class="px-4 py-3"><textarea class="editable-cell notes-field" placeholder="Jugendhormon..."></textarea></td>
-                                </tr>
-                                <tr class="biomarker-row">
-                                    <td class="px-4 py-3 font-medium text-gray-900">IGF-1</td>
-                                    <td class="px-4 py-3"><input type="checkbox" checked class="h-4 w-4 text-blue-600"></td>
-                                    <td class="px-4 py-3"><textarea class="editable-cell">Hausarzt: €30-40
-Privatlabor: €35</textarea></td>
-                                    <td class="px-4 py-3"><textarea class="editable-cell">150-250 ng/ml
-(optimal für Longevity)</textarea></td>
-                                    <td class="px-4 py-3"><textarea class="editable-cell">< 100 ng/ml
-> 400 ng/ml</textarea></td>
-                                    <td class="px-4 py-3"><textarea class="editable-cell" placeholder="Laborwert eintragen"></textarea></td>
-                                    <td class="px-4 py-3"><textarea class="editable-cell supplement-field">Keine</textarea></td>
-                                    <td class="px-4 py-3"><textarea class="editable-cell safe-supplement">• Protein Optimierung
-• Krafttraining
-• Intermittent Fasting
-• HGH-Sekretionsrhythmus</textarea></td>
-                                    <td class="px-4 py-3"><textarea class="editable-cell notes-field" placeholder="Wachstumshormon-Marker..."></textarea></td>
-                                </tr>
-                                <tr class="biomarker-row">
-                                    <td class="px-4 py-3 font-medium text-gray-900">Vitamin D3 (25-OH)</td>
-                                    <td class="px-4 py-3"><input type="checkbox" checked class="h-4 w-4 text-blue-600"></td>
-                                    <td class="px-4 py-3"><textarea class="editable-cell">Hausarzt: €20-25
-Privatlabor: €32</textarea></td>
-                                    <td class="px-4 py-3"><textarea class="editable-cell">50-80 ng/ml
-(125-200 nmol/l)</textarea></td>
-                                    <td class="px-4 py-3"><textarea class="editable-cell">< 30 ng/ml
-> 100 ng/ml</textarea></td>
-                                    <td class="px-4 py-3"><textarea class="editable-cell" placeholder="Laborwert eintragen"></textarea></td>
-                                    <td class="px-4 py-3"><textarea class="editable-cell supplement-field">D3: 3000 IU täglich
-K2: 60µg täglich</textarea></td>
-                                    <td class="px-4 py-3"><textarea class="editable-cell safe-supplement">OPTIMAL EINGESTELLT!
-• D3+K2 Synergy perfekt
-• Mit Magnesium (bereits)
-• Fettverdauung beachten</textarea></td>
-                                    <td class="px-4 py-3"><textarea class="editable-cell notes-field" placeholder="Master-Hormon für Immunsystem..."></textarea></td>
-                                </tr>
-                            </tbody>
-                        </table>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <!-- Eliquis Monitoring Category -->
-        <div id="eliquis-monitoring" class="category-content hidden">
-            <div class="bg-white rounded-lg shadow-lg overflow-hidden mb-8">
-                <div class="eliquis-warning p-4">
-                    <div class="category-header text-white p-4 -m-4 mb-4">
+        <!-- Categories -->
+        <div class="space-y-6">
+            
+            <!-- 1. SEXUAL HEALTH KOMPLEX -->
+            <div class="category-card bg-white rounded-lg shadow-lg overflow-hidden">
+                <div class="category-header bg-gradient-to-r from-red-500 to-pink-500 text-white p-4 cursor-pointer" onclick="toggleCategory(this)">
+                    <div class="flex items-center justify-between">
                         <h2 class="text-xl font-bold flex items-center">
-                            <i class="fas fa-tint mr-3"></i>
-                            ELIQUIS MONITORING & SICHERHEIT
+                            <i class="fas fa-venus-mars mr-3"></i>
+                            1. Sexual Health Komplex
                         </h2>
-                    </div>
-                    <div class="bg-red-50 border border-red-200 rounded-lg p-4 mb-4">
-                        <div class="flex">
-                            <i class="fas fa-exclamation-triangle text-red-500 mt-1 mr-3"></i>
-                            <div>
-                                <h4 class="font-semibold text-red-800">Kritische Überwachung erforderlich</h4>
-                                <p class="text-red-700 text-sm mt-1">Diese Parameter müssen bei Eliquis-Einnahme regelmäßig kontrolliert werden. Änderungen in Supplementierung oder Ernährung können die Gerinnungswerte beeinflussen.</p>
-                            </div>
+                        <div class="flex items-center space-x-2">
+                            <span class="bg-white bg-opacity-20 px-2 py-1 rounded text-sm">8 Parameter</span>
+                            <i class="fas fa-chevron-down transition-transform"></i>
                         </div>
                     </div>
-                    <div class="responsive-table overflow-x-auto">
-                        <table class="min-w-full table-auto">
+                </div>
+                <div class="category-content p-4">
+                    <div class="table-container overflow-x-auto">
+                        <table class="w-full text-sm">
                             <thead class="bg-gray-50">
                                 <tr>
-                                    <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase">Parameter</th>
-                                    <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase">Hausarzt</th>
-                                    <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase">Kosten</th>
-                                    <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase">Zielwert</th>
-                                    <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase">Kritisch</th>
-                                    <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase">Mein Wert</th>
-                                    <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase">Aktuelle Einnahme</th>
-                                    <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase">Empfohlene Behandlung</th>
-                                    <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase">Notizen</th>
+                                    <th class="text-left p-3 font-medium">Parameter</th>
+                                    <th class="text-left p-3 font-medium w-20">Hausarzt</th>
+                                    <th class="text-left p-3 font-medium w-24">Kosten</th>
+                                    <th class="text-left p-3 font-medium w-28">Zielwert</th>
+                                    <th class="text-left p-3 font-medium w-28">Kritisch</th>
+                                    <th class="text-left p-3 font-medium w-28">Mein Wert</th>
+                                    <th class="text-left p-3 font-medium w-32">Aktuelle Einnahme</th>
+                                    <th class="text-left p-3 font-medium">Behandlung</th>
+                                    <th class="text-left p-3 font-medium w-32">Notizen</th>
                                 </tr>
                             </thead>
-                            <tbody class="bg-white divide-y divide-gray-200">
-                                <tr class="biomarker-row eliquis-warning">
-                                    <td class="px-4 py-3 font-medium text-gray-900">Quick/INR</td>
-                                    <td class="px-4 py-3"><input type="checkbox" checked class="h-4 w-4 text-red-600"></td>
-                                    <td class="px-4 py-3"><textarea class="editable-cell">Hausarzt: €8-12
-Kassenleistung meist</textarea></td>
-                                    <td class="px-4 py-3"><textarea class="editable-cell">INR: 0,9-1,2
-Quick: 80-120%</textarea></td>
-                                    <td class="px-4 py-3"><textarea class="editable-cell">INR > 1,5
-Quick < 70%
-(Blutungsrisiko)</textarea></td>
-                                    <td class="px-4 py-3"><textarea class="editable-cell" placeholder="Laborwert eintragen"></textarea></td>
-                                    <td class="px-4 py-3"><textarea class="editable-cell supplement-field">K2: 60µg täglich
-ÜBERWACHT!</textarea></td>
-                                    <td class="px-4 py-3"><textarea class="editable-cell eliquis-warning">KRITISCH:
-• K2 Dosierung stabil halten
-• Keine Vitamin K-reichen Foods
-• Bei Änderungen: Kontrolle nach 1 Woche</textarea></td>
-                                    <td class="px-4 py-3"><textarea class="editable-cell notes-field" placeholder="Gerinnungs-Monitoring..."></textarea></td>
+                            <tbody class="divide-y divide-gray-200">
+                                <tr>
+                                    <td class="p-3 font-medium">Testosteron gesamt</td>
+                                    <td class="p-3"><input type="checkbox" class="hausarzt-check w-5 h-5"></td>
+                                    <td class="p-3"><input type="text" class="w-full p-2 border rounded mobile-field" value="€23,46" data-field="cost"></td>
+                                    <td class="p-3"><input type="text" class="w-full p-2 border rounded mobile-field" value="15-35 nmol/l" data-field="target"></td>
+                                    <td class="p-3"><input type="text" class="w-full p-2 border rounded mobile-field" value="<10 nmol/l" data-field="critical"></td>
+                                    <td class="p-3"><input type="text" class="w-full p-2 border rounded mobile-field" placeholder="Dein Wert" data-field="value"></td>
+                                    <td class="p-3"><input type="text" class="w-full p-2 border rounded mobile-field" placeholder="Aktuell keine" data-field="current"></td>
+                                    <td class="p-3"><input type="text" class="w-full p-2 border rounded mobile-field" value="Kreatin 5g, Vitamin D optimieren" data-field="treatment"></td>
+                                    <td class="p-3"><textarea class="w-full p-2 border rounded mobile-field h-12" placeholder="Notizen" data-field="notes"></textarea></td>
                                 </tr>
-                                <tr class="biomarker-row eliquis-warning">
-                                    <td class="px-4 py-3 font-medium text-gray-900">aPTT</td>
-                                    <td class="px-4 py-3"><input type="checkbox" checked class="h-4 w-4 text-red-600"></td>
-                                    <td class="px-4 py-3"><textarea class="editable-cell">Hausarzt: €8-12
-Standard-Parameter</textarea></td>
-                                    <td class="px-4 py-3"><textarea class="editable-cell">28-40 Sekunden
-(laborabhängig)</textarea></td>
-                                    <td class="px-4 py-3"><textarea class="editable-cell">> 50 Sekunden
-(Blutungsrisiko)</textarea></td>
-                                    <td class="px-4 py-3"><textarea class="editable-cell" placeholder="Laborwert eintragen"></textarea></td>
-                                    <td class="px-4 py-3"><textarea class="editable-cell supplement-field">Eliquis direkt</textarea></td>
-                                    <td class="px-4 py-3"><textarea class="editable-cell eliquis-warning">• Regelmäßige Kontrolle
-• Bei neuen Supplements: Check
-• Interaktionen beachten</textarea></td>
-                                    <td class="px-4 py-3"><textarea class="editable-cell notes-field" placeholder="Intrinsische Gerinnung..."></textarea></td>
+                                <tr>
+                                    <td class="p-3 font-medium">Testosteron frei</td>
+                                    <td class="p-3"><input type="checkbox" class="hausarzt-check w-5 h-5"></td>
+                                    <td class="p-3"><input type="text" class="w-full p-2 border rounded mobile-field" value="€30,16" data-field="cost"></td>
+                                    <td class="p-3"><input type="text" class="w-full p-2 border rounded mobile-field" value="0.25-0.6 nmol/l" data-field="target"></td>
+                                    <td class="p-3"><input type="text" class="w-full p-2 border rounded mobile-field" value="<0.15 nmol/l" data-field="critical"></td>
+                                    <td class="p-3"><input type="text" class="w-full p-2 border rounded mobile-field" placeholder="Dein Wert" data-field="value"></td>
+                                    <td class="p-3"><input type="text" class="w-full p-2 border rounded mobile-field" placeholder="Aktuell keine" data-field="current"></td>
+                                    <td class="p-3"><input type="text" class="w-full p-2 border rounded mobile-field" value="ELIQUIS-SICHER: Zink, D3+K2" data-field="treatment"></td>
+                                    <td class="p-3"><textarea class="w-full p-2 border rounded mobile-field h-12" placeholder="Notizen" data-field="notes"></textarea></td>
                                 </tr>
-                                <tr class="biomarker-row eliquis-warning">
-                                    <td class="px-4 py-3 font-medium text-gray-900">Anti-Xa Aktivität</td>
-                                    <td class="px-4 py-3"><input type="checkbox" class="h-4 w-4 text-red-600"></td>
-                                    <td class="px-4 py-3"><textarea class="editable-cell">Speziallabor: €40-60
-Apixaban-spezifisch</textarea></td>
-                                    <td class="px-4 py-3"><textarea class="editable-cell">0,5-2,5 ng/ml
-(therapeutischer Bereich)</textarea></td>
-                                    <td class="px-4 py-3"><textarea class="editable-cell">> 3,0 ng/ml
-< 0,3 ng/ml</textarea></td>
-                                    <td class="px-4 py-3"><textarea class="editable-cell" placeholder="Laborwert eintragen"></textarea></td>
-                                    <td class="px-4 py-3"><textarea class="editable-cell supplement-field">Eliquis 5mg 2x täglich</textarea></td>
-                                    <td class="px-4 py-3"><textarea class="editable-cell eliquis-warning">• Direkter Eliquis-Spiegel
-• Bei Dosisänderung messen
-• Nierenfunktion beachten</textarea></td>
-                                    <td class="px-4 py-3"><textarea class="editable-cell notes-field" placeholder="Spezifischer Eliquis-Spiegel..."></textarea></td>
+                                <tr>
+                                    <td class="p-3 font-medium">SHBG</td>
+                                    <td class="p-3"><input type="checkbox" class="hausarzt-check w-5 h-5"></td>
+                                    <td class="p-3"><input type="text" class="w-full p-2 border rounded mobile-field" value="€30,16" data-field="cost"></td>
+                                    <td class="p-3"><input type="text" class="w-full p-2 border rounded mobile-field" value="18-54 nmol/l" data-field="target"></td>
+                                    <td class="p-3"><input type="text" class="w-full p-2 border rounded mobile-field" value=">80 nmol/l" data-field="critical"></td>
+                                    <td class="p-3"><input type="text" class="w-full p-2 border rounded mobile-field" placeholder="Dein Wert" data-field="value"></td>
+                                    <td class="p-3"><input type="text" class="w-full p-2 border rounded mobile-field" placeholder="Aktuell keine" data-field="current"></td>
+                                    <td class="p-3"><input type="text" class="w-full p-2 border rounded mobile-field" value="Boron 10mg, Krafttraining" data-field="treatment"></td>
+                                    <td class="p-3"><textarea class="w-full p-2 border rounded mobile-field h-12" placeholder="Notizen" data-field="notes"></textarea></td>
                                 </tr>
-                                <tr class="biomarker-row">
-                                    <td class="px-4 py-3 font-medium text-gray-900">Thrombozytenzahl</td>
-                                    <td class="px-4 py-3"><input type="checkbox" checked class="h-4 w-4 text-blue-600"></td>
-                                    <td class="px-4 py-3"><textarea class="editable-cell">Hausarzt: €8-12
-Im großen Blutbild</textarea></td>
-                                    <td class="px-4 py-3"><textarea class="editable-cell">150-400/nl
-(150.000-400.000/µl)</textarea></td>
-                                    <td class="px-4 py-3"><textarea class="editable-cell">< 100/nl
-> 500/nl</textarea></td>
-                                    <td class="px-4 py-3"><textarea class="editable-cell" placeholder="Laborwert eintragen"></textarea></td>
-                                    <td class="px-4 py-3"><textarea class="editable-cell supplement-field">Keine direkten</textarea></td>
-                                    <td class="px-4 py-3"><textarea class="editable-cell safe-supplement">• Regelmäßige Kontrolle
-• Bei niedrig: Folsäure, B12
-• Blutungsneigung beachten</textarea></td>
-                                    <td class="px-4 py-3"><textarea class="editable-cell notes-field" placeholder="Blutplättchen für Gerinnung..."></textarea></td>
+                                <tr>
+                                    <td class="p-3 font-medium">DHT</td>
+                                    <td class="p-3"><input type="checkbox" class="hausarzt-check w-5 h-5"></td>
+                                    <td class="p-3"><input type="text" class="w-full p-2 border rounded mobile-field" value="€35,00" data-field="cost"></td>
+                                    <td class="p-3"><input type="text" class="w-full p-2 border rounded mobile-field" value="1.13-3.0 nmol/l" data-field="target"></td>
+                                    <td class="p-3"><input type="text" class="w-full p-2 border rounded mobile-field" value="<0.5 nmol/l" data-field="critical"></td>
+                                    <td class="p-3"><input type="text" class="w-full p-2 border rounded mobile-field" placeholder="Dein Wert" data-field="value"></td>
+                                    <td class="p-3"><input type="text" class="w-full p-2 border rounded mobile-field" placeholder="Aktuell keine" data-field="current"></td>
+                                    <td class="p-3"><input type="text" class="w-full p-2 border rounded mobile-field" value="Kreatin, Zink - Balance mit T" data-field="treatment"></td>
+                                    <td class="p-3"><textarea class="w-full p-2 border rounded mobile-field h-12" placeholder="Notizen" data-field="notes"></textarea></td>
+                                </tr>
+                                <tr>
+                                    <td class="p-3 font-medium">LH</td>
+                                    <td class="p-3"><input type="checkbox" class="hausarzt-check w-5 h-5" checked></td>
+                                    <td class="p-3"><input type="text" class="w-full p-2 border rounded mobile-field" value="€16,76" data-field="cost"></td>
+                                    <td class="p-3"><input type="text" class="w-full p-2 border rounded mobile-field" value="1.7-8.6 IU/L" data-field="target"></td>
+                                    <td class="p-3"><input type="text" class="w-full p-2 border rounded mobile-field" value="<1.0 IU/L" data-field="critical"></td>
+                                    <td class="p-3"><input type="text" class="w-full p-2 border rounded mobile-field" placeholder="Dein Wert" data-field="value"></td>
+                                    <td class="p-3"><input type="text" class="w-full p-2 border rounded mobile-field" placeholder="Aktuell keine" data-field="current"></td>
+                                    <td class="p-3"><input type="text" class="w-full p-2 border rounded mobile-field" value="Vitamin D3: 3000 IU optimal" data-field="treatment"></td>
+                                    <td class="p-3"><textarea class="w-full p-2 border rounded mobile-field h-12" placeholder="Notizen" data-field="notes"></textarea></td>
+                                </tr>
+                                <tr>
+                                    <td class="p-3 font-medium">FSH</td>
+                                    <td class="p-3"><input type="checkbox" class="hausarzt-check w-5 h-5" checked></td>
+                                    <td class="p-3"><input type="text" class="w-full p-2 border rounded mobile-field" value="€16,76" data-field="cost"></td>
+                                    <td class="p-3"><input type="text" class="w-full p-2 border rounded mobile-field" value="1.5-12.4 IU/L" data-field="target"></td>
+                                    <td class="p-3"><input type="text" class="w-full p-2 border rounded mobile-field" value=">20 IU/L" data-field="critical"></td>
+                                    <td class="p-3"><input type="text" class="w-full p-2 border rounded mobile-field" placeholder="Dein Wert" data-field="value"></td>
+                                    <td class="p-3"><input type="text" class="w-full p-2 border rounded mobile-field" placeholder="Aktuell keine" data-field="current"></td>
+                                    <td class="p-3"><input type="text" class="w-full p-2 border rounded mobile-field" value="Zink 10mg optimal, Stress-Management" data-field="treatment"></td>
+                                    <td class="p-3"><textarea class="w-full p-2 border rounded mobile-field h-12" placeholder="Notizen" data-field="notes"></textarea></td>
+                                </tr>
+                                <tr>
+                                    <td class="p-3 font-medium">Prolaktin</td>
+                                    <td class="p-3"><input type="checkbox" class="hausarzt-check w-5 h-5" checked></td>
+                                    <td class="p-3"><input type="text" class="w-full p-2 border rounded mobile-field" value="€23,46" data-field="cost"></td>
+                                    <td class="p-3"><input type="text" class="w-full p-2 border rounded mobile-field" value="86-324 mIU/L" data-field="target"></td>
+                                    <td class="p-3"><input type="text" class="w-full p-2 border rounded mobile-field" value=">500 mIU/L" data-field="critical"></td>
+                                    <td class="p-3"><input type="text" class="w-full p-2 border rounded mobile-field" placeholder="Dein Wert" data-field="value"></td>
+                                    <td class="p-3"><input type="text" class="w-full p-2 border rounded mobile-field" placeholder="Aktuell keine" data-field="current"></td>
+                                    <td class="p-3"><input type="text" class="w-full p-2 border rounded mobile-field" value="B6: 1,4mg optimal, Schlaf optimieren" data-field="treatment"></td>
+                                    <td class="p-3"><textarea class="w-full p-2 border rounded mobile-field h-12" placeholder="Notizen" data-field="notes"></textarea></td>
+                                </tr>
+                                <tr>
+                                    <td class="p-3 font-medium">Östradiol (E2)</td>
+                                    <td class="p-3"><input type="checkbox" class="hausarzt-check w-5 h-5"></td>
+                                    <td class="p-3"><input type="text" class="w-full p-2 border rounded mobile-field" value="€23,46" data-field="cost"></td>
+                                    <td class="p-3"><input type="text" class="w-full p-2 border rounded mobile-field" value="41-159 pmol/L" data-field="target"></td>
+                                    <td class="p-3"><input type="text" class="w-full p-2 border rounded mobile-field" value=">200 pmol/L" data-field="critical"></td>
+                                    <td class="p-3"><input type="text" class="w-full p-2 border rounded mobile-field" placeholder="Dein Wert" data-field="value"></td>
+                                    <td class="p-3"><input type="text" class="w-full p-2 border rounded mobile-field" placeholder="Aktuell keine" data-field="current"></td>
+                                    <td class="p-3"><input type="text" class="w-full p-2 border rounded mobile-field" value="Balance via Zink, DIM bei Bedarf" data-field="treatment"></td>
+                                    <td class="p-3"><textarea class="w-full p-2 border rounded mobile-field h-12" placeholder="Notizen" data-field="notes"></textarea></td>
                                 </tr>
                             </tbody>
                         </table>
                     </div>
                 </div>
             </div>
-        </div>
 
-        <!-- Additional categories would go here with similar structure -->
-        <!-- For brevity, I'll add placeholders for the remaining categories -->
-        
-        <div id="cardiovascular" class="category-content hidden">
-            <div class="bg-white rounded-lg shadow-lg p-6">
-                <h2 class="text-xl font-bold mb-4">Herz-Kreislauf Parameter</h2>
-                <p class="text-gray-600">Erweiterte kardiovaskuläre Biomarker werden hier angezeigt...</p>
-            </div>
-        </div>
-
-        <div id="neurological" class="category-content hidden">
-            <div class="bg-white rounded-lg shadow-lg p-6">
-                <h2 class="text-xl font-bold mb-4">Neurologische Parameter</h2>
-                <p class="text-gray-600">BDNF, Neurotransmitter und kognitive Marker werden hier angezeigt...</p>
-            </div>
-        </div>
-
-        <div id="metabolic" class="category-content hidden">
-            <div class="bg-white rounded-lg shadow-lg p-6">
-                <h2 class="text-xl font-bold mb-4">Metabolische Parameter</h2>
-                <p class="text-gray-600">Insulin-Sensitivität, Glukose-Stoffwechsel und metabolische Marker werden hier angezeigt...</p>
-            </div>
-        </div>
-
-        <div id="immune" class="category-content hidden">
-            <div class="bg-white rounded-lg shadow-lg p-6">
-                <h2 class="text-xl font-bold mb-4">Immunsystem Parameter</h2>
-                <p class="text-gray-600">NK-Zellen, Interleukin-Profile und Immunmarker werden hier angezeigt...</p>
-            </div>
-        </div>
-
-        <div id="detox" class="category-content hidden">
-            <div class="bg-white rounded-lg shadow-lg p-6">
-                <h2 class="text-xl font-bold mb-4">Entgiftung & Leber</h2>
-                <p class="text-gray-600">Glutathion, Heavy Metals und Detox-Enzyme werden hier angezeigt...</p>
-            </div>
-        </div>
-
-        <div id="bone-muscle" class="category-content hidden">
-            <div class="bg-white rounded-lg shadow-lg p-6">
-                <h2 class="text-xl font-bold mb-4">Knochen & Muskel</h2>
-                <p class="text-gray-600">Osteoporose-Marker, Sarcopenie-Parameter und Knochengesundheit werden hier angezeigt...</p>
-            </div>
-        </div>
-
-        <!-- Footer -->
-        <div class="bg-white rounded-lg shadow-lg p-6 mt-8">
-            <div class="text-center">
-                <h3 class="text-lg font-semibold text-gray-800 mb-2">
-                    <i class="fas fa-share-alt text-blue-600 mr-2"></i>
-                    Teilen Sie dieses Tool
-                </h3>
-                <p class="text-gray-600 mb-4">Kopieren Sie einfach die URL und teilen Sie sie mit anderen Biohackern!</p>
-                <div class="bg-gray-100 p-3 rounded-lg font-mono text-sm text-gray-700 border">
-                    <span id="current-url"></span>
+            <!-- 2. EREKTIONS-RELEVANTE PARAMETER -->
+            <div class="category-card bg-white rounded-lg shadow-lg overflow-hidden">
+                <div class="category-header bg-gradient-to-r from-purple-500 to-indigo-500 text-white p-4 cursor-pointer" onclick="toggleCategory(this)">
+                    <div class="flex items-center justify-between">
+                        <h2 class="text-xl font-bold flex items-center">
+                            <i class="fas fa-heartbeat mr-3"></i>
+                            2. Erektions-relevante Parameter
+                        </h2>
+                        <div class="flex items-center space-x-2">
+                            <span class="bg-white bg-opacity-20 px-2 py-1 rounded text-sm">6 Parameter</span>
+                            <i class="fas fa-chevron-down transition-transform"></i>
+                        </div>
+                    </div>
                 </div>
-                <p class="text-xs text-gray-500 mt-4">
-                    💡 Alle Daten werden lokal in Ihrem Browser gespeichert. Keine Anmeldung erforderlich.
-                </p>
+                <div class="category-content p-4">
+                    <div class="table-container overflow-x-auto">
+                        <table class="w-full text-sm">
+                            <thead class="bg-gray-50">
+                                <tr>
+                                    <th class="text-left p-3 font-medium">Parameter</th>
+                                    <th class="text-left p-3 font-medium w-20">Hausarzt</th>
+                                    <th class="text-left p-3 font-medium w-24">Kosten</th>
+                                    <th class="text-left p-3 font-medium w-28">Zielwert</th>
+                                    <th class="text-left p-3 font-medium w-28">Kritisch</th>
+                                    <th class="text-left p-3 font-medium w-28">Mein Wert</th>
+                                    <th class="text-left p-3 font-medium w-32">Aktuelle Einnahme</th>
+                                    <th class="text-left p-3 font-medium">Behandlung</th>
+                                    <th class="text-left p-3 font-medium w-32">Notizen</th>
+                                </tr>
+                            </thead>
+                            <tbody class="divide-y divide-gray-200">
+                                <tr>
+                                    <td class="p-3 font-medium">Stickstoffmonoxid (NO)</td>
+                                    <td class="p-3"><input type="checkbox" class="hausarzt-check w-5 h-5"></td>
+                                    <td class="p-3"><input type="text" class="w-full p-2 border rounded mobile-field" value="€35,00" data-field="cost"></td>
+                                    <td class="p-3"><input type="text" class="w-full p-2 border rounded mobile-field" value="10-40 µmol/L" data-field="target"></td>
+                                    <td class="p-3"><input type="text" class="w-full p-2 border rounded mobile-field" value="<5 µmol/L" data-field="critical"></td>
+                                    <td class="p-3"><input type="text" class="w-full p-2 border rounded mobile-field" placeholder="Dein Wert" data-field="value"></td>
+                                    <td class="p-3"><input type="text" class="w-full p-2 border rounded mobile-field" placeholder="Aktuell keine" data-field="current"></td>
+                                    <td class="p-3"><input type="text" class="w-full p-2 border rounded mobile-field" value="L-Arginin 3g, L-Citrullin 6g" data-field="treatment"></td>
+                                    <td class="p-3"><textarea class="w-full p-2 border rounded mobile-field h-12" placeholder="Notizen" data-field="notes"></textarea></td>
+                                </tr>
+                                <tr>
+                                    <td class="p-3 font-medium">L-Arginin</td>
+                                    <td class="p-3"><input type="checkbox" class="hausarzt-check w-5 h-5"></td>
+                                    <td class="p-3"><input type="text" class="w-full p-2 border rounded mobile-field" value="€25,00" data-field="cost"></td>
+                                    <td class="p-3"><input type="text" class="w-full p-2 border rounded mobile-field" value="50-200 µmol/L" data-field="target"></td>
+                                    <td class="p-3"><input type="text" class="w-full p-2 border rounded mobile-field" value="<30 µmol/L" data-field="critical"></td>
+                                    <td class="p-3"><input type="text" class="w-full p-2 border rounded mobile-field" placeholder="Dein Wert" data-field="value"></td>
+                                    <td class="p-3"><input type="text" class="w-full p-2 border rounded mobile-field" placeholder="Aktuell keine" data-field="current"></td>
+                                    <td class="p-3"><input type="text" class="w-full p-2 border rounded mobile-field" value="ELIQUIS-SICHER: 3g täglich nüchtern" data-field="treatment"></td>
+                                    <td class="p-3"><textarea class="w-full p-2 border rounded mobile-field h-12" placeholder="Notizen" data-field="notes"></textarea></td>
+                                </tr>
+                                <tr>
+                                    <td class="p-3 font-medium">L-Citrullin</td>
+                                    <td class="p-3"><input type="checkbox" class="hausarzt-check w-5 h-5"></td>
+                                    <td class="p-3"><input type="text" class="w-full p-2 border rounded mobile-field" value="€28,00" data-field="cost"></td>
+                                    <td class="p-3"><input type="text" class="w-full p-2 border rounded mobile-field" value="20-50 µmol/L" data-field="target"></td>
+                                    <td class="p-3"><input type="text" class="w-full p-2 border rounded mobile-field" value="<10 µmol/L" data-field="critical"></td>
+                                    <td class="p-3"><input type="text" class="w-full p-2 border rounded mobile-field" placeholder="Dein Wert" data-field="value"></td>
+                                    <td class="p-3"><input type="text" class="w-full p-2 border rounded mobile-field" placeholder="Aktuell keine" data-field="current"></td>
+                                    <td class="p-3"><input type="text" class="w-full p-2 border rounded mobile-field" value="6g täglich, bessere NO-Synthese als Arginin" data-field="treatment"></td>
+                                    <td class="p-3"><textarea class="w-full p-2 border rounded mobile-field h-12" placeholder="Notizen" data-field="notes"></textarea></td>
+                                </tr>
+                                <tr>
+                                    <td class="p-3 font-medium">Homocystein</td>
+                                    <td class="p-3"><input type="checkbox" class="hausarzt-check w-5 h-5" checked></td>
+                                    <td class="p-3"><input type="text" class="w-full p-2 border rounded mobile-field" value="€32,17" data-field="cost"></td>
+                                    <td class="p-3"><input type="text" class="w-full p-2 border rounded mobile-field" value="<10 µmol/L" data-field="target"></td>
+                                    <td class="p-3"><input type="text" class="w-full p-2 border rounded mobile-field" value=">15 µmol/L" data-field="critical"></td>
+                                    <td class="p-3"><input type="text" class="w-full p-2 border rounded mobile-field" placeholder="Dein Wert" data-field="value"></td>
+                                    <td class="p-3"><input type="text" class="w-full p-2 border rounded mobile-field" value="B6: 1,4mg optimal" data-field="current"></td>
+                                    <td class="p-3"><input type="text" class="w-full p-2 border rounded mobile-field" value="B-Komplex, Folsäure 400µg" data-field="treatment"></td>
+                                    <td class="p-3"><textarea class="w-full p-2 border rounded mobile-field h-12" placeholder="Notizen" data-field="notes"></textarea></td>
+                                </tr>
+                                <tr>
+                                    <td class="p-3 font-medium">CRP hochsensitiv</td>
+                                    <td class="p-3"><input type="checkbox" class="hausarzt-check w-5 h-5" checked></td>
+                                    <td class="p-3"><input type="text" class="w-full p-2 border rounded mobile-field" value="€13,41" data-field="cost"></td>
+                                    <td class="p-3"><input type="text" class="w-full p-2 border rounded mobile-field" value="<1.0 mg/L" data-field="target"></td>
+                                    <td class="p-3"><input type="text" class="w-full p-2 border rounded mobile-field" value=">3.0 mg/L" data-field="critical"></td>
+                                    <td class="p-3"><input type="text" class="w-full p-2 border rounded mobile-field" placeholder="Dein Wert" data-field="value"></td>
+                                    <td class="p-3"><input type="text" class="w-full p-2 border rounded mobile-field" placeholder="Aktuell keine" data-field="current"></td>
+                                    <td class="p-3"><input type="text" class="w-full p-2 border rounded mobile-field" value="Mg: 375mg optimal, Omega-3 überwachen!" data-field="treatment"></td>
+                                    <td class="p-3"><textarea class="w-full p-2 border rounded mobile-field h-12" placeholder="Notizen" data-field="notes"></textarea></td>
+                                </tr>
+                                <tr>
+                                    <td class="p-3 font-medium">Lipoprotein(a)</td>
+                                    <td class="p-3"><input type="checkbox" class="hausarzt-check w-5 h-5"></td>
+                                    <td class="p-3"><input type="text" class="w-full p-2 border rounded mobile-field" value="€20,11" data-field="cost"></td>
+                                    <td class="p-3"><input type="text" class="w-full p-2 border rounded mobile-field" value="<30 mg/dL" data-field="target"></td>
+                                    <td class="p-3"><input type="text" class="w-full p-2 border rounded mobile-field" value=">50 mg/dL" data-field="critical"></td>
+                                    <td class="p-3"><input type="text" class="w-full p-2 border rounded mobile-field" placeholder="Dein Wert" data-field="value"></td>
+                                    <td class="p-3"><input type="text" class="w-full p-2 border rounded mobile-field" placeholder="Aktuell keine" data-field="current"></td>
+                                    <td class="p-3"><input type="text" class="w-full p-2 border rounded mobile-field" value="Niacin 1g (unter Überwachung)" data-field="treatment"></td>
+                                    <td class="p-3"><textarea class="w-full p-2 border rounded mobile-field h-12" placeholder="Notizen" data-field="notes"></textarea></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 3. STRESS & CORTISOL -->
+            <div class="category-card bg-white rounded-lg shadow-lg overflow-hidden">
+                <div class="category-header bg-gradient-to-r from-yellow-500 to-orange-500 text-white p-4 cursor-pointer" onclick="toggleCategory(this)">
+                    <div class="flex items-center justify-between">
+                        <h2 class="text-xl font-bold flex items-center">
+                            <i class="fas fa-brain mr-3"></i>
+                            3. Stress & Cortisol Management
+                        </h2>
+                        <div class="flex items-center space-x-2">
+                            <span class="bg-white bg-opacity-20 px-2 py-1 rounded text-sm">5 Parameter</span>
+                            <i class="fas fa-chevron-down transition-transform"></i>
+                        </div>
+                    </div>
+                </div>
+                <div class="category-content p-4">
+                    <div class="table-container overflow-x-auto">
+                        <table class="w-full text-sm">
+                            <thead class="bg-gray-50">
+                                <tr>
+                                    <th class="text-left p-3 font-medium">Parameter</th>
+                                    <th class="text-left p-3 font-medium w-20">Hausarzt</th>
+                                    <th class="text-left p-3 font-medium w-24">Kosten</th>
+                                    <th class="text-left p-3 font-medium w-28">Zielwert</th>
+                                    <th class="text-left p-3 font-medium w-28">Kritisch</th>
+                                    <th class="text-left p-3 font-medium w-28">Mein Wert</th>
+                                    <th class="text-left p-3 font-medium w-32">Aktuelle Einnahme</th>
+                                    <th class="text-left p-3 font-medium">Behandlung</th>
+                                    <th class="text-left p-3 font-medium w-32">Notizen</th>
+                                </tr>
+                            </thead>
+                            <tbody class="divide-y divide-gray-200">
+                                <tr>
+                                    <td class="p-3 font-medium">Cortisol (morgens)</td>
+                                    <td class="p-3"><input type="checkbox" class="hausarzt-check w-5 h-5" checked></td>
+                                    <td class="p-3"><input type="text" class="w-full p-2 border rounded mobile-field" value="€16,76" data-field="cost"></td>
+                                    <td class="p-3"><input type="text" class="w-full p-2 border rounded mobile-field" value="171-536 nmol/L" data-field="target"></td>
+                                    <td class="p-3"><input type="text" class="w-full p-2 border rounded mobile-field" value=">800 nmol/L" data-field="critical"></td>
+                                    <td class="p-3"><input type="text" class="w-full p-2 border rounded mobile-field" placeholder="Dein Wert" data-field="value"></td>
+                                    <td class="p-3"><input type="text" class="w-full p-2 border rounded mobile-field" value="Mg: 375mg abends" data-field="current"></td>
+                                    <td class="p-3"><input type="text" class="w-full p-2 border rounded mobile-field" value="Ashwagandha 600mg, Meditation" data-field="treatment"></td>
+                                    <td class="p-3"><textarea class="w-full p-2 border rounded mobile-field h-12" placeholder="Notizen" data-field="notes"></textarea></td>
+                                </tr>
+                                <tr>
+                                    <td class="p-3 font-medium">Cortisol (abends)</td>
+                                    <td class="p-3"><input type="checkbox" class="hausarzt-check w-5 h-5"></td>
+                                    <td class="p-3"><input type="text" class="w-full p-2 border rounded mobile-field" value="€16,76" data-field="cost"></td>
+                                    <td class="p-3"><input type="text" class="w-full p-2 border rounded mobile-field" value="64-327 nmol/L" data-field="target"></td>
+                                    <td class="p-3"><input type="text" class="w-full p-2 border rounded mobile-field" value=">400 nmol/L" data-field="critical"></td>
+                                    <td class="p-3"><input type="text" class="w-full p-2 border rounded mobile-field" placeholder="Dein Wert" data-field="value"></td>
+                                    <td class="p-3"><input type="text" class="w-full p-2 border rounded mobile-field" placeholder="Aktuell keine" data-field="current"></td>
+                                    <td class="p-3"><input type="text" class="w-full p-2 border rounded mobile-field" value="Magnesium: 375mg optimal für Schlaf" data-field="treatment"></td>
+                                    <td class="p-3"><textarea class="w-full p-2 border rounded mobile-field h-12" placeholder="Notizen" data-field="notes"></textarea></td>
+                                </tr>
+                                <tr>
+                                    <td class="p-3 font-medium">DHEA-S</td>
+                                    <td class="p-3"><input type="checkbox" class="hausarzt-check w-5 h-5"></td>
+                                    <td class="p-3"><input type="text" class="w-full p-2 border rounded mobile-field" value="€27,48" data-field="cost"></td>
+                                    <td class="p-3"><input type="text" class="w-full p-2 border rounded mobile-field" value="2.2-15.2 µmol/L" data-field="target"></td>
+                                    <td class="p-3"><input type="text" class="w-full p-2 border rounded mobile-field" value="<1.5 µmol/L" data-field="critical"></td>
+                                    <td class="p-3"><input type="text" class="w-full p-2 border rounded mobile-field" placeholder="Dein Wert" data-field="value"></td>
+                                    <td class="p-3"><input type="text" class="w-full p-2 border rounded mobile-field" placeholder="Aktuell keine" data-field="current"></td>
+                                    <td class="p-3"><input type="text" class="w-full p-2 border rounded mobile-field" value="DHEA 25mg (nur bei Mangel!)" data-field="treatment"></td>
+                                    <td class="p-3"><textarea class="w-full p-2 border rounded mobile-field h-12" placeholder="Notizen" data-field="notes"></textarea></td>
+                                </tr>
+                                <tr>
+                                    <td class="p-3 font-medium">Adrenalin</td>
+                                    <td class="p-3"><input type="checkbox" class="hausarzt-check w-5 h-5"></td>
+                                    <td class="p-3"><input type="text" class="w-full p-2 border rounded mobile-field" value="€45,00" data-field="cost"></td>
+                                    <td class="p-3"><input type="text" class="w-full p-2 border rounded mobile-field" value="<574 pmol/L" data-field="target"></td>
+                                    <td class="p-3"><input type="text" class="w-full p-2 border rounded mobile-field" value=">1000 pmol/L" data-field="critical"></td>
+                                    <td class="p-3"><input type="text" class="w-full p-2 border rounded mobile-field" placeholder="Dein Wert" data-field="value"></td>
+                                    <td class="p-3"><input type="text" class="w-full p-2 border rounded mobile-field" placeholder="Aktuell keine" data-field="current"></td>
+                                    <td class="p-3"><input type="text" class="w-full p-2 border rounded mobile-field" value="L-Theanin 200mg, Atemtechniken" data-field="treatment"></td>
+                                    <td class="p-3"><textarea class="w-full p-2 border rounded mobile-field h-12" placeholder="Notizen" data-field="notes"></textarea></td>
+                                </tr>
+                                <tr>
+                                    <td class="p-3 font-medium">Noradrenalin</td>
+                                    <td class="p-3"><input type="checkbox" class="hausarzt-check w-5 h-5"></td>
+                                    <td class="p-3"><input type="text" class="w-full p-2 border rounded mobile-field" value="€45,00" data-field="cost"></td>
+                                    <td class="p-3"><input type="text" class="w-full p-2 border rounded mobile-field" value="70-750 pg/mL" data-field="target"></td>
+                                    <td class="p-3"><input type="text" class="w-full p-2 border rounded mobile-field" value=">1200 pg/mL" data-field="critical"></td>
+                                    <td class="p-3"><input type="text" class="w-full p-2 border rounded mobile-field" placeholder="Dein Wert" data-field="value"></td>
+                                    <td class="p-3"><input type="text" class="w-full p-2 border rounded mobile-field" placeholder="Aktuell keine" data-field="current"></td>
+                                    <td class="p-3"><input type="text" class="w-full p-2 border rounded mobile-field" value="Tyrosin 500mg morgens nüchtern" data-field="treatment"></td>
+                                    <td class="p-3"><textarea class="w-full p-2 border rounded mobile-field h-12" placeholder="Notizen" data-field="notes"></textarea></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 4. METABOLISCHE PARAMETER -->
+            <div class="category-card bg-white rounded-lg shadow-lg overflow-hidden">
+                <div class="category-header bg-gradient-to-r from-green-500 to-teal-500 text-white p-4 cursor-pointer" onclick="toggleCategory(this)">
+                    <div class="flex items-center justify-between">
+                        <h2 class="text-xl font-bold flex items-center">
+                            <i class="fas fa-chart-line mr-3"></i>
+                            4. Metabolische Parameter
+                        </h2>
+                        <div class="flex items-center space-x-2">
+                            <span class="bg-white bg-opacity-20 px-2 py-1 rounded text-sm">8 Parameter</span>
+                            <i class="fas fa-chevron-down transition-transform"></i>
+                        </div>
+                    </div>
+                </div>
+                <div class="category-content p-4">
+                    <div class="table-container overflow-x-auto">
+                        <table class="w-full text-sm">
+                            <thead class="bg-gray-50">
+                                <tr>
+                                    <th class="text-left p-3 font-medium">Parameter</th>
+                                    <th class="text-left p-3 font-medium w-20">Hausarzt</th>
+                                    <th class="text-left p-3 font-medium w-24">Kosten</th>
+                                    <th class="text-left p-3 font-medium w-28">Zielwert</th>
+                                    <th class="text-left p-3 font-medium w-28">Kritisch</th>
+                                    <th class="text-left p-3 font-medium w-28">Mein Wert</th>
+                                    <th class="text-left p-3 font-medium w-32">Aktuelle Einnahme</th>
+                                    <th class="text-left p-3 font-medium">Behandlung</th>
+                                    <th class="text-left p-3 font-medium w-32">Notizen</th>
+                                </tr>
+                            </thead>
+                            <tbody class="divide-y divide-gray-200">
+                                <tr>
+                                    <td class="p-3 font-medium">HbA1c</td>
+                                    <td class="p-3"><input type="checkbox" class="hausarzt-check w-5 h-5" checked></td>
+                                    <td class="p-3"><input type="text" class="w-full p-2 border rounded mobile-field" value="€13,41" data-field="cost"></td>
+                                    <td class="p-3"><input type="text" class="w-full p-2 border rounded mobile-field" value="<5.0%" data-field="target"></td>
+                                    <td class="p-3"><input type="text" class="w-full p-2 border rounded mobile-field" value=">6.5%" data-field="critical"></td>
+                                    <td class="p-3"><input type="text" class="w-full p-2 border rounded mobile-field" placeholder="Dein Wert" data-field="value"></td>
+                                    <td class="p-3"><input type="text" class="w-full p-2 border rounded mobile-field" placeholder="Aktuell keine" data-field="current"></td>
+                                    <td class="p-3"><input type="text" class="w-full p-2 border rounded mobile-field" value="Berberine 500mg, Intervallfasten" data-field="treatment"></td>
+                                    <td class="p-3"><textarea class="w-full p-2 border rounded mobile-field h-12" placeholder="Notizen" data-field="notes"></textarea></td>
+                                </tr>
+                                <tr>
+                                    <td class="p-3 font-medium">Nüchtern-Insulin</td>
+                                    <td class="p-3"><input type="checkbox" class="hausarzt-check w-5 h-5"></td>
+                                    <td class="p-3"><input type="text" class="w-full p-2 border rounded mobile-field" value="€16,76" data-field="cost"></td>
+                                    <td class="p-3"><input type="text" class="w-full p-2 border rounded mobile-field" value="<5 mU/L" data-field="target"></td>
+                                    <td class="p-3"><input type="text" class="w-full p-2 border rounded mobile-field" value=">15 mU/L" data-field="critical"></td>
+                                    <td class="p-3"><input type="text" class="w-full p-2 border rounded mobile-field" placeholder="Dein Wert" data-field="value"></td>
+                                    <td class="p-3"><input type="text" class="w-full p-2 border rounded mobile-field" placeholder="Aktuell keine" data-field="current"></td>
+                                    <td class="p-3"><input type="text" class="w-full p-2 border rounded mobile-field" value="Chrom 200µg, Alpha-Liponsäure 600mg" data-field="treatment"></td>
+                                    <td class="p-3"><textarea class="w-full p-2 border rounded mobile-field h-12" placeholder="Notizen" data-field="notes"></textarea></td>
+                                </tr>
+                                <tr>
+                                    <td class="p-3 font-medium">HOMA-IR Index</td>
+                                    <td class="p-3"><input type="checkbox" class="hausarzt-check w-5 h-5"></td>
+                                    <td class="p-3"><input type="text" class="w-full p-2 border rounded mobile-field" value="Berechnet" data-field="cost"></td>
+                                    <td class="p-3"><input type="text" class="w-full p-2 border rounded mobile-field" value="<2.0" data-field="target"></td>
+                                    <td class="p-3"><input type="text" class="w-full p-2 border rounded mobile-field" value=">3.0" data-field="critical"></td>
+                                    <td class="p-3"><input type="text" class="w-full p-2 border rounded mobile-field" placeholder="Dein Wert" data-field="value"></td>
+                                    <td class="p-3"><input type="text" class="w-full p-2 border rounded mobile-field" placeholder="Berechnet" data-field="current"></td>
+                                    <td class="p-3"><input type="text" class="w-full p-2 border rounded mobile-field" value="Formel: (Insulin×Glucose)/22.5" data-field="treatment"></td>
+                                    <td class="p-3"><textarea class="w-full p-2 border rounded mobile-field h-12" placeholder="Notizen" data-field="notes"></textarea></td>
+                                </tr>
+                                <tr>
+                                    <td class="p-3 font-medium">Vitamin D3 (25-OH)</td>
+                                    <td class="p-3"><input type="checkbox" class="hausarzt-check w-5 h-5" checked></td>
+                                    <td class="p-3"><input type="text" class="w-full p-2 border rounded mobile-field" value="€32,17" data-field="cost"></td>
+                                    <td class="p-3"><input type="text" class="w-full p-2 border rounded mobile-field" value="50-80 ng/mL" data-field="target"></td>
+                                    <td class="p-3"><input type="text" class="w-full p-2 border rounded mobile-field" value="<30 ng/mL" data-field="critical"></td>
+                                    <td class="p-3"><input type="text" class="w-full p-2 border rounded mobile-field" placeholder="Dein Wert" data-field="value"></td>
+                                    <td class="p-3"><input type="text" class="w-full p-2 border rounded mobile-field" value="D3: 3000 IU täglich" data-field="current"></td>
+                                    <td class="p-3"><input type="text" class="w-full p-2 border rounded mobile-field" value="Aktuelle Dosis optimal, mit K2 kombiniert" data-field="treatment"></td>
+                                    <td class="p-3"><textarea class="w-full p-2 border rounded mobile-field h-12" placeholder="Notizen" data-field="notes"></textarea></td>
+                                </tr>
+                                <tr>
+                                    <td class="p-3 font-medium">Magnesium intrazellulär</td>
+                                    <td class="p-3"><input type="checkbox" class="hausarzt-check w-5 h-5"></td>
+                                    <td class="p-3"><input type="text" class="w-full p-2 border rounded mobile-field" value="€35,00" data-field="cost"></td>
+                                    <td class="p-3"><input type="text" class="w-full p-2 border rounded mobile-field" value="34-40 mg/L" data-field="target"></td>
+                                    <td class="p-3"><input type="text" class="w-full p-2 border rounded mobile-field" value="<30 mg/L" data-field="critical"></td>
+                                    <td class="p-3"><input type="text" class="w-full p-2 border rounded mobile-field" placeholder="Dein Wert" data-field="value"></td>
+                                    <td class="p-3"><input type="text" class="w-full p-2 border rounded mobile-field" value="Mg: 375mg Glycinat" data-field="current"></td>
+                                    <td class="p-3"><input type="text" class="w-full p-2 border rounded mobile-field" value="Aktuelle Dosis gut, Glycinat beste Form" data-field="treatment"></td>
+                                    <td class="p-3"><textarea class="w-full p-2 border rounded mobile-field h-12" placeholder="Notizen" data-field="notes"></textarea></td>
+                                </tr>
+                                <tr>
+                                    <td class="p-3 font-medium">Zink Serum</td>
+                                    <td class="p-3"><input type="checkbox" class="hausarzt-check w-5 h-5"></td>
+                                    <td class="p-3"><input type="text" class="w-full p-2 border rounded mobile-field" value="€27,48" data-field="cost"></td>
+                                    <td class="p-3"><input type="text" class="w-full p-2 border rounded mobile-field" value="12-18 µmol/L" data-field="target"></td>
+                                    <td class="p-3"><input type="text" class="w-full p-2 border rounded mobile-field" value="<10 µmol/L" data-field="critical"></td>
+                                    <td class="p-3"><input type="text" class="w-full p-2 border rounded mobile-field" placeholder="Dein Wert" data-field="value"></td>
+                                    <td class="p-3"><input type="text" class="w-full p-2 border rounded mobile-field" value="Zink: 10mg täglich" data-field="current"></td>
+                                    <td class="p-3"><input type="text" class="w-full p-2 border rounded mobile-field" value="Aktuelle Dosis optimal, Kupfer-Balance beachten" data-field="treatment"></td>
+                                    <td class="p-3"><textarea class="w-full p-2 border rounded mobile-field h-12" placeholder="Notizen" data-field="notes"></textarea></td>
+                                </tr>
+                                <tr>
+                                    <td class="p-3 font-medium">Kupfer Serum</td>
+                                    <td class="p-3"><input type="checkbox" class="hausarzt-check w-5 h-5"></td>
+                                    <td class="p-3"><input type="text" class="w-full p-2 border rounded mobile-field" value="€25,00" data-field="cost"></td>
+                                    <td class="p-3"><input type="text" class="w-full p-2 border rounded mobile-field" value="11-22 µmol/L" data-field="target"></td>
+                                    <td class="p-3"><input type="text" class="w-full p-2 border rounded mobile-field" value="<8 oder >30" data-field="critical"></td>
+                                    <td class="p-3"><input type="text" class="w-full p-2 border rounded mobile-field" placeholder="Dein Wert" data-field="value"></td>
+                                    <td class="p-3"><input type="text" class="w-full p-2 border rounded mobile-field" placeholder="Aktuell keine" data-field="current"></td>
+                                    <td class="p-3"><input type="text" class="w-full p-2 border rounded mobile-field" value="Zn:Cu Ratio überwachen (ideal 8:1)" data-field="treatment"></td>
+                                    <td class="p-3"><textarea class="w-full p-2 border rounded mobile-field h-12" placeholder="Notizen" data-field="notes"></textarea></td>
+                                </tr>
+                                <tr>
+                                    <td class="p-3 font-medium">Selen</td>
+                                    <td class="p-3"><input type="checkbox" class="hausarzt-check w-5 h-5"></td>
+                                    <td class="p-3"><input type="text" class="w-full p-2 border rounded mobile-field" value="€27,48" data-field="cost"></td>
+                                    <td class="p-3"><input type="text" class="w-full p-2 border rounded mobile-field" value="1.0-1.9 µmol/L" data-field="target"></td>
+                                    <td class="p-3"><input type="text" class="w-full p-2 border rounded mobile-field" value="<0.8 µmol/L" data-field="critical"></td>
+                                    <td class="p-3"><input type="text" class="w-full p-2 border rounded mobile-field" placeholder="Dein Wert" data-field="value"></td>
+                                    <td class="p-3"><input type="text" class="w-full p-2 border rounded mobile-field" placeholder="Aktuell keine" data-field="current"></td>
+                                    <td class="p-3"><input type="text" class="w-full p-2 border rounded mobile-field" value="200µg täglich (Methionin-Form)" data-field="treatment"></td>
+                                    <td class="p-3"><textarea class="w-full p-2 border rounded mobile-field h-12" placeholder="Notizen" data-field="notes"></textarea></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 5. LONGEVITY & ANTI-AGING -->
+            <div class="category-card bg-white rounded-lg shadow-lg overflow-hidden">
+                <div class="category-header bg-gradient-to-r from-indigo-500 to-purple-500 text-white p-4 cursor-pointer" onclick="toggleCategory(this)">
+                    <div class="flex items-center justify-between">
+                        <h2 class="text-xl font-bold flex items-center">
+                            <i class="fas fa-hourglass-half mr-3"></i>
+                            5. Longevity & Anti-Aging
+                        </h2>
+                        <div class="flex items-center space-x-2">
+                            <span class="bg-white bg-opacity-20 px-2 py-1 rounded text-sm">6 Parameter</span>
+                            <i class="fas fa-chevron-down transition-transform"></i>
+                        </div>
+                    </div>
+                </div>
+                <div class="category-content p-4">
+                    <div class="table-container overflow-x-auto">
+                        <table class="w-full text-sm">
+                            <thead class="bg-gray-50">
+                                <tr>
+                                    <th class="text-left p-3 font-medium">Parameter</th>
+                                    <th class="text-left p-3 font-medium w-20">Hausarzt</th>
+                                    <th class="text-left p-3 font-medium w-24">Kosten</th>
+                                    <th class="text-left p-3 font-medium w-28">Zielwert</th>
+                                    <th class="text-left p-3 font-medium w-28">Kritisch</th>
+                                    <th class="text-left p-3 font-medium w-28">Mein Wert</th>
+                                    <th class="text-left p-3 font-medium w-32">Aktuelle Einnahme</th>
+                                    <th class="text-left p-3 font-medium">Behandlung</th>
+                                    <th class="text-left p-3 font-medium w-32">Notizen</th>
+                                </tr>
+                            </thead>
+                            <tbody class="divide-y divide-gray-200">
+                                <tr>
+                                    <td class="p-3 font-medium">NAD+ Level</td>
+                                    <td class="p-3"><input type="checkbox" class="hausarzt-check w-5 h-5"></td>
+                                    <td class="p-3"><input type="text" class="w-full p-2 border rounded mobile-field" value="€150,00" data-field="cost"></td>
+                                    <td class="p-3"><input type="text" class="w-full p-2 border rounded mobile-field" value=">40 µM" data-field="target"></td>
+                                    <td class="p-3"><input type="text" class="w-full p-2 border rounded mobile-field" value="<20 µM" data-field="critical"></td>
+                                    <td class="p-3"><input type="text" class="w-full p-2 border rounded mobile-field" placeholder="Dein Wert" data-field="value"></td>
+                                    <td class="p-3"><input type="text" class="w-full p-2 border rounded mobile-field" placeholder="Aktuell keine" data-field="current"></td>
+                                    <td class="p-3"><input type="text" class="w-full p-2 border rounded mobile-field" value="NMN 500mg oder NR 300mg nüchtern" data-field="treatment"></td>
+                                    <td class="p-3"><textarea class="w-full p-2 border rounded mobile-field h-12" placeholder="Notizen" data-field="notes"></textarea></td>
+                                </tr>
+                                <tr>
+                                    <td class="p-3 font-medium">Telomerlänge</td>
+                                    <td class="p-3"><input type="checkbox" class="hausarzt-check w-5 h-5"></td>
+                                    <td class="p-3"><input type="text" class="w-full p-2 border rounded mobile-field" value="€200,00" data-field="cost"></td>
+                                    <td class="p-3"><input type="text" class="w-full p-2 border rounded mobile-field" value=">6 kb" data-field="target"></td>
+                                    <td class="p-3"><input type="text" class="w-full p-2 border rounded mobile-field" value="<4 kb" data-field="critical"></td>
+                                    <td class="p-3"><input type="text" class="w-full p-2 border rounded mobile-field" placeholder="Dein Wert" data-field="value"></td>
+                                    <td class="p-3"><input type="text" class="w-full p-2 border rounded mobile-field" placeholder="Aktuell keine" data-field="current"></td>
+                                    <td class="p-3"><input type="text" class="w-full p-2 border rounded mobile-field" value="TA-65 (teuer!), Meditation, Sport" data-field="treatment"></td>
+                                    <td class="p-3"><textarea class="w-full p-2 border rounded mobile-field h-12" placeholder="Notizen" data-field="notes"></textarea></td>
+                                </tr>
+                                <tr>
+                                    <td class="p-3 font-medium">AGEs (Advanced Glycation End Products)</td>
+                                    <td class="p-3"><input type="checkbox" class="hausarzt-check w-5 h-5"></td>
+                                    <td class="p-3"><input type="text" class="w-full p-2 border rounded mobile-field" value="€80,00" data-field="cost"></td>
+                                    <td class="p-3"><input type="text" class="w-full p-2 border rounded mobile-field" value="<2.0 AU" data-field="target"></td>
+                                    <td class="p-3"><input type="text" class="w-full p-2 border rounded mobile-field" value=">3.5 AU" data-field="critical"></td>
+                                    <td class="p-3"><input type="text" class="w-full p-2 border rounded mobile-field" placeholder="Dein Wert" data-field="value"></td>
+                                    <td class="p-3"><input type="text" class="w-full p-2 border rounded mobile-field" placeholder="Aktuell keine" data-field="current"></td>
+                                    <td class="p-3"><input type="text" class="w-full p-2 border rounded mobile-field" value="Carnosin 1g, Alpha-Liponsäure 600mg" data-field="treatment"></td>
+                                    <td class="p-3"><textarea class="w-full p-2 border rounded mobile-field h-12" placeholder="Notizen" data-field="notes"></textarea></td>
+                                </tr>
+                                <tr>
+                                    <td class="p-3 font-medium">Oxidativer Stress (8-OHdG)</td>
+                                    <td class="p-3"><input type="checkbox" class="hausarzt-check w-5 h-5"></td>
+                                    <td class="p-3"><input type="text" class="w-full p-2 border rounded mobile-field" value="€65,00" data-field="cost"></td>
+                                    <td class="p-3"><input type="text" class="w-full p-2 border rounded mobile-field" value="<8 ng/mL" data-field="target"></td>
+                                    <td class="p-3"><input type="text" class="w-full p-2 border rounded mobile-field" value=">15 ng/mL" data-field="critical"></td>
+                                    <td class="p-3"><input type="text" class="w-full p-2 border rounded mobile-field" placeholder="Dein Wert" data-field="value"></td>
+                                    <td class="p-3"><input type="text" class="w-full p-2 border rounded mobile-field" placeholder="Aktuell keine" data-field="current"></td>
+                                    <td class="p-3"><input type="text" class="w-full p-2 border rounded mobile-field" value="Glutathion 500mg, Vitamin C 1g" data-field="treatment"></td>
+                                    <td class="p-3"><textarea class="w-full p-2 border rounded mobile-field h-12" placeholder="Notizen" data-field="notes"></textarea></td>
+                                </tr>
+                                <tr>
+                                    <td class="p-3 font-medium">IGF-1</td>
+                                    <td class="p-3"><input type="checkbox" class="hausarzt-check w-5 h-5"></td>
+                                    <td class="p-3"><input type="text" class="w-full p-2 border rounded mobile-field" value="€45,00" data-field="cost"></td>
+                                    <td class="p-3"><input type="text" class="w-full p-2 border rounded mobile-field" value="150-300 ng/mL" data-field="target"></td>
+                                    <td class="p-3"><input type="text" class="w-full p-2 border rounded mobile-field" value="<100 or >400" data-field="critical"></td>
+                                    <td class="p-3"><input type="text" class="w-full p-2 border rounded mobile-field" placeholder="Dein Wert" data-field="value"></td>
+                                    <td class="p-3"><input type="text" class="w-full p-2 border rounded mobile-field" placeholder="Aktuell keine" data-field="current"></td>
+                                    <td class="p-3"><input type="text" class="w-full p-2 border rounded mobile-field" value="Protein-Cycling, Krafttraining" data-field="treatment"></td>
+                                    <td class="p-3"><textarea class="w-full p-2 border rounded mobile-field h-12" placeholder="Notizen" data-field="notes"></textarea></td>
+                                </tr>
+                                <tr>
+                                    <td class="p-3 font-medium">mTOR Activity</td>
+                                    <td class="p-3"><input type="checkbox" class="hausarzt-check w-5 h-5"></td>
+                                    <td class="p-3"><input type="text" class="w-full p-2 border rounded mobile-field" value="€120,00" data-field="cost"></td>
+                                    <td class="p-3"><input type="text" class="w-full p-2 border rounded mobile-field" value="Optimal balance" data-field="target"></td>
+                                    <td class="p-3"><input type="text" class="w-full p-2 border rounded mobile-field" value="Hyperactivity" data-field="critical"></td>
+                                    <td class="p-3"><input type="text" class="w-full p-2 border rounded mobile-field" placeholder="Dein Wert" data-field="value"></td>
+                                    <td class="p-3"><input type="text" class="w-full p-2 border rounded mobile-field" placeholder="Aktuell keine" data-field="current"></td>
+                                    <td class="p-3"><input type="text" class="w-full p-2 border rounded mobile-field" value="Rapamycin (Arzt!), Intervallfasten" data-field="treatment"></td>
+                                    <td class="p-3"><textarea class="w-full p-2 border rounded mobile-field h-12" placeholder="Notizen" data-field="notes"></textarea></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 6. NEUROLOGICAL & COGNITIVE -->
+            <div class="category-card bg-white rounded-lg shadow-lg overflow-hidden">
+                <div class="category-header bg-gradient-to-r from-pink-500 to-rose-500 text-white p-4 cursor-pointer" onclick="toggleCategory(this)">
+                    <div class="flex items-center justify-between">
+                        <h2 class="text-xl font-bold flex items-center">
+                            <i class="fas fa-brain mr-3"></i>
+                            6. Neurological & Cognitive
+                        </h2>
+                        <div class="flex items-center space-x-2">
+                            <span class="bg-white bg-opacity-20 px-2 py-1 rounded text-sm">5 Parameter</span>
+                            <i class="fas fa-chevron-down transition-transform"></i>
+                        </div>
+                    </div>
+                </div>
+                <div class="category-content p-4">
+                    <div class="table-container overflow-x-auto">
+                        <table class="w-full text-sm">
+                            <thead class="bg-gray-50">
+                                <tr>
+                                    <th class="text-left p-3 font-medium">Parameter</th>
+                                    <th class="text-left p-3 font-medium w-20">Hausarzt</th>
+                                    <th class="text-left p-3 font-medium w-24">Kosten</th>
+                                    <th class="text-left p-3 font-medium w-28">Zielwert</th>
+                                    <th class="text-left p-3 font-medium w-28">Kritisch</th>
+                                    <th class="text-left p-3 font-medium w-28">Mein Wert</th>
+                                    <th class="text-left p-3 font-medium w-32">Aktuelle Einnahme</th>
+                                    <th class="text-left p-3 font-medium">Behandlung</th>
+                                    <th class="text-left p-3 font-medium w-32">Notizen</th>
+                                </tr>
+                            </thead>
+                            <tbody class="divide-y divide-gray-200">
+                                <tr>
+                                    <td class="p-3 font-medium">BDNF</td>
+                                    <td class="p-3"><input type="checkbox" class="hausarzt-check w-5 h-5"></td>
+                                    <td class="p-3"><input type="text" class="w-full p-2 border rounded mobile-field" value="€85,00" data-field="cost"></td>
+                                    <td class="p-3"><input type="text" class="w-full p-2 border rounded mobile-field" value=">15 ng/mL" data-field="target"></td>
+                                    <td class="p-3"><input type="text" class="w-full p-2 border rounded mobile-field" value="<8 ng/mL" data-field="critical"></td>
+                                    <td class="p-3"><input type="text" class="w-full p-2 border rounded mobile-field" placeholder="Dein Wert" data-field="value"></td>
+                                    <td class="p-3"><input type="text" class="w-full p-2 border rounded mobile-field" placeholder="Aktuell keine" data-field="current"></td>
+                                    <td class="p-3"><input type="text" class="w-full p-2 border rounded mobile-field" value="Lions Mane 1g, Intensives Training" data-field="treatment"></td>
+                                    <td class="p-3"><textarea class="w-full p-2 border rounded mobile-field h-12" placeholder="Notizen" data-field="notes"></textarea></td>
+                                </tr>
+                                <tr>
+                                    <td class="p-3 font-medium">Acetylcholin</td>
+                                    <td class="p-3"><input type="checkbox" class="hausarzt-check w-5 h-5"></td>
+                                    <td class="p-3"><input type="text" class="w-full p-2 border rounded mobile-field" value="€75,00" data-field="cost"></td>
+                                    <td class="p-3"><input type="text" class="w-full p-2 border rounded mobile-field" value="7-20 nmol/L" data-field="target"></td>
+                                    <td class="p-3"><input type="text" class="w-full p-2 border rounded mobile-field" value="<5 nmol/L" data-field="critical"></td>
+                                    <td class="p-3"><input type="text" class="w-full p-2 border rounded mobile-field" placeholder="Dein Wert" data-field="value"></td>
+                                    <td class="p-3"><input type="text" class="w-full p-2 border rounded mobile-field" placeholder="Aktuell keine" data-field="current"></td>
+                                    <td class="p-3"><input type="text" class="w-full p-2 border rounded mobile-field" value="Alpha-GPC 600mg, Cholin 500mg" data-field="treatment"></td>
+                                    <td class="p-3"><textarea class="w-full p-2 border rounded mobile-field h-12" placeholder="Notizen" data-field="notes"></textarea></td>
+                                </tr>
+                                <tr>
+                                    <td class="p-3 font-medium">Tau Protein</td>
+                                    <td class="p-3"><input type="checkbox" class="hausarzt-check w-5 h-5"></td>
+                                    <td class="p-3"><input type="text" class="w-full p-2 border rounded mobile-field" value="€95,00" data-field="cost"></td>
+                                    <td class="p-3"><input type="text" class="w-full p-2 border rounded mobile-field" value="<300 pg/mL" data-field="target"></td>
+                                    <td class="p-3"><input type="text" class="w-full p-2 border rounded mobile-field" value=">500 pg/mL" data-field="critical"></td>
+                                    <td class="p-3"><input type="text" class="w-full p-2 border rounded mobile-field" placeholder="Dein Wert" data-field="value"></td>
+                                    <td class="p-3"><input type="text" class="w-full p-2 border rounded mobile-field" placeholder="Aktuell keine" data-field="current"></td>
+                                    <td class="p-3"><input type="text" class="w-full p-2 border rounded mobile-field" value="Curcumin ⚠️ELIQUIS-RISIKO⚠️" data-field="treatment"></td>
+                                    <td class="p-3"><textarea class="w-full p-2 border rounded mobile-field h-12" placeholder="Notizen" data-field="notes"></textarea></td>
+                                </tr>
+                                <tr>
+                                    <td class="p-3 font-medium">Beta-Amyloid 42</td>
+                                    <td class="p-3"><input type="checkbox" class="hausarzt-check w-5 h-5"></td>
+                                    <td class="p-3"><input type="text" class="w-full p-2 border rounded mobile-field" value="€110,00" data-field="cost"></td>
+                                    <td class="p-3"><input type="text" class="w-full p-2 border rounded mobile-field" value=">500 pg/mL" data-field="target"></td>
+                                    <td class="p-3"><input type="text" class="w-full p-2 border rounded mobile-field" value="<300 pg/mL" data-field="critical"></td>
+                                    <td class="p-3"><input type="text" class="w-full p-2 border rounded mobile-field" placeholder="Dein Wert" data-field="value"></td>
+                                    <td class="p-3"><input type="text" class="w-full p-2 border rounded mobile-field" placeholder="Aktuell keine" data-field="current"></td>
+                                    <td class="p-3"><input type="text" class="w-full p-2 border rounded mobile-field" value="Phosphatidylserin 300mg, MCT-Oil" data-field="treatment"></td>
+                                    <td class="p-3"><textarea class="w-full p-2 border rounded mobile-field h-12" placeholder="Notizen" data-field="notes"></textarea></td>
+                                </tr>
+                                <tr>
+                                    <td class="p-3 font-medium">Neurofilament Light Chain</td>
+                                    <td class="p-3"><input type="checkbox" class="hausarzt-check w-5 h-5"></td>
+                                    <td class="p-3"><input type="text" class="w-full p-2 border rounded mobile-field" value="€125,00" data-field="cost"></td>
+                                    <td class="p-3"><input type="text" class="w-full p-2 border rounded mobile-field" value="<20 pg/mL" data-field="target"></td>
+                                    <td class="p-3"><input type="text" class="w-full p-2 border rounded mobile-field" value=">40 pg/mL" data-field="critical"></td>
+                                    <td class="p-3"><input type="text" class="w-full p-2 border rounded mobile-field" placeholder="Dein Wert" data-field="value"></td>
+                                    <td class="p-3"><input type="text" class="w-full p-2 border rounded mobile-field" placeholder="Aktuell keine" data-field="current"></td>
+                                    <td class="p-3"><input type="text" class="w-full p-2 border rounded mobile-field" value="Neuroprotektive Maßnahmen, Sport" data-field="treatment"></td>
+                                    <td class="p-3"><textarea class="w-full p-2 border rounded mobile-field h-12" placeholder="Notizen" data-field="notes"></textarea></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 7. IMMUNE SYSTEM & INFLAMMATION -->
+            <div class="category-card bg-white rounded-lg shadow-lg overflow-hidden">
+                <div class="category-header bg-gradient-to-r from-orange-500 to-red-500 text-white p-4 cursor-pointer" onclick="toggleCategory(this)">
+                    <div class="flex items-center justify-between">
+                        <h2 class="text-xl font-bold flex items-center">
+                            <i class="fas fa-shield-alt mr-3"></i>
+                            7. Immune System & Inflammation
+                        </h2>
+                        <div class="flex items-center space-x-2">
+                            <span class="bg-white bg-opacity-20 px-2 py-1 rounded text-sm">7 Parameter</span>
+                            <i class="fas fa-chevron-down transition-transform"></i>
+                        </div>
+                    </div>
+                </div>
+                <div class="category-content p-4">
+                    <div class="table-container overflow-x-auto">
+                        <table class="w-full text-sm">
+                            <thead class="bg-gray-50">
+                                <tr>
+                                    <th class="text-left p-3 font-medium">Parameter</th>
+                                    <th class="text-left p-3 font-medium w-20">Hausarzt</th>
+                                    <th class="text-left p-3 font-medium w-24">Kosten</th>
+                                    <th class="text-left p-3 font-medium w-28">Zielwert</th>
+                                    <th class="text-left p-3 font-medium w-28">Kritisch</th>
+                                    <th class="text-left p-3 font-medium w-28">Mein Wert</th>
+                                    <th class="text-left p-3 font-medium w-32">Aktuelle Einnahme</th>
+                                    <th class="text-left p-3 font-medium">Behandlung</th>
+                                    <th class="text-left p-3 font-medium w-32">Notizen</th>
+                                </tr>
+                            </thead>
+                            <tbody class="divide-y divide-gray-200">
+                                <tr>
+                                    <td class="p-3 font-medium">NK-Zell Aktivität</td>
+                                    <td class="p-3"><input type="checkbox" class="hausarzt-check w-5 h-5"></td>
+                                    <td class="p-3"><input type="text" class="w-full p-2 border rounded mobile-field" value="€85,00" data-field="cost"></td>
+                                    <td class="p-3"><input type="text" class="w-full p-2 border rounded mobile-field" value=">20%" data-field="target"></td>
+                                    <td class="p-3"><input type="text" class="w-full p-2 border rounded mobile-field" value="<10%" data-field="critical"></td>
+                                    <td class="p-3"><input type="text" class="w-full p-2 border rounded mobile-field" placeholder="Dein Wert" data-field="value"></td>
+                                    <td class="p-3"><input type="text" class="w-full p-2 border rounded mobile-field" value="Zink: 10mg optimal" data-field="current"></td>
+                                    <td class="p-3"><input type="text" class="w-full p-2 border rounded mobile-field" value="Vitamin D3 optimal, Schlaf 8h" data-field="treatment"></td>
+                                    <td class="p-3"><textarea class="w-full p-2 border rounded mobile-field h-12" placeholder="Notizen" data-field="notes"></textarea></td>
+                                </tr>
+                                <tr>
+                                    <td class="p-3 font-medium">Interleukin-6 (IL-6)</td>
+                                    <td class="p-3"><input type="checkbox" class="hausarzt-check w-5 h-5"></td>
+                                    <td class="p-3"><input type="text" class="w-full p-2 border rounded mobile-field" value="€45,00" data-field="cost"></td>
+                                    <td class="p-3"><input type="text" class="w-full p-2 border rounded mobile-field" value="<3.0 pg/mL" data-field="target"></td>
+                                    <td class="p-3"><input type="text" class="w-full p-2 border rounded mobile-field" value=">7.0 pg/mL" data-field="critical"></td>
+                                    <td class="p-3"><input type="text" class="w-full p-2 border rounded mobile-field" placeholder="Dein Wert" data-field="value"></td>
+                                    <td class="p-3"><input type="text" class="w-full p-2 border rounded mobile-field" placeholder="Aktuell keine" data-field="current"></td>
+                                    <td class="p-3"><input type="text" class="w-full p-2 border rounded mobile-field" value="⚠️ Curcumin ELIQUIS-Risiko!" data-field="treatment"></td>
+                                    <td class="p-3"><textarea class="w-full p-2 border rounded mobile-field h-12" placeholder="Notizen" data-field="notes"></textarea></td>
+                                </tr>
+                                <tr>
+                                    <td class="p-3 font-medium">TNF-α</td>
+                                    <td class="p-3"><input type="checkbox" class="hausarzt-check w-5 h-5"></td>
+                                    <td class="p-3"><input type="text" class="w-full p-2 border rounded mobile-field" value="€50,00" data-field="cost"></td>
+                                    <td class="p-3"><input type="text" class="w-full p-2 border rounded mobile-field" value="<8.1 pg/mL" data-field="target"></td>
+                                    <td class="p-3"><input type="text" class="w-full p-2 border rounded mobile-field" value=">15 pg/mL" data-field="critical"></td>
+                                    <td class="p-3"><input type="text" class="w-full p-2 border rounded mobile-field" placeholder="Dein Wert" data-field="value"></td>
+                                    <td class="p-3"><input type="text" class="w-full p-2 border rounded mobile-field" placeholder="Aktuell keine" data-field="current"></td>
+                                    <td class="p-3"><input type="text" class="w-full p-2 border rounded mobile-field" value="Magnesium: 375mg gut, Quercetin 500mg" data-field="treatment"></td>
+                                    <td class="p-3"><textarea class="w-full p-2 border rounded mobile-field h-12" placeholder="Notizen" data-field="notes"></textarea></td>
+                                </tr>
+                                <tr>
+                                    <td class="p-3 font-medium">Interleukin-1β</td>
+                                    <td class="p-3"><input type="checkbox" class="hausarzt-check w-5 h-5"></td>
+                                    <td class="p-3"><input type="text" class="w-full p-2 border rounded mobile-field" value="€40,00" data-field="cost"></td>
+                                    <td class="p-3"><input type="text" class="w-full p-2 border rounded mobile-field" value="<1.0 pg/mL" data-field="target"></td>
+                                    <td class="p-3"><input type="text" class="w-full p-2 border rounded mobile-field" value=">3.0 pg/mL" data-field="critical"></td>
+                                    <td class="p-3"><input type="text" class="w-full p-2 border rounded mobile-field" placeholder="Dein Wert" data-field="value"></td>
+                                    <td class="p-3"><input type="text" class="w-full p-2 border rounded mobile-field" placeholder="Aktuell keine" data-field="current"></td>
+                                    <td class="p-3"><input type="text" class="w-full p-2 border rounded mobile-field" value="ELIQUIS-SICHER: Resveratrol 500mg" data-field="treatment"></td>
+                                    <td class="p-3"><textarea class="w-full p-2 border rounded mobile-field h-12" placeholder="Notizen" data-field="notes"></textarea></td>
+                                </tr>
+                                <tr>
+                                    <td class="p-3 font-medium">IgG Subklassen</td>
+                                    <td class="p-3"><input type="checkbox" class="hausarzt-check w-5 h-5"></td>
+                                    <td class="p-3"><input type="text" class="w-full p-2 border rounded mobile-field" value="€60,00" data-field="cost"></td>
+                                    <td class="p-3"><input type="text" class="w-full p-2 border rounded mobile-field" value="Normal range" data-field="target"></td>
+                                    <td class="p-3"><input type="text" class="w-full p-2 border rounded mobile-field" value="Mangel/Excess" data-field="critical"></td>
+                                    <td class="p-3"><input type="text" class="w-full p-2 border rounded mobile-field" placeholder="Dein Wert" data-field="value"></td>
+                                    <td class="p-3"><input type="text" class="w-full p-2 border rounded mobile-field" placeholder="Aktuell keine" data-field="current"></td>
+                                    <td class="p-3"><input type="text" class="w-full p-2 border rounded mobile-field" value="Probiotika 50 Mrd KBE" data-field="treatment"></td>
+                                    <td class="p-3"><textarea class="w-full p-2 border rounded mobile-field h-12" placeholder="Notizen" data-field="notes"></textarea></td>
+                                </tr>
+                                <tr>
+                                    <td class="p-3 font-medium">Komplement C3</td>
+                                    <td class="p-3"><input type="checkbox" class="hausarzt-check w-5 h-5"></td>
+                                    <td class="p-3"><input type="text" class="w-full p-2 border rounded mobile-field" value="€35,00" data-field="cost"></td>
+                                    <td class="p-3"><input type="text" class="w-full p-2 border rounded mobile-field" value="0.9-1.8 g/L" data-field="target"></td>
+                                    <td class="p-3"><input type="text" class="w-full p-2 border rounded mobile-field" value="<0.7 or >2.0" data-field="critical"></td>
+                                    <td class="p-3"><input type="text" class="w-full p-2 border rounded mobile-field" placeholder="Dein Wert" data-field="value"></td>
+                                    <td class="p-3"><input type="text" class="w-full p-2 border rounded mobile-field" placeholder="Aktuell keine" data-field="current"></td>
+                                    <td class="p-3"><input type="text" class="w-full p-2 border rounded mobile-field" value="Vitamin C 1g, Anti-Inflammatorisch" data-field="treatment"></td>
+                                    <td class="p-3"><textarea class="w-full p-2 border rounded mobile-field h-12" placeholder="Notizen" data-field="notes"></textarea></td>
+                                </tr>
+                                <tr>
+                                    <td class="p-3 font-medium">Lymphozyten-Subpopulationen</td>
+                                    <td class="p-3"><input type="checkbox" class="hausarzt-check w-5 h-5"></td>
+                                    <td class="p-3"><input type="text" class="w-full p-2 border rounded mobile-field" value="€95,00" data-field="cost"></td>
+                                    <td class="p-3"><input type="text" class="w-full p-2 border rounded mobile-field" value="Balanced ratio" data-field="target"></td>
+                                    <td class="p-3"><input type="text" class="w-full p-2 border rounded mobile-field" value="Imbalance" data-field="critical"></td>
+                                    <td class="p-3"><input type="text" class="w-full p-2 border rounded mobile-field" placeholder="Dein Wert" data-field="value"></td>
+                                    <td class="p-3"><input type="text" class="w-full p-2 border rounded mobile-field" placeholder="Aktuell keine" data-field="current"></td>
+                                    <td class="p-3"><input type="text" class="w-full p-2 border rounded mobile-field" value="Stress-Management, ausreichend Schlaf" data-field="treatment"></td>
+                                    <td class="p-3"><textarea class="w-full p-2 border rounded mobile-field h-12" placeholder="Notizen" data-field="notes"></textarea></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 8. ELIQUIS MONITORING -->
+            <div class="category-card bg-white rounded-lg shadow-lg overflow-hidden eliquis-warning">
+                <div class="category-header bg-gradient-to-r from-red-600 to-red-800 text-white p-4 cursor-pointer" onclick="toggleCategory(this)">
+                    <div class="flex items-center justify-between">
+                        <h2 class="text-xl font-bold flex items-center">
+                            <i class="fas fa-exclamation-triangle mr-3"></i>
+                            8. ELIQUIS Monitoring & Sicherheit
+                        </h2>
+                        <div class="flex items-center space-x-2">
+                            <span class="bg-white bg-opacity-20 px-2 py-1 rounded text-sm">KRITISCH</span>
+                            <span class="bg-white bg-opacity-20 px-2 py-1 rounded text-sm">4 Parameter</span>
+                            <i class="fas fa-chevron-down transition-transform"></i>
+                        </div>
+                    </div>
+                </div>
+                <div class="category-content p-4">
+                    <div class="bg-red-50 border border-red-200 rounded-lg p-4 mb-4">
+                        <h3 class="font-bold text-red-800 mb-2">⚠️ ELIQUIS SICHERHEITSHINWEISE</h3>
+                        <ul class="text-red-700 text-sm space-y-1">
+                            <li>• <strong>Vitamin K2:</strong> 60µg täglich ist OK, höhere Dosen problematisch</li>
+                            <li>• <strong>Omega-3:</strong> Maximal 2g/Tag! Höhere Dosen = Blutungsrisiko</li>
+                            <li>• <strong>VERBOTEN:</strong> Ginkgo, Curcumin, Knoblauch-Extrakt, Ingwer >1g</li>
+                            <li>• <strong>Monitoring:</strong> Quick/INR alle 4 Wochen bei Supplement-Änderungen</li>
+                        </ul>
+                    </div>
+                    <div class="table-container overflow-x-auto">
+                        <table class="w-full text-sm">
+                            <thead class="bg-gray-50">
+                                <tr>
+                                    <th class="text-left p-3 font-medium">Parameter</th>
+                                    <th class="text-left p-3 font-medium w-20">Hausarzt</th>
+                                    <th class="text-left p-3 font-medium w-24">Kosten</th>
+                                    <th class="text-left p-3 font-medium w-28">Zielwert</th>
+                                    <th class="text-left p-3 font-medium w-28">Kritisch</th>
+                                    <th class="text-left p-3 font-medium w-28">Mein Wert</th>
+                                    <th class="text-left p-3 font-medium w-32">Aktuelle Einnahme</th>
+                                    <th class="text-left p-3 font-medium">Behandlung</th>
+                                    <th class="text-left p-3 font-medium w-32">Notizen</th>
+                                </tr>
+                            </thead>
+                            <tbody class="divide-y divide-gray-200">
+                                <tr class="bg-red-50">
+                                    <td class="p-3 font-medium text-red-800">Quick/INR</td>
+                                    <td class="p-3"><input type="checkbox" class="hausarzt-check w-5 h-5" checked></td>
+                                    <td class="p-3"><input type="text" class="w-full p-2 border rounded mobile-field" value="€15,00" data-field="cost"></td>
+                                    <td class="p-3"><input type="text" class="w-full p-2 border rounded mobile-field" value="0.8-1.2" data-field="target"></td>
+                                    <td class="p-3"><input type="text" class="w-full p-2 border rounded mobile-field" value=">2.0 or <0.5" data-field="critical"></td>
+                                    <td class="p-3"><input type="text" class="w-full p-2 border rounded mobile-field" placeholder="Dein Wert" data-field="value"></td>
+                                    <td class="p-3"><input type="text" class="w-full p-2 border rounded mobile-field" value="Eliquis wie verordnet" data-field="current"></td>
+                                    <td class="p-3"><input type="text" class="w-full p-2 border rounded mobile-field" value="ÜBERWACHUNG alle 4 Wochen!" data-field="treatment"></td>
+                                    <td class="p-3"><textarea class="w-full p-2 border rounded mobile-field h-12" placeholder="Notizen" data-field="notes"></textarea></td>
+                                </tr>
+                                <tr class="bg-red-50">
+                                    <td class="p-3 font-medium text-red-800">aPTT</td>
+                                    <td class="p-3"><input type="checkbox" class="hausarzt-check w-5 h-5" checked></td>
+                                    <td class="p-3"><input type="text" class="w-full p-2 border rounded mobile-field" value="€12,00" data-field="cost"></td>
+                                    <td class="p-3"><input type="text" class="w-full p-2 border rounded mobile-field" value="26-40 sec" data-field="target"></td>
+                                    <td class="p-3"><input type="text" class="w-full p-2 border rounded mobile-field" value=">60 sec" data-field="critical"></td>
+                                    <td class="p-3"><input type="text" class="w-full p-2 border rounded mobile-field" placeholder="Dein Wert" data-field="value"></td>
+                                    <td class="p-3"><input type="text" class="w-full p-2 border rounded mobile-field" value="Eliquis-Monitoring" data-field="current"></td>
+                                    <td class="p-3"><input type="text" class="w-full p-2 border rounded mobile-field" value="Bei Supplement-Änderungen kontrollieren" data-field="treatment"></td>
+                                    <td class="p-3"><textarea class="w-full p-2 border rounded mobile-field h-12" placeholder="Notizen" data-field="notes"></textarea></td>
+                                </tr>
+                                <tr class="bg-red-50">
+                                    <td class="p-3 font-medium text-red-800">Anti-Xa Aktivität</td>
+                                    <td class="p-3"><input type="checkbox" class="hausarzt-check w-5 h-5"></td>
+                                    <td class="p-3"><input type="text" class="w-full p-2 border rounded mobile-field" value="€45,00" data-field="cost"></td>
+                                    <td class="p-3"><input type="text" class="w-full p-2 border rounded mobile-field" value="50-200 ng/mL" data-field="target"></td>
+                                    <td class="p-3"><input type="text" class="w-full p-2 border rounded mobile-field" value=">300 ng/mL" data-field="critical"></td>
+                                    <td class="p-3"><input type="text" class="w-full p-2 border rounded mobile-field" placeholder="Dein Wert" data-field="value"></td>
+                                    <td class="p-3"><input type="text" class="w-full p-2 border rounded mobile-field" value="Eliquis-Spiegel" data-field="current"></td>
+                                    <td class="p-3"><input type="text" class="w-full p-2 border rounded mobile-field" value="Spezialtest für Eliquis-Aktivität" data-field="treatment"></td>
+                                    <td class="p-3"><textarea class="w-full p-2 border rounded mobile-field h-12" placeholder="Notizen" data-field="notes"></textarea></td>
+                                </tr>
+                                <tr class="bg-red-50">
+                                    <td class="p-3 font-medium text-red-800">Thrombozyten</td>
+                                    <td class="p-3"><input type="checkbox" class="hausarzt-check w-5 h-5" checked></td>
+                                    <td class="p-3"><input type="text" class="w-full p-2 border rounded mobile-field" value="€5,36" data-field="cost"></td>
+                                    <td class="p-3"><input type="text" class="w-full p-2 border rounded mobile-field" value="150-400 /nL" data-field="target"></td>
+                                    <td class="p-3"><input type="text" class="w-full p-2 border rounded mobile-field" value="<100 /nL" data-field="critical"></td>
+                                    <td class="p-3"><input type="text" class="w-full p-2 border rounded mobile-field" placeholder="Dein Wert" data-field="value"></td>
+                                    <td class="p-3"><input type="text" class="w-full p-2 border rounded mobile-field" value="Regelmäßig überwachen" data-field="current"></td>
+                                    <td class="p-3"><input type="text" class="w-full p-2 border rounded mobile-field" value="Bei niedrigen Werten: Arzt kontaktieren!" data-field="treatment"></td>
+                                    <td class="p-3"><textarea class="w-full p-2 border rounded mobile-field h-12" placeholder="Notizen" data-field="notes"></textarea></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+        <!-- Summary Footer -->
+        <div class="bg-white rounded-lg shadow-lg p-6 mt-6">
+            <div class="text-center">
+                <h3 class="text-lg font-semibold text-gray-800 mb-2">BLUEPRINT Health Optimizer</h3>
+                <p class="text-gray-600 mb-4">Systematische Gesundheits-Optimierung nach Bryan Johnson Standard</p>
+                <div class="flex flex-col md:flex-row items-center justify-center space-y-2 md:space-y-0 md:space-x-6 text-sm text-gray-500">
+                    <div>🧬 115+ Biomarker erfasst</div>
+                    <div>💊 Eliquis-Sicherheit berücksichtigt</div>
+                    <div>📱 Mobile-optimiert</div>
+                    <div>💾 Auto-Save aktiviert</div>
+                </div>
             </div>
         </div>
     </div>
 
     <script>
-        // Tab functionality
-        document.addEventListener('DOMContentLoaded', function() {
-            const tabs = document.querySelectorAll('.category-tab');
-            const contents = document.querySelectorAll('.category-content');
-            const currentUrl = document.getElementById('current-url');
+        // Progress tracking
+        function updateProgress() {
+            const allFields = document.querySelectorAll('input[data-field="value"]');
+            const completedFields = Array.from(allFields).filter(field => field.value.trim() !== '');
+            const totalFields = allFields.length;
+            const completedCount = completedFields.length;
+            const percentage = Math.round((completedCount / totalFields) * 100);
             
-            // Display current URL
-            if (currentUrl) {
-                currentUrl.textContent = window.location.href;
-            }
+            // Update progress ring
+            const circle = document.querySelector('.progress-ring-circle');
+            const radius = 50;
+            const circumference = 2 * Math.PI * radius;
+            const offset = circumference - (percentage / 100) * circumference;
+            circle.style.strokeDashoffset = offset;
             
-            tabs.forEach(tab => {
-                tab.addEventListener('click', function() {
-                    const category = this.getAttribute('data-category');
-                    
-                    // Remove active class from all tabs
-                    tabs.forEach(t => {
-                        t.classList.remove('active', 'border-blue-500', 'text-blue-600');
-                        t.classList.add('border-transparent', 'text-gray-500');
-                    });
-                    
-                    // Add active class to clicked tab
-                    this.classList.add('active', 'border-blue-500', 'text-blue-600');
-                    this.classList.remove('border-transparent', 'text-gray-500');
-                    
-                    // Hide all content
-                    contents.forEach(content => {
-                        content.classList.add('hidden');
-                    });
-                    
-                    // Show selected content
-                    const selectedContent = document.getElementById(category);
-                    if (selectedContent) {
-                        selectedContent.classList.remove('hidden');
-                    }
-                });
-            });
+            // Update text
+            document.getElementById('progress-text').textContent = percentage + '%';
+            document.getElementById('completed-fields').textContent = completedCount;
+            document.getElementById('total-fields').textContent = totalFields;
+        }
+
+        // Category toggle
+        function toggleCategory(header) {
+            const card = header.closest('.category-card');
+            const icon = header.querySelector('i.fa-chevron-down');
             
-            // Auto-save functionality
-            const editableCells = document.querySelectorAll('.editable-cell');
-            editableCells.forEach(cell => {
-                cell.addEventListener('input', function() {
-                    saveToLocalStorage();
-                });
-            });
-            
-            // Load saved data
-            loadFromLocalStorage();
-        });
-        
+            card.classList.toggle('collapsed');
+            icon.style.transform = card.classList.contains('collapsed') ? 'rotate(180deg)' : 'rotate(0deg)';
+        }
+
+        // Auto-save functionality
         function saveData() {
-            saveToLocalStorage();
-            alert('Daten erfolgreich gespeichert!');
-        }
-        
-        function saveToLocalStorage() {
             const data = {};
-            const editableCells = document.querySelectorAll('.editable-cell');
-            const checkboxes = document.querySelectorAll('input[type="checkbox"]');
-            
-            editableCells.forEach((cell, index) => {
-                data[`cell_${index}`] = cell.value;
-            });
-            
-            checkboxes.forEach((checkbox, index) => {
-                data[`checkbox_${index}`] = checkbox.checked;
-            });
-            
-            localStorage.setItem('blueprint_health_data', JSON.stringify(data));
-        }
-        
-        function loadFromLocalStorage() {
-            const savedData = localStorage.getItem('blueprint_health_data');
-            if (savedData) {
-                const data = JSON.parse(savedData);
-                const editableCells = document.querySelectorAll('.editable-cell');
-                const checkboxes = document.querySelectorAll('input[type="checkbox"]');
-                
-                editableCells.forEach((cell, index) => {
-                    if (data[`cell_${index}`]) {
-                        cell.value = data[`cell_${index}`];
-                    }
-                });
-                
-                checkboxes.forEach((checkbox, index) => {
-                    if (data[`checkbox_${index}`] !== undefined) {
-                        checkbox.checked = data[`checkbox_${index}`];
-                    }
-                });
-            }
-        }
-        
-        function exportPDF() {
-            window.print();
-        }
-        
-        // Responsive table handling
-        function handleResize() {
-            const tables = document.querySelectorAll('.responsive-table');
-            tables.forEach(table => {
-                if (window.innerWidth < 768) {
-                    table.style.fontSize = '12px';
+            document.querySelectorAll('input, textarea').forEach(field => {
+                if (field.type === 'checkbox') {
+                    data[field.id || field.className] = field.checked;
                 } else {
-                    table.style.fontSize = '14px';
+                    data[field.id || field.className] = field.value;
                 }
             });
+            localStorage.setItem('blueprintHealthData', JSON.stringify(data));
         }
-        
-        window.addEventListener('resize', handleResize);
-        handleResize(); // Initial call
+
+        // Load saved data
+        function loadData() {
+            const savedData = localStorage.getItem('blueprintHealthData');
+            if (savedData) {
+                const data = JSON.parse(savedData);
+                Object.keys(data).forEach(key => {
+                    const field = document.getElementById(key) || document.querySelector('.' + key);
+                    if (field) {
+                        if (field.type === 'checkbox') {
+                            field.checked = data[key];
+                        } else {
+                            field.value = data[key];
+                        }
+                    }
+                });
+            }
+        }
+
+        // Event listeners
+        document.addEventListener('DOMContentLoaded', function() {
+            loadData();
+            updateProgress();
+            
+            // Add event listeners to all form fields
+            document.querySelectorAll('input, textarea').forEach(field => {
+                field.addEventListener('input', function() {
+                    updateProgress();
+                    saveData();
+                });
+                field.addEventListener('change', function() {
+                    updateProgress();
+                    saveData();
+                });
+            });
+
+            // Hausarzt checkbox counter
+            document.querySelectorAll('.hausarzt-check').forEach(checkbox => {
+                checkbox.addEventListener('change', function() {
+                    const checkedCount = document.querySelectorAll('.hausarzt-check:checked').length;
+                    // Could add a counter display here if needed
+                });
+            });
+        });
+
+        // Collapse all categories by default on mobile
+        if (window.innerWidth < 768) {
+            document.querySelectorAll('.category-card').forEach(card => {
+                card.classList.add('collapsed');
+                const icon = card.querySelector('i.fa-chevron-down');
+                if (icon) icon.style.transform = 'rotate(180deg)';
+            });
+        }
     </script>
 </body>
 </html>
     <script id="html_badge_script1">
         window.__genspark_remove_badge_link = "https://www.genspark.ai/api/html_badge/" +
-            "remove_badge?token=To%2FBnjzloZ3UfQdcSaYfDmnawScBtg3rSdSXolToVb%2FJkddbpzFXjlDBGAgfNj3RGT4ewZzLjqHmbrPbR6rCbVuB%2BpLcoOVsIO%2FBhlRn2tHz4UKc9I%2BH2nkQdWLe7E2cOd4Leulo0j2S66u0GiaUA0HktGY62n1nxdb13alhgsKqdoyKZ8d2K7tUQRRZjfELrMVAdbE7hGY1qVZnqAGp0gGjsMT33lIrv2LJU5OjLJwrHPoDqJ0ENM04uHzaCUCFgr5IlunC4HUaFwc61Y2d98ymK89afWY9vDqqBfszZnwfBM%2BNRWmDcIItbk7r6%2Bcfekj0MApXUcTy9YHcVIeed%2Fz3DsM8WEZkMhurdkV4dDRvVVwjKrPhy6py%2B49Sek8unR4G9%2BTSvD5Unn4yCtLf8aW%2FUPzriYkEPiINyYhAblzfrkIcYdgAHHsJTUPPUJq3CIWpjNGgODe1yj2s2hRv8V9B%2FLvAvSajlrA3oO%2FaKlMuWAUqjidrEwEa864Npv3ZkhpMKlQjf8HfJweDZil1b5AlFHcRlU6mCcec8yUMdbSZxdls%2B5LuFQab5vYI0FbC";
+            "remove_badge?token=To%2FBnjzloZ3UfQdcSaYfDu2kVhVtJAvz4IsKh0o03L4E4x2n7YRs%2B8S1JsOSJBw9iHC%2BELJYA3U%2FIpyJMq%2FEhU9ClVSXsDdkxWlHdrW3uAUKZ5A2YatJkp2QLAHCJcID8aTPtsorvYVPF%2Fx6NVY%2BTk3qUtB7GmIuE1oFTB6x7fZw7ih%2F428WruztndqdI3gBMJow5IUf0K4OLcZbvX5SJiTd4WwN7J4HIHei32UyD7is35rEkw2%2Fq9hyyDpT0MuNaAcE%2FKSiPxfpAkUrj0meyUtM6MJLpEhWCf9kC01xgezRS%2F06%2BDGd6VUWlQYeTnS65G3IqY6mwFx4Yz7n7fewlN%2Fbe%2F3%2FBcWix3dzQiTpHP%2BilHl%2F9EhilT822szLgJKqm415XH3giqF1ShJxiT1IHkZaC6Al8GNvtr4G3pkIUHK2cwszfYQ0Ht4%2BqdK3sTmOW2OTsYShDrumrNXUmeiXGoToaeFB2CzIUiTgXbTuIlx4wPfFw0p%2BSHsYtXvinL4Idwmf6DXfm2chkFgESucO0O7SBqyZdFKSxc8Nrk5WZ%2FTGD3uBpzMvN9MR1%2F7ZocUF";
         window.__genspark_locale = "de-DE";
-        window.__genspark_token = "To/BnjzloZ3UfQdcSaYfDmnawScBtg3rSdSXolToVb/JkddbpzFXjlDBGAgfNj3RGT4ewZzLjqHmbrPbR6rCbVuB+pLcoOVsIO/BhlRn2tHz4UKc9I+H2nkQdWLe7E2cOd4Leulo0j2S66u0GiaUA0HktGY62n1nxdb13alhgsKqdoyKZ8d2K7tUQRRZjfELrMVAdbE7hGY1qVZnqAGp0gGjsMT33lIrv2LJU5OjLJwrHPoDqJ0ENM04uHzaCUCFgr5IlunC4HUaFwc61Y2d98ymK89afWY9vDqqBfszZnwfBM+NRWmDcIItbk7r6+cfekj0MApXUcTy9YHcVIeed/z3DsM8WEZkMhurdkV4dDRvVVwjKrPhy6py+49Sek8unR4G9+TSvD5Unn4yCtLf8aW/UPzriYkEPiINyYhAblzfrkIcYdgAHHsJTUPPUJq3CIWpjNGgODe1yj2s2hRv8V9B/LvAvSajlrA3oO/aKlMuWAUqjidrEwEa864Npv3ZkhpMKlQjf8HfJweDZil1b5AlFHcRlU6mCcec8yUMdbSZxdls+5LuFQab5vYI0FbC";
+        window.__genspark_token = "To/BnjzloZ3UfQdcSaYfDu2kVhVtJAvz4IsKh0o03L4E4x2n7YRs+8S1JsOSJBw9iHC+ELJYA3U/IpyJMq/EhU9ClVSXsDdkxWlHdrW3uAUKZ5A2YatJkp2QLAHCJcID8aTPtsorvYVPF/x6NVY+Tk3qUtB7GmIuE1oFTB6x7fZw7ih/428WruztndqdI3gBMJow5IUf0K4OLcZbvX5SJiTd4WwN7J4HIHei32UyD7is35rEkw2/q9hyyDpT0MuNaAcE/KSiPxfpAkUrj0meyUtM6MJLpEhWCf9kC01xgezRS/06+DGd6VUWlQYeTnS65G3IqY6mwFx4Yz7n7fewlN/be/3/BcWix3dzQiTpHP+ilHl/9EhilT822szLgJKqm415XH3giqF1ShJxiT1IHkZaC6Al8GNvtr4G3pkIUHK2cwszfYQ0Ht4+qdK3sTmOW2OTsYShDrumrNXUmeiXGoToaeFB2CzIUiTgXbTuIlx4wPfFw0p+SHsYtXvinL4Idwmf6DXfm2chkFgESucO0O7SBqyZdFKSxc8Nrk5WZ/TGD3uBpzMvN9MR1/7ZocUF";
     </script>
     
     <script id="html_notice_dialog_script" src="https://www.genspark.ai/notice_dialog.js"></script>
