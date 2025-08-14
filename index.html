@@ -1,187 +1,250 @@
 <!DOCTYPE html>
-<html lang="de">
-<head>
-    <meta charset="UTF-8">
+<!-- saved from url=(0140)https://gensparkpublicblob.blob.core.windows.net/user-upload-image/page/tooluse_9ftXtPrlRl6cbfFo4jTKNw/health_optimizer_pro_clean_final.html -->
+<html lang="de"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>BLUEPRINT Health Optimizer - Complete Biomarker System</title>
-    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.4.0/css/all.min.css">
+    <title>Health Optimizer Pro - Complete Biomarker System</title>
+    <link href="./index_files/tailwind.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="./index_files/all.min.css">
     <style>
         .category-header {
             background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             color: white;
             font-weight: bold;
-            padding: 1rem;
-            border-radius: 0.5rem;
-            margin-bottom: 1rem;
+            padding: 16px;
             cursor: pointer;
+            border-radius: 8px;
+            margin-bottom: 8px;
             transition: all 0.3s ease;
+        }
+        .category-header:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
         }
         .category-content {
             background: white;
-            border-radius: 0.5rem;
-            padding: 1rem;
-            margin-bottom: 2rem;
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            border-radius: 8px;
+            margin-bottom: 20px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
         }
         .biomarker-row {
             display: grid;
-            grid-template-columns: 2fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 2fr;
-            gap: 0.5rem;
+            grid-template-columns: 2fr 1fr 1fr 1fr 1fr 1fr 1fr 2fr 2fr;
+            gap: 8px;
+            padding: 12px;
+            border-bottom: 1px solid #f0f0f0;
             align-items: center;
-            padding: 0.5rem;
-            border-bottom: 1px solid #e5e7eb;
-            font-size: 0.875rem;
         }
-        .biomarker-header {
-            background: #f9fafb;
-            font-weight: bold;
-            border-radius: 0.25rem;
+        .biomarker-row:last-child {
+            border-bottom: none;
         }
-        input, textarea {
-            width: 100%;
-            padding: 0.25rem;
-            border: 1px solid #d1d5db;
-            border-radius: 0.25rem;
-            font-size: 0.875rem;
-        }
-        input:focus, textarea:focus {
-            outline: none;
-            border-color: #3b82f6;
-            box-shadow: 0 0 0 1px #3b82f6;
-        }
-        .cost-display {
-            background: #f0f9ff;
-            border: 1px solid #0ea5e9;
-            border-radius: 0.5rem;
-            padding: 1rem;
-            margin: 1rem 0;
-            font-weight: bold;
-            color: #0369a1;
+        .biomarker-input {
+            padding: 8px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            font-size: 14px;
         }
         .progress-bar {
-            background: #e5e7eb;
-            border-radius: 1rem;
-            height: 1rem;
+            width: 100%;
+            height: 20px;
+            background: #f0f0f0;
+            border-radius: 10px;
             overflow: hidden;
-            margin: 1rem 0;
+            margin: 10px 0;
         }
         .progress-fill {
-            background: linear-gradient(90deg, #10b981, #059669);
             height: 100%;
-            transition: width 0.3s ease;
+            background: linear-gradient(90deg, #4CAF50 0%, #45a049 100%);
+            width: 0%;
+            transition: width 0.5s ease;
         }
-        .supplement-status {
-            background: #f0fdf4;
-            border: 1px solid #22c55e;
-            border-radius: 0.5rem;
-            padding: 1rem;
-            margin: 1rem 0;
+        .cost-summary {
+            position: sticky;
+            bottom: 0;
+            background: white;
+            padding: 16px;
+            box-shadow: 0 -2px 8px rgba(0,0,0,0.1);
+            border-top: 2px solid #667eea;
+        }
+        .supplement-stack {
+            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+            color: white;
+            padding: 16px;
+            border-radius: 8px;
+            margin-bottom: 20px;
         }
         @media (max-width: 768px) {
             .biomarker-row {
                 grid-template-columns: 1fr;
-                gap: 0.25rem;
-                padding: 1rem;
-                border: 1px solid #e5e7eb;
-                border-radius: 0.5rem;
-                margin-bottom: 1rem;
+                gap: 4px;
             }
             .biomarker-row > div {
-                display: flex;
-                justify-content: space-between;
-                align-items: center;
-                margin-bottom: 0.5rem;
-            }
-            .biomarker-row > div:before {
-                content: attr(data-label);
-                font-weight: bold;
-                margin-right: 0.5rem;
+                margin-bottom: 4px;
             }
         }
+        .category-1 { background: linear-gradient(135deg, #2E7D32 0%, #4CAF50 100%); }
+        .category-2 { background: linear-gradient(135deg, #1565C0 0%, #2196F3 100%); }
+        .category-3 { background: linear-gradient(135deg, #E65100 0%, #FF9800 100%); }
+        .category-4 { background: linear-gradient(135deg, #6A1B9A 0%, #9C27B0 100%); }
+        .category-5 { background: linear-gradient(135deg, #C62828 0%, #F44336 100%); }
+        .category-6 { background: linear-gradient(135deg, #F57C00 0%, #FFC107 100%); }
+        .category-7 { background: linear-gradient(135deg, #00796B 0%, #009688 100%); }
+        .category-8 { background: linear-gradient(135deg, #5D4037 0%, #8D6E63 100%); }
+        .category-9 { background: linear-gradient(135deg, #455A64 0%, #607D8B 100%); }
+        .category-10 { background: linear-gradient(135deg, #BF360C 0%, #FF5722 100%); }
     </style>
-</head>
+<style>
+    .genspark-notice-dialog {
+      display: flex;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-color: rgba(0, 0, 0, 0.5);
+      z-index: 10001;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .genspark-notice-content {
+      background-color: white;
+      border-radius: 8px;
+      max-width: 600px;
+      width: 90%;
+      box-sizing: border-box;
+      padding: 10px 30px 30px 30px;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+      font-size: 16px;
+    }
+
+    .genspark-notice-title {
+      color: #000;
+      font-family: Arial;
+      font-size: 20px;
+      font-style: normal;
+      font-weight: 700;
+      line-height: 150%; 
+    }
+
+    .genspark-notice-list {
+      margin: 24px 0;
+      
+      color: #606366;
+      font-family: Arial;
+      font-size: 14px;
+      font-style: normal;
+      font-weight: 400;
+      line-height: 150%;
+      padding-left: 12px;
+    }
+
+    .genspark-notice-list li {
+      margin-bottom: 12px;
+      list-style-type: disc;
+    }
+
+    .genspark-notice-list li a {
+      color: #606366;
+      text-decoration: underline;
+    }
+
+    .genspark-notice-checkbox {
+      display: flex;
+      align-items: center;
+      margin-top: 20px;
+      gap: 10px;
+
+      color: #232425;
+
+      font-family: Arial;
+      font-size: 14px;
+      font-style: normal;
+      font-weight: 400;
+      line-height: normal;
+    }
+
+    .genspark-notice-actions {
+      display: flex;
+      justify-content: center;
+      margin-top: 20px;
+    }
+      
+    .genspark-notice-ok {
+      color: #232425;
+
+      text-align: center;
+      font-family: Arial;
+      font-size: 16px;
+      font-style: normal;
+      font-weight: 700;
+      line-height: 150%; 
+
+      cursor: pointer;
+      display: flex;
+      height: 40px;
+      padding: 6px 14px;
+      justify-content: center;
+      align-items: center;
+      gap: 10px;
+      align-self: stretch;
+      border-radius: 8px;
+      border: 1px solid #000;
+      box-sizing: border-box;
+      width: 100%;
+    }
+  </style></head>
 <body class="bg-gray-50 min-h-screen">
-    <div class="container mx-auto px-4 py-8 max-w-7xl">
+    <div class="container mx-auto px-4 py-8">
         <!-- Header -->
         <div class="text-center mb-8">
-            <h1 class="text-4xl font-bold text-gray-800 mb-4">
-                <i class="fas fa-dna text-blue-600"></i>
-                BLUEPRINT Health Optimizer
-            </h1>
-            <p class="text-lg text-gray-600">Complete Biomarker System nach Bryan Johnson Standard</p>
-            <div class="flex justify-center items-center mt-4 space-x-4">
-                <div class="text-sm text-gray-500">
-                    <i class="fas fa-save"></i> Auto-Save aktiviert
+            <h1 class="text-4xl font-bold text-gray-800 mb-4">Health Optimizer Pro</h1>
+            <p class="text-lg text-gray-600">Complete Biomarker System - Professionelle Gesundheitsoptimierung</p>
+            <div class="mt-4">
+                <div class="progress-bar">
+                    <div class="progress-fill" id="progressBar" style="width: 0%;"></div>
                 </div>
-                <div class="text-sm text-gray-500">
-                    <i class="fas fa-mobile-alt"></i> Mobile-optimiert
-                </div>
-            </div>
-        </div>
-
-        <!-- Progress Bar -->
-        <div class="bg-white rounded-lg p-6 mb-6 shadow-lg">
-            <div class="flex justify-between items-center mb-2">
-                <h3 class="text-lg font-semibold">Fortschritt</h3>
-                <span id="progress-text" class="text-sm text-gray-600">0% (0/150 Parameter)</span>
-            </div>
-            <div class="progress-bar">
-                <div id="progress-fill" class="progress-fill" style="width: 0%"></div>
-            </div>
-        </div>
-
-        <!-- Cost Overview -->
-        <div class="cost-display">
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
-                <div class="text-center">
-                    <div class="text-2xl font-bold" id="total-cost">€0,00</div>
-                    <div class="text-sm">Gesamtkosten</div>
-                </div>
-                <div class="text-center">
-                    <div class="text-2xl font-bold" id="hausarzt-cost">€0,00</div>
-                    <div class="text-sm">Hausarzt möglich</div>
-                </div>
-                <div class="text-center">
-                    <div class="text-2xl font-bold" id="privat-cost">€0,00</div>
-                    <div class="text-sm">Privatlabor nötig</div>
-                </div>
+                <p class="text-sm text-gray-500 mt-2">Fortschritt: <span id="progressText">0% (0/33 Tests)</span></p>
             </div>
         </div>
 
         <!-- Current Supplement Stack -->
-        <div class="supplement-status">
-            <h3 class="text-lg font-semibold text-green-800 mb-4">
-                <i class="fas fa-pills"></i> Dein aktueller Supplement-Stack
-            </h3>
-            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 text-sm">
-                <div><strong>Vitamin D3:</strong> <span id="current-d3">3000 IU täglich</span></div>
-                <div><strong>Vitamin K2:</strong> <span id="current-k2">60µg täglich</span></div>
-                <div><strong>Magnesium:</strong> <span id="current-mg">375mg täglich</span></div>
-                <div><strong>Zink:</strong> <span id="current-zn">10mg täglich</span></div>
-                <div><strong>Vitamin B6:</strong> <span id="current-b6">1,4mg täglich</span></div>
-                <div class="text-red-600"><strong>⚠️ Eliquis:</strong> Wechselwirkungen beachten!</div>
+        <div class="supplement-stack">
+            <h3 class="text-xl font-bold mb-4"><i class="fas fa-pills mr-2"></i>Dein Aktueller Supplement Stack</h3>
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4" id="supplementStack">
+                <div class="bg-white bg-opacity-20 p-3 rounded">
+                    <strong>Vitamin D3:</strong> <span id="d3-display">D3: 3000 IU täglich</span>
+                </div>
+                <div class="bg-white bg-opacity-20 p-3 rounded">
+                    <strong>Vitamin K2:</strong> <span id="k2-display">K2: 60µg täglich</span>
+                </div>
+                <div class="bg-white bg-opacity-20 p-3 rounded">
+                    <strong>Magnesium:</strong> <span id="mg-display">Magnesium: 375mg täglich</span>
+                </div>
+                <div class="bg-white bg-opacity-20 p-3 rounded">
+                    <strong>Zink:</strong> <span id="zn-display">Zink: 10mg täglich</span>
+                </div>
+                <div class="bg-white bg-opacity-20 p-3 rounded">
+                    <strong>Vitamin B6:</strong> <span id="b6-display">B6: 1,4mg täglich</span>
+                </div>
             </div>
         </div>
 
         <!-- Categories -->
-        <div id="categories-container">
+        <div id="categories">
             <!-- Category 1: Testosteron-Komplex -->
-            <div class="category" data-category="testosteron">
-                <div class="category-header" onclick="toggleCategory('testosteron')">
+            <div class="category-content">
+                <div class="category-header category-1" onclick="toggleCategory(&#39;cat1&#39;)">
                     <div class="flex justify-between items-center">
-                        <div>
-                            <i class="fas fa-male"></i>
-                            1. Testosteron-Komplex & Hormonelle Steuerung
-                        </div>
+                        <span><i class="fas fa-male mr-2"></i>1. Testosteron-Komplex &amp; Hormonachse</span>
                         <div class="flex items-center space-x-4">
-                            <span class="category-cost" id="cost-testosteron">€0,00</span>
-                            <i class="fas fa-chevron-down transition-transform" id="icon-testosteron"></i>
+                            <span class="category-cost" id="cat1-cost">€169.29</span>
+                            <i class="fas fa-chevron-down transition-transform" id="cat1-icon" style="transform: rotate(0deg);"></i>
                         </div>
                     </div>
                 </div>
-                <div class="category-content" id="content-testosteron">
-                    <div class="biomarker-row biomarker-header">
+                <div class="category-body hidden" id="cat1-content">
+                    <div class="biomarker-row font-semibold bg-gray-100">
                         <div>Parameter</div>
                         <div>Hausarzt</div>
                         <div>Kosten (€)</div>
@@ -189,116 +252,80 @@
                         <div>Kritisch</div>
                         <div>Mein Wert</div>
                         <div>Aktuelle Einnahme</div>
-                        <div>Empf. Behandlung</div>
+                        <div>Behandlung</div>
                         <div>Notizen</div>
                     </div>
                     <div class="biomarker-row">
-                        <div data-label="Parameter">Testosteron Gesamt</div>
-                        <div data-label="Hausarzt"><input type="checkbox" class="hausarzt-check"></div>
-                        <div data-label="Kosten"><input type="number" class="cost-input" value="23.46" step="0.01"></div>
-                        <div data-label="Zielwert"><input type="text" value="400-1000 ng/dl"></div>
-                        <div data-label="Kritisch"><input type="text" value="<300 ng/dl"></div>
-                        <div data-label="Mein Wert"><input type="text" class="my-value"></div>
-                        <div data-label="Aktuelle Einnahme"><input type="text" class="current-intake"></div>
-                        <div data-label="Behandlung"><input type="text" value="TRT, Lifestyle, D3+Zink"></div>
-                        <div data-label="Notizen"><textarea rows="1"></textarea></div>
+                        <div><strong>Testosteron Gesamt</strong></div>
+                        <div><input type="checkbox" class="hausarzt-check"></div>
+                        <div><input type="number" class="biomarker-input cost-input" value="23.46" step="0.01"></div>
+                        <div><input type="text" class="biomarker-input" value="400-1000 ng/dl"></div>
+                        <div><input type="text" class="biomarker-input" value="&lt;300 ng/dl"></div>
+                        <div><input type="text" class="biomarker-input value-input"></div>
+                        <div><input type="text" class="biomarker-input supplement-input" placeholder="Keine direkte Einnahme"></div>
+                        <div><input type="text" class="biomarker-input" value="Kreatin 5g, D3 optimieren, Training"></div>
+                        <div><input type="text" class="biomarker-input notes-input" placeholder="Notizen..."></div>
                     </div>
                     <div class="biomarker-row">
-                        <div data-label="Parameter">Testosteron Frei</div>
-                        <div data-label="Hausarzt"><input type="checkbox" class="hausarzt-check"></div>
-                        <div data-label="Kosten"><input type="number" class="cost-input" value="35.80" step="0.01"></div>
-                        <div data-label="Zielwert"><input type="text" value="9-27 ng/dl"></div>
-                        <div data-label="Kritisch"><input type="text" value="<7 ng/dl"></div>
-                        <div data-label="Mein Wert"><input type="text" class="my-value"></div>
-                        <div data-label="Aktuelle Einnahme"><input type="text" class="current-intake"></div>
-                        <div data-label="Behandlung"><input type="text" value="SHBG optimieren, Boron"></div>
-                        <div data-label="Notizen"><textarea rows="1"></textarea></div>
+                        <div><strong>Testosteron Frei</strong></div>
+                        <div><input type="checkbox" class="hausarzt-check"></div>
+                        <div><input type="number" class="biomarker-input cost-input" value="32.17" step="0.01"></div>
+                        <div><input type="text" class="biomarker-input" value="9-30 ng/dl"></div>
+                        <div><input type="text" class="biomarker-input" value="&lt;7 ng/dl"></div>
+                        <div><input type="text" class="biomarker-input value-input"></div>
+                        <div><input type="text" class="biomarker-input supplement-input" placeholder="Keine direkte Einnahme"></div>
+                        <div><input type="text" class="biomarker-input" value="SHBG reduzieren, Krafttraining"></div>
+                        <div><input type="text" class="biomarker-input notes-input" placeholder="Notizen..."></div>
                     </div>
                     <div class="biomarker-row">
-                        <div data-label="Parameter">SHBG (Sexualhormon-bindendes Globulin)</div>
-                        <div data-label="Hausarzt"><input type="checkbox" class="hausarzt-check" checked></div>
-                        <div data-label="Kosten"><input type="number" class="cost-input" value="30.16" step="0.01"></div>
-                        <div data-label="Zielwert"><input type="text" value="20-50 nmol/l"></div>
-                        <div data-label="Kritisch"><input type="text" value=">60 oder <15"></div>
-                        <div data-label="Mein Wert"><input type="text" class="my-value"></div>
-                        <div data-label="Aktuelle Einnahme"><input type="text" class="current-intake"></div>
-                        <div data-label="Behandlung"><input type="text" value="Boron, Magnesium, Nettle Root"></div>
-                        <div data-label="Notizen"><textarea rows="1"></textarea></div>
+                        <div><strong>SHBG (Sexualhormon-bindendes Globulin)</strong></div>
+                        <div><input type="checkbox" class="hausarzt-check"></div>
+                        <div><input type="number" class="biomarker-input cost-input" value="30.16" step="0.01"></div>
+                        <div><input type="text" class="biomarker-input" value="20-50 nmol/L"></div>
+                        <div><input type="text" class="biomarker-input" value="&gt;60 nmol/L"></div>
+                        <div><input type="text" class="biomarker-input value-input"></div>
+                        <div><input type="text" class="biomarker-input supplement-input" placeholder="Keine direkte Einnahme"></div>
+                        <div><input type="text" class="biomarker-input" value="Insulin optimieren, Krafttraining"></div>
+                        <div><input type="text" class="biomarker-input notes-input" placeholder="Notizen..."></div>
                     </div>
                     <div class="biomarker-row">
-                        <div data-label="Parameter">DHT (Dihydrotestosteron)</div>
-                        <div data-label="Hausarzt"><input type="checkbox" class="hausarzt-check"></div>
-                        <div data-label="Kosten"><input type="number" class="cost-input" value="45.20" step="0.01"></div>
-                        <div data-label="Zielwert"><input type="text" value="30-85 ng/dl"></div>
-                        <div data-label="Kritisch"><input type="text" value="<20 oder >100"></div>
-                        <div data-label="Mein Wert"><input type="text" class="my-value"></div>
-                        <div data-label="Aktuelle Einnahme"><input type="text" class="current-intake"></div>
-                        <div data-label="Behandlung"><input type="text" value="5α-Reductase Modulatoren"></div>
-                        <div data-label="Notizen"><textarea rows="1"></textarea></div>
+                        <div><strong>DHT (Dihydrotestosteron)</strong></div>
+                        <div><input type="checkbox" class="hausarzt-check"></div>
+                        <div><input type="number" class="biomarker-input cost-input" value="45.00" step="0.01"></div>
+                        <div><input type="text" class="biomarker-input" value="30-85 ng/dl"></div>
+                        <div><input type="text" class="biomarker-input" value="&lt;20 ng/dl"></div>
+                        <div><input type="text" class="biomarker-input value-input"></div>
+                        <div><input type="text" class="biomarker-input supplement-input" placeholder="Keine direkte Einnahme"></div>
+                        <div><input type="text" class="biomarker-input" value="Kreatin, Krafttraining, Zink"></div>
+                        <div><input type="text" class="biomarker-input notes-input" placeholder="Notizen..."></div>
                     </div>
                     <div class="biomarker-row">
-                        <div data-label="Parameter">LH (Luteinisierendes Hormon)</div>
-                        <div data-label="Hausarzt"><input type="checkbox" class="hausarzt-check" checked></div>
-                        <div data-label="Kosten"><input type="number" class="cost-input" value="16.76" step="0.01"></div>
-                        <div data-label="Zielwert"><input type="text" value="1.7-8.6 mIU/ml"></div>
-                        <div data-label="Kritisch"><input type="text" value="<1.0 oder >12"></div>
-                        <div data-label="Mein Wert"><input type="text" class="my-value"></div>
-                        <div data-label="Aktuelle Einnahme"><input type="text" class="current-intake"></div>
-                        <div data-label="Behandlung"><input type="text" value="HCG, Clomid (Arzt konsultieren)"></div>
-                        <div data-label="Notizen"><textarea rows="1"></textarea></div>
-                    </div>
-                    <div class="biomarker-row">
-                        <div data-label="Parameter">FSH (Follikel-stimulierendes Hormon)</div>
-                        <div data-label="Hausarzt"><input type="checkbox" class="hausarzt-check" checked></div>
-                        <div data-label="Kosten"><input type="number" class="cost-input" value="16.76" step="0.01"></div>
-                        <div data-label="Zielwert"><input type="text" value="1.5-12.4 mIU/ml"></div>
-                        <div data-label="Kritisch"><input type="text" value="<1.0 oder >15"></div>
-                        <div data-label="Mein Wert"><input type="text" class="my-value"></div>
-                        <div data-label="Aktuelle Einnahme"><input type="text" class="current-intake"></div>
-                        <div data-label="Behandlung"><input type="text" value="Lifestyle, Stress Management"></div>
-                        <div data-label="Notizen"><textarea rows="1"></textarea></div>
-                    </div>
-                    <div class="biomarker-row">
-                        <div data-label="Parameter">Prolaktin</div>
-                        <div data-label="Hausarzt"><input type="checkbox" class="hausarzt-check" checked></div>
-                        <div data-label="Kosten"><input type="number" class="cost-input" value="23.46" step="0.01"></div>
-                        <div data-label="Zielwert"><input type="text" value="4-15 ng/ml"></div>
-                        <div data-label="Kritisch"><input type="text" value=">20 ng/ml"></div>
-                        <div data-label="Mein Wert"><input type="text" class="my-value"></div>
-                        <div data-label="Aktuelle Einnahme"><input type="text" class="current-intake"></div>
-                        <div data-label="Behandlung"><input type="text" value="P5P (B6), Vitex, Cabergoline"></div>
-                        <div data-label="Notizen"><textarea rows="1"></textarea></div>
-                    </div>
-                    <div class="biomarker-row">
-                        <div data-label="Parameter">Estradiol (E2) - Sensitiv</div>
-                        <div data-label="Hausarzt"><input type="checkbox" class="hausarzt-check"></div>
-                        <div data-label="Kosten"><input type="number" class="cost-input" value="23.46" step="0.01"></div>
-                        <div data-label="Zielwert"><input type="text" value="20-40 pg/ml"></div>
-                        <div data-label="Kritisch"><input type="text" value=">50 oder <15"></div>
-                        <div data-label="Mein Wert"><input type="text" class="my-value"></div>
-                        <div data-label="Aktuelle Einnahme"><input type="text" class="current-intake"></div>
-                        <div data-label="Behandlung"><input type="text" value="DIM, Calcium D-Glucarate, AI"></div>
-                        <div data-label="Notizen"><textarea rows="1"></textarea></div>
+                        <div><strong>Estradiol (E2) - Sensitiv</strong></div>
+                        <div><input type="checkbox" class="hausarzt-check"></div>
+                        <div><input type="number" class="biomarker-input cost-input" value="38.50" step="0.01"></div>
+                        <div><input type="text" class="biomarker-input" value="20-40 pg/ml"></div>
+                        <div><input type="text" class="biomarker-input" value="&gt;50 pg/ml"></div>
+                        <div><input type="text" class="biomarker-input value-input"></div>
+                        <div><input type="text" class="biomarker-input supplement-input" placeholder="Keine direkte Einnahme"></div>
+                        <div><input type="text" class="biomarker-input" value="DIM, Cruciferous Vegetables"></div>
+                        <div><input type="text" class="biomarker-input notes-input" placeholder="Notizen..."></div>
                     </div>
                 </div>
             </div>
 
-            <!-- Category 2: Erektions-relevante Parameter -->
-            <div class="category" data-category="erektion">
-                <div class="category-header" onclick="toggleCategory('erektion')" style="background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);">
+            <!-- Category 2: Zentrale Steuerung -->
+            <div class="category-content">
+                <div class="category-header category-2" onclick="toggleCategory(&#39;cat2&#39;)">
                     <div class="flex justify-between items-center">
-                        <div>
-                            <i class="fas fa-heart"></i>
-                            2. Erektions-relevante Parameter & Gefäßgesundheit  
-                        </div>
+                        <span><i class="fas fa-brain mr-2"></i>2. Zentrale Hormon-Steuerung</span>
                         <div class="flex items-center space-x-4">
-                            <span class="category-cost" id="cost-erektion">€0,00</span>
-                            <i class="fas fa-chevron-down transition-transform" id="icon-erektion"></i>
+                            <span class="category-cost" id="cat2-cost">€56.98</span>
+                            <i class="fas fa-chevron-down transition-transform" id="cat2-icon"></i>
                         </div>
                     </div>
                 </div>
-                <div class="category-content" id="content-erektion" style="display: none;">
-                    <div class="biomarker-row biomarker-header">
+                <div class="category-body hidden" id="cat2-content">
+                    <div class="biomarker-row font-semibold bg-gray-100">
                         <div>Parameter</div>
                         <div>Hausarzt</div>
                         <div>Kosten (€)</div>
@@ -306,94 +333,58 @@
                         <div>Kritisch</div>
                         <div>Mein Wert</div>
                         <div>Aktuelle Einnahme</div>
-                        <div>Empf. Behandlung</div>
+                        <div>Behandlung</div>
                         <div>Notizen</div>
                     </div>
                     <div class="biomarker-row">
-                        <div data-label="Parameter">Stickstoffmonoxid (NO) Metabolite</div>
-                        <div data-label="Hausarzt"><input type="checkbox" class="hausarzt-check"></div>
-                        <div data-label="Kosten"><input type="number" class="cost-input" value="35.00" step="0.01"></div>
-                        <div data-label="Zielwert"><input type="text" value=">40 µmol/l"></div>
-                        <div data-label="Kritisch"><input type="text" value="<25 µmol/l"></div>
-                        <div data-label="Mein Wert"><input type="text" class="my-value"></div>
-                        <div data-label="Aktuelle Einnahme"><input type="text" class="current-intake"></div>
-                        <div data-label="Behandlung"><input type="text" value="L-Arginin, L-Citrullin, Rote Beete"></div>
-                        <div data-label="Notizen"><textarea rows="1"></textarea></div>
+                        <div><strong>LH (Luteinisierendes Hormon)</strong></div>
+                        <div><input type="checkbox" class="hausarzt-check"></div>
+                        <div><input type="number" class="biomarker-input cost-input" value="16.76" step="0.01"></div>
+                        <div><input type="text" class="biomarker-input" value="1.7-8.6 IU/L"></div>
+                        <div><input type="text" class="biomarker-input" value="&lt;1.0 IU/L"></div>
+                        <div><input type="text" class="biomarker-input value-input"></div>
+                        <div><input type="text" class="biomarker-input supplement-input" placeholder="Keine direkte Einnahme"></div>
+                        <div><input type="text" class="biomarker-input" value="Stress reduzieren, Schlaf optimieren"></div>
+                        <div><input type="text" class="biomarker-input notes-input" placeholder="Notizen..."></div>
                     </div>
                     <div class="biomarker-row">
-                        <div data-label="Parameter">L-Arginin</div>
-                        <div data-label="Hausarzt"><input type="checkbox" class="hausarzt-check"></div>
-                        <div data-label="Kosten"><input type="number" class="cost-input" value="28.50" step="0.01"></div>
-                        <div data-label="Zielwert"><input type="text" value="80-150 µmol/l"></div>
-                        <div data-label="Kritisch"><input type="text" value="<60 µmol/l"></div>
-                        <div data-label="Mein Wert"><input type="text" class="my-value"></div>
-                        <div data-label="Aktuelle Einnahme"><input type="text" class="current-intake"></div>
-                        <div data-label="Behandlung"><input type="text" value="L-Arginin 3-6g täglich ELIQUIS-SICHER"></div>
-                        <div data-label="Notizen"><textarea rows="1"></textarea></div>
+                        <div><strong>FSH (Follikelstimulierendes Hormon)</strong></div>
+                        <div><input type="checkbox" class="hausarzt-check"></div>
+                        <div><input type="number" class="biomarker-input cost-input" value="16.76" step="0.01"></div>
+                        <div><input type="text" class="biomarker-input" value="1.5-12.4 IU/L"></div>
+                        <div><input type="text" class="biomarker-input" value="&gt;15 IU/L"></div>
+                        <div><input type="text" class="biomarker-input value-input"></div>
+                        <div><input type="text" class="biomarker-input supplement-input" placeholder="Keine direkte Einnahme"></div>
+                        <div><input type="text" class="biomarker-input" value="Ernährung optimieren, Training"></div>
+                        <div><input type="text" class="biomarker-input notes-input" placeholder="Notizen..."></div>
                     </div>
                     <div class="biomarker-row">
-                        <div data-label="Parameter">L-Citrullin</div>
-                        <div data-label="Hausarzt"><input type="checkbox" class="hausarzt-check"></div>
-                        <div data-label="Kosten"><input type="number" class="cost-input" value="32.00" step="0.01"></div>
-                        <div data-label="Zielwert"><input type="text" value="30-60 µmol/l"></div>
-                        <div data-label="Kritisch"><input type="text" value="<20 µmol/l"></div>
-                        <div data-label="Mein Wert"><input type="text" class="my-value"></div>
-                        <div data-label="Aktuelle Einnahme"><input type="text" class="current-intake"></div>
-                        <div data-label="Behandlung"><input type="text" value="L-Citrullin 3-6g täglich ELIQUIS-SICHER"></div>
-                        <div data-label="Notizen"><textarea rows="1"></textarea></div>
-                    </div>
-                    <div class="biomarker-row">
-                        <div data-label="Parameter">Homocystein</div>
-                        <div data-label="Hausarzt"><input type="checkbox" class="hausarzt-check" checked></div>
-                        <div data-label="Kosten"><input type="number" class="cost-input" value="32.17" step="0.01"></div>
-                        <div data-label="Zielwert"><input type="text" value="<10 µmol/l"></div>
-                        <div data-label="Kritisch"><input type="text" value=">15 µmol/l"></div>
-                        <div data-label="Mein Wert"><input type="text" class="my-value"></div>
-                        <div data-label="Aktuelle Einnahme"><input type="text" class="current-intake"></div>
-                        <div data-label="Behandlung"><input type="text" value="B6, B12, Folat - bereits optimal!</div>
-                        <div data-label="Notizen"><textarea rows="1"></textarea></div>
-                    </div>
-                    <div class="biomarker-row">
-                        <div data-label="Parameter">CRP hochsensitiv (hsCRP)</div>
-                        <div data-label="Hausarzt"><input type="checkbox" class="hausarzt-check" checked></div>
-                        <div data-label="Kosten"><input type="number" class="cost-input" value="13.41" step="0.01"></div>
-                        <div data-label="Zielwert"><input type="text" value="<1.0 mg/l"></div>
-                        <div data-label="Kritisch"><input type="text" value=">3.0 mg/l"></div>
-                        <div data-label="Mein Wert"><input type="text" class="my-value"></div>
-                        <div data-label="Aktuelle Einnahme"><input type="text" class="current-intake"></div>
-                        <div data-label="Behandlung"><input type="text" value="Omega-3 (VORSICHT ELIQUIS!), Curcumin VERMEIDEN"></div>
-                        <div data-label="Notizen"><textarea rows="1"></textarea></div>
-                    </div>
-                    <div class="biomarker-row">
-                        <div data-label="Parameter">Lipoprotein(a) [Lp(a)]</div>
-                        <div data-label="Hausarzt"><input type="checkbox" class="hausarzt-check"></div>
-                        <div data-label="Kosten"><input type="number" class="cost-input" value="20.11" step="0.01"></div>
-                        <div data-label="Zielwert"><input type="text" value="<30 mg/dl"></div>
-                        <div data-label="Kritisch"><input type="text" value=">50 mg/dl"></div>
-                        <div data-label="Mein Wert"><input type="text" class="my-value"></div>
-                        <div data-label="Aktuelle Einnahme"><input type="text" class="current-intake"></div>
-                        <div data-label="Behandlung"><input type="text" value="Niacin, CoQ10, PCSK9-Inhibitoren"></div>
-                        <div data-label="Notizen"><textarea rows="1"></textarea></div>
+                        <div><strong>Prolaktin</strong></div>
+                        <div><input type="checkbox" class="hausarzt-check"></div>
+                        <div><input type="number" class="biomarker-input cost-input" value="23.46" step="0.01"></div>
+                        <div><input type="text" class="biomarker-input" value="4-15 ng/ml"></div>
+                        <div><input type="text" class="biomarker-input" value="&gt;20 ng/ml"></div>
+                        <div><input type="text" class="biomarker-input value-input"></div>
+                        <div><input type="text" class="biomarker-input supplement-input" placeholder="Keine direkte Einnahme"></div>
+                        <div><input type="text" class="biomarker-input" value="Vitamin B6, Stress Management"></div>
+                        <div><input type="text" class="biomarker-input notes-input" placeholder="Notizen..."></div>
                     </div>
                 </div>
             </div>
 
-            <!-- Category 3: Longevity & Anti-Aging -->
-            <div class="category" data-category="longevity">
-                <div class="category-header" onclick="toggleCategory('longevity')" style="background: linear-gradient(135deg, #a8edea 0%, #fed6e3 100%);">
+            <!-- Category 3: Erektions-relevante Parameter -->
+            <div class="category-content">
+                <div class="category-header category-3" onclick="toggleCategory(&#39;cat3&#39;)">
                     <div class="flex justify-between items-center">
-                        <div>
-                            <i class="fas fa-infinity"></i>
-                            3. Longevity & Anti-Aging Biomarker
-                        </div>
+                        <span><i class="fas fa-heartbeat mr-2"></i>3. Erektions-relevante Parameter</span>
                         <div class="flex items-center space-x-4">
-                            <span class="category-cost" id="cost-longevity">€0,00</span>
-                            <i class="fas fa-chevron-down transition-transform" id="icon-longevity"></i>
+                            <span class="category-cost" id="cat3-cost">€93.00</span>
+                            <i class="fas fa-chevron-down transition-transform" id="cat3-icon"></i>
                         </div>
                     </div>
                 </div>
-                <div class="category-content" id="content-longevity" style="display: none;">
-                    <div class="biomarker-row biomarker-header">
+                <div class="category-body hidden" id="cat3-content">
+                    <div class="biomarker-row font-semibold bg-gray-100">
                         <div>Parameter</div>
                         <div>Hausarzt</div>
                         <div>Kosten (€)</div>
@@ -401,94 +392,58 @@
                         <div>Kritisch</div>
                         <div>Mein Wert</div>
                         <div>Aktuelle Einnahme</div>
-                        <div>Empf. Behandlung</div>
+                        <div>Behandlung</div>
                         <div>Notizen</div>
                     </div>
                     <div class="biomarker-row">
-                        <div data-label="Parameter">Telomerlänge (QFISH)</div>
-                        <div data-label="Hausarzt"><input type="checkbox" class="hausarzt-check"></div>
-                        <div data-label="Kosten"><input type="number" class="cost-input" value="195.00" step="0.01"></div>
-                        <div data-label="Zielwert"><input type="text" value=">7.0 kb (top 20%)</div>
-                        <div data-label="Kritisch"><input type="text" value="<5.5 kb"></div>
-                        <div data-label="Mein Wert"><input type="text" class="my-value"></div>
-                        <div data-label="Aktuelle Einnahme"><input type="text" class="current-intake"></div>
-                        <div data-label="Behandlung"><input type="text" value="TA-65, Astragalus, Lifestyle Optimization"></div>
-                        <div data-label="Notizen"><textarea rows="1"></textarea></div>
+                        <div><strong>Stickstoffmonoxid (NO) Metabolite</strong></div>
+                        <div><input type="checkbox" class="hausarzt-check"></div>
+                        <div><input type="number" class="biomarker-input cost-input" value="35.00" step="0.01"></div>
+                        <div><input type="text" class="biomarker-input" value="20-45 µmol/L"></div>
+                        <div><input type="text" class="biomarker-input" value="&lt;15 µmol/L"></div>
+                        <div><input type="text" class="biomarker-input value-input"></div>
+                        <div><input type="text" class="biomarker-input supplement-input" placeholder="Keine direkte Einnahme"></div>
+                        <div><input type="text" class="biomarker-input" value="L-Arginin, L-Citrullin, Rote Beete"></div>
+                        <div><input type="text" class="biomarker-input notes-input" placeholder="Notizen..."></div>
                     </div>
                     <div class="biomarker-row">
-                        <div data-label="Parameter">NAD+ Levels</div>
-                        <div data-label="Hausarzt"><input type="checkbox" class="hausarzt-check"></div>
-                        <div data-label="Kosten"><input type="number" class="cost-input" value="165.00" step="0.01"></div>
-                        <div data-label="Zielwert"><input type="text" value=">50 µmol/l (jung)</div>
-                        <div data-label="Kritisch"><input type="text" value="<30 µmol/l"></div>
-                        <div data-label="Mein Wert"><input type="text" class="my-value"></div>
-                        <div data-label="Aktuelle Einnahme"><input type="text" class="current-intake"></div>
-                        <div data-label="Behandlung"><input type="text" value="NMN, NR, Niacin, Fasten"></div>
-                        <div data-label="Notizen"><textarea rows="1"></textarea></div>
+                        <div><strong>L-Arginin Serumspiegel</strong></div>
+                        <div><input type="checkbox" class="hausarzt-check"></div>
+                        <div><input type="number" class="biomarker-input cost-input" value="28.00" step="0.01"></div>
+                        <div><input type="text" class="biomarker-input" value="80-200 µmol/L"></div>
+                        <div><input type="text" class="biomarker-input" value="&lt;60 µmol/L"></div>
+                        <div><input type="text" class="biomarker-input value-input"></div>
+                        <div><input type="text" class="biomarker-input supplement-input" placeholder="Keine direkte Einnahme"></div>
+                        <div><input type="text" class="biomarker-input" value="L-Arginin 3-6g täglich"></div>
+                        <div><input type="text" class="biomarker-input notes-input" placeholder="Notizen..."></div>
                     </div>
                     <div class="biomarker-row">
-                        <div data-label="Parameter">Glutathione (Total)</div>
-                        <div data-label="Hausarzt"><input type="checkbox" class="hausarzt-check"></div>
-                        <div data-label="Kosten"><input type="number" class="cost-input" value="85.00" step="0.01"></div>
-                        <div data-label="Zielwert"><input type="text" value=">200 µmol/l</div>
-                        <div data-label="Kritisch"><input type="text" value="<150 µmol/l"></div>
-                        <div data-label="Mein Wert"><input type="text" class="my-value"></div>
-                        <div data-label="Aktuelle Einnahme"><input type="text" class="current-intake"></div>
-                        <div data-label="Behandlung"><input type="text" value="NAC, Glycine, Glutamine - ELIQUIS-SICHER"></div>
-                        <div data-label="Notizen"><textarea rows="1"></textarea></div>
-                    </div>
-                    <div class="biomarker-row">
-                        <div data-label="Parameter">IGF-1 (Insulin-like Growth Factor)</div>
-                        <div data-label="Hausarzt"><input type="checkbox" class="hausarzt-check" checked></div>
-                        <div data-label="Kosten"><input type="number" class="cost-input" value="32.17" step="0.01"></div>
-                        <div data-label="Zielwert"><input type="text" value="75-150 ng/ml (optimal)</div>
-                        <div data-label="Kritisch"><input type="text" value="<60 oder >200"></div>
-                        <div data-label="Mein Wert"><input type="text" class="my-value"></div>
-                        <div data-label="Aktuelle Einnahme"><input type="text" class="current-intake"></div>
-                        <div data-label="Behandlung"><input type="text" value="Protein, Schlaf, Intermittent Fasting"></div>
-                        <div data-label="Notizen"><textarea rows="1"></textarea></div>
-                    </div>
-                    <div class="biomarker-row">
-                        <div data-label="Parameter">DHEA-S</div>
-                        <div data-label="Hausarzt"><input type="checkbox" class="hausarzt-check" checked></div>
-                        <div data-label="Kosten"><input type="number" class="cost-input" value="23.46" step="0.01"></div>
-                        <div data-label="Zielwert"><input type="text" value="350-500 µg/dl (jung)</div>
-                        <div data-label="Kritisch"><input type="text" value="<200 µg/dl"></div>
-                        <div data-label="Mein Wert"><input type="text" class="my-value"></div>
-                        <div data-label="Aktuelle Einnahme"><input type="text" class="current-intake"></div>
-                        <div data-label="Behandlung"><input type="text" value="DHEA 25-50mg (Arzt konsultieren)"></div>
-                        <div data-label="Notizen"><textarea rows="1"></textarea></div>
-                    </div>
-                    <div class="biomarker-row">
-                        <div data-label="Parameter">Advanced Glycation End Products (AGEs)</div>
-                        <div data-label="Hausarzt"><input type="checkbox" class="hausarzt-check"></div>
-                        <div data-label="Kosten"><input type="number" class="cost-input" value="125.00" step="0.01"></div>
-                        <div data-label="Zielwert"><input type="text" value="<2.0 AU (jung)</div>
-                        <div data-label="Kritisch"><input type="text" value=">4.0 AU"></div>
-                        <div data-label="Mein Wert"><input type="text" class="my-value"></div>
-                        <div data-label="Aktuelle Einnahme"><input type="text" class="current-intake"></div>
-                        <div data-label="Behandlung"><input type="text" value="Antioxidantien, Low-AGE Diet, Carnosin"></div>
-                        <div data-label="Notizen"><textarea rows="1"></textarea></div>
+                        <div><strong>L-Citrullin Serumspiegel</strong></div>
+                        <div><input type="checkbox" class="hausarzt-check"></div>
+                        <div><input type="number" class="biomarker-input cost-input" value="30.00" step="0.01"></div>
+                        <div><input type="text" class="biomarker-input" value="25-65 µmol/L"></div>
+                        <div><input type="text" class="biomarker-input" value="&lt;20 µmol/L"></div>
+                        <div><input type="text" class="biomarker-input value-input"></div>
+                        <div><input type="text" class="biomarker-input supplement-input" placeholder="Keine direkte Einnahme"></div>
+                        <div><input type="text" class="biomarker-input" value="L-Citrullin 3-8g täglich"></div>
+                        <div><input type="text" class="biomarker-input notes-input" placeholder="Notizen..."></div>
                     </div>
                 </div>
             </div>
 
-            <!-- Category 4: Metabolische Parameter -->
-            <div class="category" data-category="metabolisch">
-                <div class="category-header" onclick="toggleCategory('metabolisch')" style="background: linear-gradient(135deg, #ffecd2 0%, #fcb69f 100%);">
+            <!-- Category 4: Kardiovaskuläre Gesundheit -->
+            <div class="category-content">
+                <div class="category-header category-4" onclick="toggleCategory(&#39;cat4&#39;)">
                     <div class="flex justify-between items-center">
-                        <div>
-                            <i class="fas fa-fire"></i>
-                            4. Metabolische Parameter & Blutzucker
-                        </div>
+                        <span><i class="fas fa-heart mr-2"></i>4. Kardiovaskuläre Gesundheit</span>
                         <div class="flex items-center space-x-4">
-                            <span class="category-cost" id="cost-metabolisch">€0,00</span>
-                            <i class="fas fa-chevron-down transition-transform" id="icon-metabolisch"></i>
+                            <span class="category-cost" id="cat4-cost">€90.69</span>
+                            <i class="fas fa-chevron-down transition-transform" id="cat4-icon"></i>
                         </div>
                     </div>
                 </div>
-                <div class="category-content" id="content-metabolisch" style="display: none;">
-                    <div class="biomarker-row biomarker-header">
+                <div class="category-body hidden" id="cat4-content">
+                    <div class="biomarker-row font-semibold bg-gray-100">
                         <div>Parameter</div>
                         <div>Hausarzt</div>
                         <div>Kosten (€)</div>
@@ -496,94 +451,69 @@
                         <div>Kritisch</div>
                         <div>Mein Wert</div>
                         <div>Aktuelle Einnahme</div>
-                        <div>Empf. Behandlung</div>
+                        <div>Behandlung</div>
                         <div>Notizen</div>
                     </div>
                     <div class="biomarker-row">
-                        <div data-label="Parameter">HbA1c (Langzeit-Blutzucker)</div>
-                        <div data-label="Hausarzt"><input type="checkbox" class="hausarzt-check" checked></div>
-                        <div data-label="Kosten"><input type="number" class="cost-input" value="13.41" step="0.01"></div>
-                        <div data-label="Zielwert"><input type="text" value="4.5-5.6% (optimal <5.0%)</div>
-                        <div data-label="Kritisch"><input type="text" value=">6.0%"></div>
-                        <div data-label="Mein Wert"><input type="text" class="my-value"></div>
-                        <div data-label="Aktuelle Einnahme"><input type="text" class="current-intake"></div>
-                        <div data-label="Behandlung"><input type="text" value="Low Carb, Metformin, Berberine"></div>
-                        <div data-label="Notizen"><textarea rows="1"></textarea></div>
+                        <div><strong>Homocystein</strong></div>
+                        <div><input type="checkbox" class="hausarzt-check"></div>
+                        <div><input type="number" class="biomarker-input cost-input" value="32.17" step="0.01"></div>
+                        <div><input type="text" class="biomarker-input" value="&lt;10 µmol/L"></div>
+                        <div><input type="text" class="biomarker-input" value="&gt;15 µmol/L"></div>
+                        <div><input type="text" class="biomarker-input value-input"></div>
+                        <div><input type="text" class="biomarker-input supplement-input" value="B6: 1,4mg täglich"></div>
+                        <div><input type="text" class="biomarker-input" value="B-Komplex, Folsäure, B12"></div>
+                        <div><input type="text" class="biomarker-input notes-input" placeholder="Notizen..."></div>
                     </div>
                     <div class="biomarker-row">
-                        <div data-label="Parameter">Nüchtern-Glukose</div>
-                        <div data-label="Hausarzt"><input type="checkbox" class="hausarzt-check" checked></div>
-                        <div data-label="Kosten"><input type="number" class="cost-input" value="2.68" step="0.01"></div>
-                        <div data-label="Zielwert"><input type="text" value="70-85 mg/dl (optimal)</div>
-                        <div data-label="Kritisch"><input type="text" value=">100 mg/dl"></div>
-                        <div data-label="Mein Wert"><input type="text" class="my-value"></div>
-                        <div data-label="Aktuelle Einnahme"><input type="text" class="current-intake"></div>
-                        <div data-label="Behandlung"><input type="text" value="Intermittent Fasting, Low GI Diet"></div>
-                        <div data-label="Notizen"><textarea rows="1"></textarea></div>
+                        <div><strong>CRP hochsensitiv</strong></div>
+                        <div><input type="checkbox" class="hausarzt-check"></div>
+                        <div><input type="number" class="biomarker-input cost-input" value="13.41" step="0.01"></div>
+                        <div><input type="text" class="biomarker-input" value="&lt;1.0 mg/L"></div>
+                        <div><input type="text" class="biomarker-input" value="&gt;3.0 mg/L"></div>
+                        <div><input type="text" class="biomarker-input value-input"></div>
+                        <div><input type="text" class="biomarker-input supplement-input" placeholder="Keine direkte Einnahme"></div>
+                        <div><input type="text" class="biomarker-input" value="Omega-3, Curcumin (ELIQUIS VORSICHT!)"></div>
+                        <div><input type="text" class="biomarker-input notes-input" placeholder="Notizen..."></div>
                     </div>
                     <div class="biomarker-row">
-                        <div data-label="Parameter">Insulin (nüchtern)</div>
-                        <div data-label="Hausarzt"><input type="checkbox" class="hausarzt-check" checked></div>
-                        <div data-label="Kosten"><input type="number" class="cost-input" value="16.76" step="0.01"></div>
-                        <div data-label="Zielwert"><input type="text" value="2-10 µU/ml (optimal <5)</div>
-                        <div data-label="Kritisch"><input type="text" value=">15 µU/ml"></div>
-                        <div data-label="Mein Wert"><input type="text" class="my-value"></div>
-                        <div data-label="Aktuelle Einnahme"><input type="text" class="current-intake"></div>
-                        <div data-label="Behandlung"><input type="text" value="Chrom, Alpha-Liponsäure, Fasten"></div>
-                        <div data-label="Notizen"><textarea rows="1"></textarea></div>
+                        <div><strong>Lipoprotein(a)</strong></div>
+                        <div><input type="checkbox" class="hausarzt-check"></div>
+                        <div><input type="number" class="biomarker-input cost-input" value="20.11" step="0.01"></div>
+                        <div><input type="text" class="biomarker-input" value="&lt;30 mg/dl"></div>
+                        <div><input type="text" class="biomarker-input" value="&gt;50 mg/dl"></div>
+                        <div><input type="text" class="biomarker-input value-input"></div>
+                        <div><input type="text" class="biomarker-input supplement-input" placeholder="Keine direkte Einnahme"></div>
+                        <div><input type="text" class="biomarker-input" value="Niacin, Vitamin C (genetisch bedingt)"></div>
+                        <div><input type="text" class="biomarker-input notes-input" placeholder="Notizen..."></div>
                     </div>
                     <div class="biomarker-row">
-                        <div data-label="Parameter">HOMA-IR (Insulinresistenz)</div>
-                        <div data-label="Hausarzt"><input type="checkbox" class="hausarzt-check"></div>
-                        <div data-label="Kosten"><input type="number" class="cost-input" value="0.00" step="0.01"></div>
-                        <div data-label="Zielwert"><input type="text" value="<1.0 (berechnet)</div>
-                        <div data-label="Kritisch"><input type="text" value=">2.5"></div>
-                        <div data-label="Mein Wert"><input type="text" class="my-value"></div>
-                        <div data-label="Aktuelle Einnahme"><input type="text" class="current-intake"></div>
-                        <div data-label="Behandlung"><input type="text" value="Berechnung aus Glukose & Insulin"></div>
-                        <div data-label="Notizen"><textarea rows="1"></textarea></div>
-                    </div>
-                    <div class="biomarker-row">
-                        <div data-label="Parameter">Adiponectin</div>
-                        <div data-label="Hausarzt"><input type="checkbox" class="hausarzt-check"></div>
-                        <div data-label="Kosten"><input type="number" class="cost-input" value="75.00" step="0.01"></div>
-                        <div data-label="Zielwert"><input type="text" value=">10 µg/ml</div>
-                        <div data-label="Kritisch"><input type="text" value="<5 µg/ml"></div>
-                        <div data-label="Mein Wert"><input type="text" class="my-value"></div>
-                        <div data-label="Aktuelle Einnahme"><input type="text" class="current-intake"></div>
-                        <div data-label="Behandlung"><input type="text" value="Omega-3, PPARγ Agonisten, Exercise"></div>
-                        <div data-label="Notizen"><textarea rows="1"></textarea></div>
-                    </div>
-                    <div class="biomarker-row">
-                        <div data-label="Parameter">Leptin</div>
-                        <div data-label="Hausarzt"><input type="checkbox" class="hausarzt-check"></div>
-                        <div data-label="Kosten"><input type="number" class="cost-input" value="45.00" step="0.01"></div>
-                        <div data-label="Zielwert"><input type="text" value="<10 ng/ml (Männer)</div>
-                        <div data-label="Kritisch"><input type="text" value=">20 ng/ml"></div>
-                        <div data-label="Mein Wert"><input type="text" class="my-value"></div>
-                        <div data-label="Aktuelle Einnahme"><input type="text" class="current-intake"></div>
-                        <div data-label="Behandlung"><input type="text" value="Intermittent Fasting, Zink, Schlaf"></div>
-                        <div data-label="Notizen"><textarea rows="1"></textarea></div>
+                        <div><strong>Apolipoprotein B (ApoB)</strong></div>
+                        <div><input type="checkbox" class="hausarzt-check"></div>
+                        <div><input type="number" class="biomarker-input cost-input" value="25.00" step="0.01"></div>
+                        <div><input type="text" class="biomarker-input" value="&lt;90 mg/dl"></div>
+                        <div><input type="text" class="biomarker-input" value="&gt;120 mg/dl"></div>
+                        <div><input type="text" class="biomarker-input value-input"></div>
+                        <div><input type="text" class="biomarker-input supplement-input" placeholder="Keine direkte Einnahme"></div>
+                        <div><input type="text" class="biomarker-input" value="Ernährung, Bewegung, Statine"></div>
+                        <div><input type="text" class="biomarker-input notes-input" placeholder="Notizen..."></div>
                     </div>
                 </div>
             </div>
 
-            <!-- Category 5: Stress & Cortisol -->
-            <div class="category" data-category="stress">
-                <div class="category-header" onclick="toggleCategory('stress')" style="background: linear-gradient(135deg, #ff9a9e 0%, #fecfef 100%);">
+            <!-- Category 5: Longevity & Anti-Aging -->
+            <div class="category-content">
+                <div class="category-header category-5" onclick="toggleCategory(&#39;cat5&#39;)">
                     <div class="flex justify-between items-center">
-                        <div>
-                            <i class="fas fa-brain"></i>
-                            5. Stress & Cortisol System
-                        </div>
+                        <span><i class="fas fa-hourglass-half mr-2"></i>5. Longevity &amp; Anti-Aging</span>
                         <div class="flex items-center space-x-4">
-                            <span class="category-cost" id="cost-stress">€0,00</span>
-                            <i class="fas fa-chevron-down transition-transform" id="icon-stress"></i>
+                            <span class="category-cost" id="cat5-cost">€380.00</span>
+                            <i class="fas fa-chevron-down transition-transform" id="cat5-icon"></i>
                         </div>
                     </div>
                 </div>
-                <div class="category-content" id="content-stress" style="display: none;">
-                    <div class="biomarker-row biomarker-header">
+                <div class="category-body hidden" id="cat5-content">
+                    <div class="biomarker-row font-semibold bg-gray-100">
                         <div>Parameter</div>
                         <div>Hausarzt</div>
                         <div>Kosten (€)</div>
@@ -591,83 +521,69 @@
                         <div>Kritisch</div>
                         <div>Mein Wert</div>
                         <div>Aktuelle Einnahme</div>
-                        <div>Empf. Behandlung</div>
+                        <div>Behandlung</div>
                         <div>Notizen</div>
                     </div>
                     <div class="biomarker-row">
-                        <div data-label="Parameter">Cortisol (morgens)</div>
-                        <div data-label="Hausarzt"><input type="checkbox" class="hausarzt-check" checked></div>
-                        <div data-label="Kosten"><input type="number" class="cost-input" value="16.76" step="0.01"></div>
-                        <div data-label="Zielwert"><input type="text" value="10-25 µg/dl (6-10 Uhr)</div>
-                        <div data-label="Kritisch"><input type="text" value="<5 oder >30"></div>
-                        <div data-label="Mein Wert"><input type="text" class="my-value"></div>
-                        <div data-label="Aktuelle Einnahme"><input type="text" class="current-intake"></div>
-                        <div data-label="Behandlung"><input type="text" value="Adaptogene, Melatonin, Schlafoptimierung"></div>
-                        <div data-label="Notizen"><textarea rows="1"></textarea></div>
+                        <div><strong>Telomerlänge (QFISH)</strong></div>
+                        <div><input type="checkbox" class="hausarzt-check"></div>
+                        <div><input type="number" class="biomarker-input cost-input" value="180.00" step="0.01"></div>
+                        <div><input type="text" class="biomarker-input" value="&gt;7.0 kb"></div>
+                        <div><input type="text" class="biomarker-input" value="&lt;5.0 kb"></div>
+                        <div><input type="text" class="biomarker-input value-input"></div>
+                        <div><input type="text" class="biomarker-input supplement-input" placeholder="Keine direkte Einnahme"></div>
+                        <div><input type="text" class="biomarker-input" value="Stress reduzieren, Meditation, Omega-3"></div>
+                        <div><input type="text" class="biomarker-input notes-input" placeholder="Notizen..."></div>
                     </div>
                     <div class="biomarker-row">
-                        <div data-label="Parameter">Cortisol (abends)</div>
-                        <div data-label="Hausarzt"><input type="checkbox" class="hausarzt-check"></div>
-                        <div data-label="Kosten"><input type="number" class="cost-input" value="16.76" step="0.01"></div>
-                        <div data-label="Zielwert"><input type="text" value="<5 µg/dl (23 Uhr)</div>
-                        <div data-label="Kritisch"><input type="text" value=">10 µg/dl"></div>
-                        <div data-label="Mein Wert"><input type="text" class="my-value"></div>
-                        <div data-label="Aktuelle Einnahme"><input type="text" class="current-intake"></div>
-                        <div data-label="Behandlung"><input type="text" value="Phosphatidylserin, Magnolia, Meditation"></div>
-                        <div data-label="Notizen"><textarea rows="1"></textarea></div>
+                        <div><strong>NAD+ Levels</strong></div>
+                        <div><input type="checkbox" class="hausarzt-check"></div>
+                        <div><input type="number" class="biomarker-input cost-input" value="120.00" step="0.01"></div>
+                        <div><input type="text" class="biomarker-input" value="&gt;40 µM"></div>
+                        <div><input type="text" class="biomarker-input" value="&lt;25 µM"></div>
+                        <div><input type="text" class="biomarker-input value-input"></div>
+                        <div><input type="text" class="biomarker-input supplement-input" placeholder="Keine direkte Einnahme"></div>
+                        <div><input type="text" class="biomarker-input" value="NMN, NR, Fasten, Exercise"></div>
+                        <div><input type="text" class="biomarker-input notes-input" placeholder="Notizen..."></div>
                     </div>
                     <div class="biomarker-row">
-                        <div data-label="Parameter">24h Cortisol-Profil (Speichel)</div>
-                        <div data-label="Hausarzt"><input type="checkbox" class="hausarzt-check"></div>
-                        <div data-label="Kosten"><input type="number" class="cost-input" value="85.00" step="0.01"></div>
-                        <div data-label="Zielwert"><input type="text" value="Normale Rhythmik</div>
-                        <div data-label="Kritisch"><input type="text" value="Flacher Verlauf"></div>
-                        <div data-label="Mein Wert"><input type="text" class="my-value"></div>
-                        <div data-label="Aktuelle Einnahme"><input type="text" class="current-intake"></div>
-                        <div data-label="Behandlung"><input type="text" value="Circadianer Rhythmus Reset"></div>
-                        <div data-label="Notizen"><textarea rows="1"></textarea></div>
+                        <div><strong>Glutathione (Total)</strong></div>
+                        <div><input type="checkbox" class="hausarzt-check"></div>
+                        <div><input type="number" class="biomarker-input cost-input" value="45.00" step="0.01"></div>
+                        <div><input type="text" class="biomarker-input" value="&gt;200 µmol/L"></div>
+                        <div><input type="text" class="biomarker-input" value="&lt;150 µmol/L"></div>
+                        <div><input type="text" class="biomarker-input value-input"></div>
+                        <div><input type="text" class="biomarker-input supplement-input" placeholder="Keine direkte Einnahme"></div>
+                        <div><input type="text" class="biomarker-input" value="NAC, Glycin, Glutamin"></div>
+                        <div><input type="text" class="biomarker-input notes-input" placeholder="Notizen..."></div>
                     </div>
                     <div class="biomarker-row">
-                        <div data-label="Parameter">Adrenalin (Epinephrin)</div>
-                        <div data-label="Hausarzt"><input type="checkbox" class="hausarzt-check"></div>
-                        <div data-label="Kosten"><input type="number" class="cost-input" value="65.00" step="0.01"></div>
-                        <div data-label="Zielwert"><input type="text" value="<100 pg/ml</div>
-                        <div data-label="Kritisch"><input type="text" value=">200 pg/ml"></div>
-                        <div data-label="Mein Wert"><input type="text" class="my-value"></div>
-                        <div data-label="Aktuelle Einnahme"><input type="text" class="current-intake"></div>
-                        <div data-label="Behandlung"><input type="text" value="L-Theanin, Taurin, Atemtechniken"></div>
-                        <div data-label="Notizen"><textarea rows="1"></textarea></div>
-                    </div>
-                    <div class="biomarker-row">
-                        <div data-label="Parameter">Noradrenalin (Norepinephrin)</div>
-                        <div data-label="Hausarzt"><input type="checkbox" class="hausarzt-check"></div>
-                        <div data-label="Kosten"><input type="number" class="cost-input" value="65.00" step="0.01"></div>
-                        <div data-label="Zielwert"><input type="text" value="200-600 pg/ml</div>
-                        <div data-label="Kritisch"><input type="text" value=">800 pg/ml"></div>
-                        <div data-label="Mein Wert"><input type="text" class="my-value"></div>
-                        <div data-label="Aktuelle Einnahme"><input type="text" class="current-intake"></div>
-                        <div data-label="Behandlung"><input type="text" value="Tyrosin, Koffein-Reduktion"></div>
-                        <div data-label="Notizen"><textarea rows="1"></textarea></div>
+                        <div><strong>IGF-1 (Insulin-like Growth Factor)</strong></div>
+                        <div><input type="checkbox" class="hausarzt-check"></div>
+                        <div><input type="number" class="biomarker-input cost-input" value="35.00" step="0.01"></div>
+                        <div><input type="text" class="biomarker-input" value="100-200 ng/ml"></div>
+                        <div><input type="text" class="biomarker-input" value="&gt;300 ng/ml oder &lt;80 ng/ml"></div>
+                        <div><input type="text" class="biomarker-input value-input"></div>
+                        <div><input type="text" class="biomarker-input supplement-input" placeholder="Keine direkte Einnahme"></div>
+                        <div><input type="text" class="biomarker-input" value="Protein Balance, Fasten, Training"></div>
+                        <div><input type="text" class="biomarker-input notes-input" placeholder="Notizen..."></div>
                     </div>
                 </div>
             </div>
 
-            <!-- Category 6: Nährstoffe & Vitamine -->
-            <div class="category" data-category="naehrstoffe">
-                <div class="category-header" onclick="toggleCategory('naehrstoffe')" style="background: linear-gradient(135deg, #a8e6cf 0%, #dcedc1 100%);">
+            <!-- Category 6: Neurological & Cognitive -->
+            <div class="category-content">
+                <div class="category-header category-6" onclick="toggleCategory(&#39;cat6&#39;)">
                     <div class="flex justify-between items-center">
-                        <div>
-                            <i class="fas fa-leaf"></i>
-                            6. Nährstoffe & Vitamine Status
-                        </div>
+                        <span><i class="fas fa-brain mr-2"></i>6. Neurological &amp; Cognitive Health</span>
                         <div class="flex items-center space-x-4">
-                            <span class="category-cost" id="cost-naehrstoffe">€0,00</span>
-                            <i class="fas fa-chevron-down transition-transform" id="icon-naehrstoffe"></i>
+                            <span class="category-cost" id="cat6-cost">€235.00</span>
+                            <i class="fas fa-chevron-down transition-transform" id="cat6-icon"></i>
                         </div>
                     </div>
                 </div>
-                <div class="category-content" id="content-naehrstoffe" style="display: none;">
-                    <div class="biomarker-row biomarker-header">
+                <div class="category-body hidden" id="cat6-content">
+                    <div class="biomarker-row font-semibold bg-gray-100">
                         <div>Parameter</div>
                         <div>Hausarzt</div>
                         <div>Kosten (€)</div>
@@ -675,125 +591,47 @@
                         <div>Kritisch</div>
                         <div>Mein Wert</div>
                         <div>Aktuelle Einnahme</div>
-                        <div>Empf. Behandlung</div>
+                        <div>Behandlung</div>
                         <div>Notizen</div>
                     </div>
                     <div class="biomarker-row">
-                        <div data-label="Parameter">Vitamin D3 (25-OH)</div>
-                        <div data-label="Hausarzt"><input type="checkbox" class="hausarzt-check" checked></div>
-                        <div data-label="Kosten"><input type="number" class="cost-input" value="32.17" step="0.01"></div>
-                        <div data-label="Zielwert"><input type="text" value="50-80 ng/ml (optimal)</div>
-                        <div data-label="Kritisch"><input type="text" value="<30 ng/ml"></div>
-                        <div data-label="Mein Wert"><input type="text" class="my-value"></div>
-                        <div data-label="Aktuelle Einnahme"><input type="text" class="current-intake" value="3000 IU täglich"></div>
-                        <div data-label="Behandlung"><input type="text" value="Dosierung anpassen nach Laborbefund"></div>
-                        <div data-label="Notizen"><textarea rows="1"></textarea></div>
+                        <div><strong>BDNF (Brain-Derived Neurotrophic Factor)</strong></div>
+                        <div><input type="checkbox" class="hausarzt-check"></div>
+                        <div><input type="number" class="biomarker-input cost-input" value="85.00" step="0.01"></div>
+                        <div><input type="text" class="biomarker-input" value="&gt;20 ng/ml"></div>
+                        <div><input type="text" class="biomarker-input" value="&lt;15 ng/ml"></div>
+                        <div><input type="text" class="biomarker-input value-input"></div>
+                        <div><input type="text" class="biomarker-input supplement-input" placeholder="Keine direkte Einnahme"></div>
+                        <div><input type="text" class="biomarker-input" value="Exercise, Meditation, Lion&#39;s Mane"></div>
+                        <div><input type="text" class="biomarker-input notes-input" placeholder="Notizen..."></div>
                     </div>
                     <div class="biomarker-row">
-                        <div data-label="Parameter">Vitamin K2 (MK-7)</div>
-                        <div data-label="Hausarzt"><input type="checkbox" class="hausarzt-check"></div>
-                        <div data-label="Kosten"><input type="number" class="cost-input" value="65.00" step="0.01"></div>
-                        <div data-label="Zielwert"><input type="text" value=">500 ng/ml</div>
-                        <div data-label="Kritisch"><input type="text" value="<200 ng/ml"></div>
-                        <div data-label="Mein Wert"><input type="text" class="my-value"></div>
-                        <div data-label="Aktuelle Einnahme"><input type="text" class="current-intake" value="60µg täglich (ELIQUIS BEACHTEN!)"></div>
-                        <div data-label="Behandlung"><input type="text" value="VORSICHT bei Eliquis - INR überwachen!"></div>
-                        <div data-label="Notizen"><textarea rows="1"></textarea></div>
-                    </div>
-                    <div class="biomarker-row">
-                        <div data-label="Parameter">Magnesium (intrazellulärer)</div>
-                        <div data-label="Hausarzt"><input type="checkbox" class="hausarzt-check"></div>
-                        <div data-label="Kosten"><input type="number" class="cost-input" value="45.00" step="0.01"></div>
-                        <div data-label="Zielwert"><input type="text" value="4.2-6.8 mg/dl</div>
-                        <div data-label="Kritisch"><input type="text" value="<4.0 mg/dl"></div>
-                        <div data-label="Mein Wert"><input type="text" class="my-value"></div>
-                        <div data-label="Aktuelle Einnahme"><input type="text" class="current-intake" value="375mg täglich (Glycinat)"></div>
-                        <div data-label="Behandlung"><input type="text" value="Optimale Dosierung bereits erreicht"></div>
-                        <div data-label="Notizen"><textarea rows="1"></textarea></div>
-                    </div>
-                    <div class="biomarker-row">
-                        <div data-label="Parameter">Zink</div>
-                        <div data-label="Hausarzt"><input type="checkbox" class="hausarzt-check" checked></div>
-                        <div data-label="Kosten"><input type="number" class="cost-input" value="27.48" step="0.01"></div>
-                        <div data-label="Zielwert"><input type="text" value="90-130 µg/dl</div>
-                        <div data-label="Kritisch"><input type="text" value="<70 µg/dl"></div>
-                        <div data-label="Mein Wert"><input type="text" class="my-value"></div>
-                        <div data-label="Aktuelle Einnahme"><input type="text" class="current-intake" value="10mg täglich"></div>
-                        <div data-label="Behandlung"><input type="text" value="Copper-Zink Balance beachten"></div>
-                        <div data-label="Notizen"><textarea rows="1"></textarea></div>
-                    </div>
-                    <div class="biomarker-row">
-                        <div data-label="Parameter">Vitamin B6 (P5P)</div>
-                        <div data-label="Hausarzt"><input type="checkbox" class="hausarzt-check"></div>
-                        <div data-label="Kosten"><input type="number" class="cost-input" value="35.00" step="0.01"></div>
-                        <div data-label="Zielwert"><input type="text" value="20-50 µg/l</div>
-                        <div data-label="Kritisch"><input type="text" value="<10 µg/l"></div>
-                        <div data-label="Mein Wert"><input type="text" class="my-value"></div>
-                        <div data-label="Aktuelle Einnahme"><input type="text" class="current-intake" value="1,4mg täglich"></div>
-                        <div data-label="Behandlung"><input type="text" value="Aktive Form P5P bevorzugen"></div>
-                        <div data-label="Notizen"><textarea rows="1"></textarea></div>
-                    </div>
-                    <div class="biomarker-row">
-                        <div data-label="Parameter">Vitamin B12 (aktiv)</div>
-                        <div data-label="Hausarzt"><input type="checkbox" class="hausarzt-check" checked></div>
-                        <div data-label="Kosten"><input type="number" class="cost-input" value="32.17" step="0.01"></div>
-                        <div data-label="Zielwert"><input type="text" value=">400 pg/ml</div>
-                        <div data-label="Kritisch"><input type="text" value="<300 pg/ml"></div>
-                        <div data-label="Mein Wert"><input type="text" class="my-value"></div>
-                        <div data-label="Aktuelle Einnahme"><input type="text" class="current-intake"></div>
-                        <div data-label="Behandlung"><input type="text" value="Methylcobalamin bevorzugen"></div>
-                        <div data-label="Notizen"><textarea rows="1"></textarea></div>
-                    </div>
-                    <div class="biomarker-row">
-                        <div data-label="Parameter">Folsäure (aktiv)</div>
-                        <div data-label="Hausarzt"><input type="checkbox" class="hausarzt-check" checked></div>
-                        <div data-label="Kosten"><input type="number" class="cost-input" value="16.76" step="0.01"></div>
-                        <div data-label="Zielwert"><input type="text" value=">15 ng/ml</div>
-                        <div data-label="Kritisch"><input type="text" value="<10 ng/ml"></div>
-                        <div data-label="Mein Wert"><input type="text" class="my-value"></div>
-                        <div data-label="Aktuelle Einnahme"><input type="text" class="current-intake"></div>
-                        <div data-label="Behandlung"><input type="text" value="Methylfolat verwenden (MTHFR!)"></div>
-                        <div data-label="Notizen"><textarea rows="1"></textarea></div>
-                    </div>
-                    <div class="biomarker-row">
-                        <div data-label="Parameter">Omega-3 Index</div>
-                        <div data-label="Hausarzt"><input type="checkbox" class="hausarzt-check"></div>
-                        <div data-label="Kosten"><input type="number" class="cost-input" value="85.00" step="0.01"></div>
-                        <div data-label="Zielwert"><input type="text" value=">8% (optimal)</div>
-                        <div data-label="Kritisch"><input type="text" value="<4%"></div>
-                        <div data-label="Mein Wert"><input type="text" class="my-value"></div>
-                        <div data-label="Aktuelle Einnahme"><input type="text" class="current-intake"></div>
-                        <div data-label="Behandlung"><input type="text" value="⚠️ ELIQUIS: Max 2g täglich! Blutungsrisiko!"></div>
-                        <div data-label="Notizen"><textarea rows="1"></textarea></div>
+                        <div><strong>Neurotransmitter Panel</strong></div>
+                        <div><input type="checkbox" class="hausarzt-check"></div>
+                        <div><input type="number" class="biomarker-input cost-input" value="150.00" step="0.01"></div>
+                        <div><input type="text" class="biomarker-input" value="Balanced Profile"></div>
+                        <div><input type="text" class="biomarker-input" value="Multiple Imbalances"></div>
+                        <div><input type="text" class="biomarker-input value-input"></div>
+                        <div><input type="text" class="biomarker-input supplement-input" placeholder="Keine direkte Einnahme"></div>
+                        <div><input type="text" class="biomarker-input" value="Tyrosin, 5-HTP, GABA support"></div>
+                        <div><input type="text" class="biomarker-input notes-input" placeholder="Notizen..."></div>
                     </div>
                 </div>
             </div>
 
-            <!-- Category 7: ELIQUIS-Monitoring -->
-            <div class="category" data-category="eliquis">
-                <div class="category-header" onclick="toggleCategory('eliquis')" style="background: linear-gradient(135deg, #ff8a80 0%, #ffab91 100%);">
+            <!-- Category 7: Metabolic Optimization -->
+            <div class="category-content">
+                <div class="category-header category-7" onclick="toggleCategory(&#39;cat7&#39;)">
                     <div class="flex justify-between items-center">
-                        <div>
-                            <i class="fas fa-exclamation-triangle"></i>
-                            7. ELIQUIS-Monitoring & Gerinnungsparameter
-                        </div>
+                        <span><i class="fas fa-tachometer-alt mr-2"></i>7. Metabolic Optimization</span>
                         <div class="flex items-center space-x-4">
-                            <span class="category-cost" id="cost-eliquis">€0,00</span>
-                            <i class="fas fa-chevron-down transition-transform" id="icon-eliquis"></i>
+                            <span class="category-cost" id="cat7-cost">€30.17</span>
+                            <i class="fas fa-chevron-down transition-transform" id="cat7-icon"></i>
                         </div>
                     </div>
                 </div>
-                <div class="category-content" id="content-eliquis" style="display: none;">
-                    <div class="bg-red-50 border border-red-200 rounded-lg p-4 mb-4">
-                        <h4 class="text-red-800 font-semibold mb-2">⚠️ WICHTIGER HINWEISE FÜR ELIQUIS-PATIENTEN:</h4>
-                        <ul class="text-red-700 text-sm space-y-1">
-                            <li>• Regelmäßige Überwachung der Gerinnungsparameter erforderlich</li>
-                            <li>• Vitamin K2 und Omega-3 nur unter ärztlicher Kontrolle</li>
-                            <li>• Ginkgo, Kurkumin, Knoblauch-Extrakte VERMEIDEN</li>
-                            <li>• Bei Supplement-Änderungen IMMER Arzt konsultieren</li>
-                        </ul>
-                    </div>
-                    <div class="biomarker-row biomarker-header">
+                <div class="category-body hidden" id="cat7-content">
+                    <div class="biomarker-row font-semibold bg-gray-100">
                         <div>Parameter</div>
                         <div>Hausarzt</div>
                         <div>Kosten (€)</div>
@@ -801,83 +639,58 @@
                         <div>Kritisch</div>
                         <div>Mein Wert</div>
                         <div>Aktuelle Einnahme</div>
-                        <div>Empf. Behandlung</div>
+                        <div>Behandlung</div>
                         <div>Notizen</div>
                     </div>
                     <div class="biomarker-row">
-                        <div data-label="Parameter">Quick/INR</div>
-                        <div data-label="Hausarzt"><input type="checkbox" class="hausarzt-check" checked></div>
-                        <div data-label="Kosten"><input type="number" class="cost-input" value="8.50" step="0.01"></div>
-                        <div data-label="Zielwert"><input type="text" value="0.8-1.2 INR (Eliquis)</div>
-                        <div data-label="Kritisch"><input type="text" value=">2.0 oder <0.5"></div>
-                        <div data-label="Mein Wert"><input type="text" class="my-value"></div>
-                        <div data-label="Aktuelle Einnahme"><input type="text" class="current-intake">Eliquis nach Verordnung</div>
-                        <div data-label="Behandlung"><input type="text" value="Regelmäßige Kontrolle alle 4 Wochen"></div>
-                        <div data-label="Notizen"><textarea rows="1"></textarea></div>
+                        <div><strong>HbA1c</strong></div>
+                        <div><input type="checkbox" class="hausarzt-check"></div>
+                        <div><input type="number" class="biomarker-input cost-input" value="13.41" step="0.01"></div>
+                        <div><input type="text" class="biomarker-input" value="&lt;5.7%"></div>
+                        <div><input type="text" class="biomarker-input" value="&gt;6.5%"></div>
+                        <div><input type="text" class="biomarker-input value-input"></div>
+                        <div><input type="text" class="biomarker-input supplement-input" placeholder="Keine direkte Einnahme"></div>
+                        <div><input type="text" class="biomarker-input" value="Low Carb, Metformin, Exercise"></div>
+                        <div><input type="text" class="biomarker-input notes-input" placeholder="Notizen..."></div>
                     </div>
                     <div class="biomarker-row">
-                        <div data-label="Parameter">aPTT (aktivierte partielle Thromboplastinzeit)</div>
-                        <div data-label="Hausarzt"><input type="checkbox" class="hausarzt-check" checked></div>
-                        <div data-label="Kosten"><input type="number" class="cost-input" value="6.20" step="0.01"></div>
-                        <div data-label="Zielwert"><input type="text" value="25-35 sec</div>
-                        <div data-label="Kritisch"><input type="text" value=">60 sec"></div>
-                        <div data-label="Mein Wert"><input type="text" class="my-value"></div>
-                        <div data-label="Aktuelle Einnahme"><input type="text" class="current-intake"></div>
-                        <div data-label="Behandlung"><input type="text" value="Monitoring bei Supplement-Änderungen"></div>
-                        <div data-label="Notizen"><textarea rows="1"></textarea></div>
+                        <div><strong>Insulin (nüchtern)</strong></div>
+                        <div><input type="checkbox" class="hausarzt-check"></div>
+                        <div><input type="number" class="biomarker-input cost-input" value="16.76" step="0.01"></div>
+                        <div><input type="text" class="biomarker-input" value="&lt;10 mU/L"></div>
+                        <div><input type="text" class="biomarker-input" value="&gt;15 mU/L"></div>
+                        <div><input type="text" class="biomarker-input value-input"></div>
+                        <div><input type="text" class="biomarker-input supplement-input" placeholder="Keine direkte Einnahme"></div>
+                        <div><input type="text" class="biomarker-input" value="Fasten, Low Carb, Berberine"></div>
+                        <div><input type="text" class="biomarker-input notes-input" placeholder="Notizen..."></div>
                     </div>
                     <div class="biomarker-row">
-                        <div data-label="Parameter">Anti-Xa Aktivität (spezifisch für Apixaban)</div>
-                        <div data-label="Hausarzt"><input type="checkbox" class="hausarzt-check"></div>
-                        <div data-label="Kosten"><input type="number" class="cost-input" value="45.00" step="0.01"></div>
-                        <div data-label="Zielwert"><input type="text" value="50-250 ng/ml (2-4h nach Dosis)</div>
-                        <div data-label="Kritisch"><input type="text" value=">400 ng/ml"></div>
-                        <div data-label="Mein Wert"><input type="text" class="my-value"></div>
-                        <div data-label="Aktuelle Einnahme"><input type="text" class="current-intake"></div>
-                        <div data-label="Behandlung"><input type="text" value="Bei Dosisanpassung oder Interaktionen"></div>
-                        <div data-label="Notizen"><textarea rows="1"></textarea></div>
-                    </div>
-                    <div class="biomarker-row">
-                        <div data-label="Parameter">Thrombozytenzahl</div>
-                        <div data-label="Hausarzt"><input type="checkbox" class="hausarzt-check" checked></div>
-                        <div data-label="Kosten"><input type="number" class="cost-input" value="4.20" step="0.01"></div>
-                        <div data-label="Zielwert"><input type="text" value="150-400 k/µl</div>
-                        <div data-label="Kritisch"><input type="text" value="<100 k/µl"></div>
-                        <div data-label="Mein Wert"><input type="text" class="my-value"></div>
-                        <div data-label="Aktuelle Einnahme"><input type="text" class="current-intake"></div>
-                        <div data-label="Behandlung"><input type="text" value="Regelmäßige Kontrolle - Blutungsrisiko"></div>
-                        <div data-label="Notizen"><textarea rows="1"></textarea></div>
-                    </div>
-                    <div class="biomarker-row">
-                        <div data-label="Parameter">D-Dimere</div>
-                        <div data-label="Hausarzt"><input type="checkbox" class="hausarzt-check" checked></div>
-                        <div data-label="Kosten"><input type="number" class="cost-input" value="25.00" step="0.01"></div>
-                        <div data-label="Zielwert"><input type="text" value="<500 ng/ml</div>
-                        <div data-label="Kritisch"><input type="text" value=">1000 ng/ml"></div>
-                        <div data-label="Mein Wert"><input type="text" class="my-value"></div>
-                        <div data-label="Aktuelle Einnahme"><input type="text" class="current-intake"></div>
-                        <div data-label="Behandlung"><input type="text" value="Thrombose-Monitoring unter Eliquis"></div>
-                        <div data-label="Notizen"><textarea rows="1"></textarea></div>
+                        <div><strong>HOMA-IR Index</strong></div>
+                        <div><input type="checkbox" class="hausarzt-check"></div>
+                        <div><input type="number" class="biomarker-input cost-input" value="0.00" step="0.01"></div>
+                        <div><input type="text" class="biomarker-input" value="&lt;2.0"></div>
+                        <div><input type="text" class="biomarker-input" value="&gt;3.0"></div>
+                        <div><input type="text" class="biomarker-input value-input"></div>
+                        <div><input type="text" class="biomarker-input supplement-input" placeholder="Berechnet aus Glukose &amp; Insulin"></div>
+                        <div><input type="text" class="biomarker-input" value="Insulin Sensitivity verbessern"></div>
+                        <div><input type="text" class="biomarker-input notes-input" placeholder="Notizen..."></div>
                     </div>
                 </div>
             </div>
 
-            <!-- Category 8: Erweiterte Biomarker -->
-            <div class="category" data-category="erweitert">
-                <div class="category-header" onclick="toggleCategory('erweitert')" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);">
+            <!-- Category 8: ELIQUIS Monitoring -->
+            <div class="category-content">
+                <div class="category-header category-8" onclick="toggleCategory(&#39;cat8&#39;)">
                     <div class="flex justify-between items-center">
-                        <div>
-                            <i class="fas fa-microscope"></i>
-                            8. Erweiterte Blueprint Biomarker
-                        </div>
+                        <span><i class="fas fa-shield-alt mr-2"></i>8. ELIQUIS Monitoring &amp; Safety</span>
                         <div class="flex items-center space-x-4">
-                            <span class="category-cost" id="cost-erweitert">€0,00</span>
-                            <i class="fas fa-chevron-down transition-transform" id="icon-erweitert"></i>
+                            <span class="category-cost" id="cat8-cost">€40.00</span>
+                            <i class="fas fa-chevron-down transition-transform" id="cat8-icon"></i>
                         </div>
                     </div>
                 </div>
-                <div class="category-content" id="content-erweitert" style="display: none;">
-                    <div class="biomarker-row biomarker-header">
+                <div class="category-body hidden" id="cat8-content">
+                    <div class="biomarker-row font-semibold bg-gray-100">
                         <div>Parameter</div>
                         <div>Hausarzt</div>
                         <div>Kosten (€)</div>
@@ -885,283 +698,368 @@
                         <div>Kritisch</div>
                         <div>Mein Wert</div>
                         <div>Aktuelle Einnahme</div>
-                        <div>Empf. Behandlung</div>
+                        <div>Behandlung</div>
                         <div>Notizen</div>
                     </div>
                     <div class="biomarker-row">
-                        <div data-label="Parameter">Apolipoprotein B (ApoB)</div>
-                        <div data-label="Hausarzt"><input type="checkbox" class="hausarzt-check"></div>
-                        <div data-label="Kosten"><input type="number" class="cost-input" value="35.00" step="0.01"></div>
-                        <div data-label="Zielwert"><input type="text" value="<90 mg/dl (optimal <80)</div>
-                        <div data-label="Kritisch"><input type="text" value=">120 mg/dl"></div>
-                        <div data-label="Mein Wert"><input type="text" class="my-value"></div>
-                        <div data-label="Aktuelle Einnahme"><input type="text" class="current-intake"></div>
-                        <div data-label="Behandlung"><input type="text" value="Statine, PCSK9-Inhibitoren, Plant Sterols"></div>
-                        <div data-label="Notizen"><textarea rows="1"></textarea></div>
+                        <div><strong>Quick/INR</strong></div>
+                        <div><input type="checkbox" class="hausarzt-check" checked=""></div>
+                        <div><input type="number" class="biomarker-input cost-input" value="8.50" step="0.01"></div>
+                        <div><input type="text" class="biomarker-input" value="0.9-1.1 INR"></div>
+                        <div><input type="text" class="biomarker-input" value="&gt;2.0 oder &lt;0.8 INR"></div>
+                        <div><input type="text" class="biomarker-input value-input"></div>
+                        <div><input type="text" class="biomarker-input supplement-input" value="K2: 60µg täglich (WICHTIG!)"></div>
+                        <div><input type="text" class="biomarker-input" value="K2 Dosierung anpassen, regelmäßig kontrollieren"></div>
+                        <div><input type="text" class="biomarker-input notes-input" placeholder="ELIQUIS Monitoring..."></div>
                     </div>
                     <div class="biomarker-row">
-                        <div data-label="Parameter">BDNF (Brain-Derived Neurotrophic Factor)</div>
-                        <div data-label="Hausarzt"><input type="checkbox" class="hausarzt-check"></div>
-                        <div data-label="Kosten"><input type="number" class="cost-input" value="145.00" step="0.01"></div>
-                        <div data-label="Zielwert"><input type="text" value=">25 ng/ml</div>
-                        <div data-label="Kritisch"><input type="text" value="<15 ng/ml"></div>
-                        <div data-label="Mein Wert"><input type="text" class="my-value"></div>
-                        <div data-label="Aktuelle Einnahme"><input type="text" class="current-intake"></div>
-                        <div data-label="Behandlung"><input type="text" value="Exercise, Omega-3, Intermittent Fasting"></div>
-                        <div data-label="Notizen"><textarea rows="1"></textarea></div>
+                        <div><strong>aPTT</strong></div>
+                        <div><input type="checkbox" class="hausarzt-check" checked=""></div>
+                        <div><input type="number" class="biomarker-input cost-input" value="6.50" step="0.01"></div>
+                        <div><input type="text" class="biomarker-input" value="25-35 sec"></div>
+                        <div><input type="text" class="biomarker-input" value="&gt;45 sec"></div>
+                        <div><input type="text" class="biomarker-input value-input"></div>
+                        <div><input type="text" class="biomarker-input supplement-input" placeholder="Keine direkte Beeinflussung"></div>
+                        <div><input type="text" class="biomarker-input" value="Bei Anomalien Arzt konsultieren"></div>
+                        <div><input type="text" class="biomarker-input notes-input" placeholder="Gerinnungsmonitoring..."></div>
                     </div>
                     <div class="biomarker-row">
-                        <div data-label="Parameter">Antinuclear Antibodies (ANA) Screen</div>
-                        <div data-label="Hausarzt"><input type="checkbox" class="hausarzt-check" checked></div>
-                        <div data-label="Kosten"><input type="number" class="cost-input" value="25.00" step="0.01"></div>
-                        <div data-label="Zielwert"><input type="text" value="Negativ (<1:80)</div>
-                        <div data-label="Kritisch"><input type="text" value="Positiv (>1:160)</div>
-                        <div data-label="Mein Wert"><input type="text" class="my-value"></div>
-                        <div data-label="Aktuelle Einnahme"><input type="text" class="current-intake"></div>
-                        <div data-label="Behandlung"><input type="text" value="Autoimmun-Screening bei Positivität"></div>
-                        <div data-label="Notizen"><textarea rows="1"></textarea></div>
+                        <div><strong>Anti-Xa Activity</strong></div>
+                        <div><input type="checkbox" class="hausarzt-check"></div>
+                        <div><input type="number" class="biomarker-input cost-input" value="25.00" step="0.01"></div>
+                        <div><input type="text" class="biomarker-input" value="50-250 ng/ml"></div>
+                        <div><input type="text" class="biomarker-input" value="&gt;300 ng/ml"></div>
+                        <div><input type="text" class="biomarker-input value-input"></div>
+                        <div><input type="text" class="biomarker-input supplement-input" placeholder="Apixaban Wirkung"></div>
+                        <div><input type="text" class="biomarker-input" value="ELIQUIS Dosierung überprüfen"></div>
+                        <div><input type="text" class="biomarker-input notes-input" placeholder="Spezialtest..."></div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Category 9: Nutrient Status -->
+            <div class="category-content">
+                <div class="category-header category-9" onclick="toggleCategory(&#39;cat9&#39;)">
+                    <div class="flex justify-between items-center">
+                        <span><i class="fas fa-leaf mr-2"></i>9. Advanced Nutrient Status</span>
+                        <div class="flex items-center space-x-4">
+                            <span class="category-cost" id="cat9-cost">€140.17</span>
+                            <i class="fas fa-chevron-down transition-transform" id="cat9-icon"></i>
+                        </div>
+                    </div>
+                </div>
+                <div class="category-body hidden" id="cat9-content">
+                    <div class="biomarker-row font-semibold bg-gray-100">
+                        <div>Parameter</div>
+                        <div>Hausarzt</div>
+                        <div>Kosten (€)</div>
+                        <div>Zielwert</div>
+                        <div>Kritisch</div>
+                        <div>Mein Wert</div>
+                        <div>Aktuelle Einnahme</div>
+                        <div>Behandlung</div>
+                        <div>Notizen</div>
                     </div>
                     <div class="biomarker-row">
-                        <div data-label="Parameter">Ferritin</div>
-                        <div data-label="Hausarzt"><input type="checkbox" class="hausarzt-check" checked></div>
-                        <div data-label="Kosten"><input type="number" class="cost-input" value="16.76" step="0.01"></div>
-                        <div data-label="Zielwert"><input type="text" value="50-150 ng/ml (Männer)</div>
-                        <div data-label="Kritisch"><input type="text" value="<30 oder >300"></div>
-                        <div data-label="Mein Wert"><input type="text" class="my-value"></div>
-                        <div data-label="Aktuelle Einnahme"><input type="text" class="current-intake"></div>
-                        <div data-label="Behandlung"><input type="text" value="Eisen-Supplementierung oder Aderlass"></div>
-                        <div data-label="Notizen"><textarea rows="1"></textarea></div>
+                        <div><strong>Vitamin D3 (25-OH)</strong></div>
+                        <div><input type="checkbox" class="hausarzt-check" checked=""></div>
+                        <div><input type="number" class="biomarker-input cost-input" value="32.17" step="0.01"></div>
+                        <div><input type="text" class="biomarker-input" value="50-80 ng/ml"></div>
+                        <div><input type="text" class="biomarker-input" value="&lt;30 ng/ml"></div>
+                        <div><input type="text" class="biomarker-input value-input"></div>
+                        <div><input type="text" class="biomarker-input supplement-input" value="D3: 3000 IU täglich"></div>
+                        <div><input type="text" class="biomarker-input" value="Dosierung basierend auf Laborwert"></div>
+                        <div><input type="text" class="biomarker-input notes-input" placeholder="Mit K2 kombinieren..."></div>
                     </div>
                     <div class="biomarker-row">
-                        <div data-label="Parameter">PSA (Prostataspezifisches Antigen)</div>
-                        <div data-label="Hausarzt"><input type="checkbox" class="hausarzt-check" checked></div>
-                        <div data-label="Kosten"><input type="number" class="cost-input" value="20.11" step="0.01"></div>
-                        <div data-label="Zielwert"><input type="text" value="<1.0 ng/ml (<50 Jahre)</div>
-                        <div data-label="Kritisch"><input type="text" value=">4.0 ng/ml"></div>
-                        <div data-label="Mein Wert"><input type="text" class="my-value"></div>
-                        <div data-label="Aktuelle Einnahme"><input type="text" class="current-intake"></div>
-                        <div data-label="Behandlung"><input type="text" value="Saw Palmetto, Lycopin, regelmäßige Kontrolle"></div>
-                        <div data-label="Notizen"><textarea rows="1"></textarea></div>
+                        <div><strong>Vitamin K2 (MK-7)</strong></div>
+                        <div><input type="checkbox" class="hausarzt-check"></div>
+                        <div><input type="number" class="biomarker-input cost-input" value="45.00" step="0.01"></div>
+                        <div><input type="text" class="biomarker-input" value="1-8 ng/ml"></div>
+                        <div><input type="text" class="biomarker-input" value="&lt;0.5 ng/ml"></div>
+                        <div><input type="text" class="biomarker-input value-input"></div>
+                        <div><input type="text" class="biomarker-input supplement-input" value="K2: 60µg täglich"></div>
+                        <div><input type="text" class="biomarker-input" value="ELIQUIS: Dosierung überwachen!"></div>
+                        <div><input type="text" class="biomarker-input notes-input" placeholder="ELIQUIS Interaktion beachten..."></div>
                     </div>
                     <div class="biomarker-row">
-                        <div data-label="Parameter">Lead (Blei)</div>
-                        <div data-label="Hausarzt"><input type="checkbox" class="hausarzt-check"></div>
-                        <div data-label="Kosten"><input type="number" class="cost-input" value="35.00" step="0.01"></div>
-                        <div data-label="Zielwert"><input type="text" value="<5 µg/dl</div>
-                        <div data-label="Kritisch"><input type="text" value=">10 µg/dl"></div>
-                        <div data-label="Mein Wert"><input type="text" class="my-value"></div>
-                        <div data-label="Aktuelle Einnahme"><input type="text" class="current-intake"></div>
-                        <div data-label="Behandlung"><input type="text" value="Chelation-Therapie bei erhöhten Werten"></div>
-                        <div data-label="Notizen"><textarea rows="1"></textarea></div>
+                        <div><strong>Magnesium (intracellular)</strong></div>
+                        <div><input type="checkbox" class="hausarzt-check"></div>
+                        <div><input type="number" class="biomarker-input cost-input" value="35.00" step="0.01"></div>
+                        <div><input type="text" class="biomarker-input" value="4.2-6.8 mg/dl"></div>
+                        <div><input type="text" class="biomarker-input" value="&lt;4.0 mg/dl"></div>
+                        <div><input type="text" class="biomarker-input value-input"></div>
+                        <div><input type="text" class="biomarker-input supplement-input" value="Magnesium: 375mg täglich"></div>
+                        <div><input type="text" class="biomarker-input" value="Glycinat/Bisglycinat bevorzugt"></div>
+                        <div><input type="text" class="biomarker-input notes-input" placeholder="Besser als Serum-Mg..."></div>
+                    </div>
+                    <div class="biomarker-row">
+                        <div><strong>Zink/Kupfer Ratio</strong></div>
+                        <div><input type="checkbox" class="hausarzt-check"></div>
+                        <div><input type="number" class="biomarker-input cost-input" value="28.00" step="0.01"></div>
+                        <div><input type="text" class="biomarker-input" value="8:1 - 12:1"></div>
+                        <div><input type="text" class="biomarker-input" value="&gt;15:1 oder &lt;6:1"></div>
+                        <div><input type="text" class="biomarker-input value-input"></div>
+                        <div><input type="text" class="biomarker-input supplement-input" value="Zink: 10mg täglich"></div>
+                        <div><input type="text" class="biomarker-input" value="Balance wichtiger als Einzelwerte"></div>
+                        <div><input type="text" class="biomarker-input notes-input" placeholder="Kupfer-Antagonismus..."></div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Category 10: Detoxification & Heavy Metals -->
+            <div class="category-content">
+                <div class="category-header category-10" onclick="toggleCategory(&#39;cat10&#39;)">
+                    <div class="flex justify-between items-center">
+                        <span><i class="fas fa-filter mr-2"></i>10. Detoxification &amp; Heavy Metals</span>
+                        <div class="flex items-center space-x-4">
+                            <span class="category-cost" id="cat10-cost">€50.00</span>
+                            <i class="fas fa-chevron-down transition-transform" id="cat10-icon"></i>
+                        </div>
+                    </div>
+                </div>
+                <div class="category-body hidden" id="cat10-content">
+                    <div class="biomarker-row font-semibold bg-gray-100">
+                        <div>Parameter</div>
+                        <div>Hausarzt</div>
+                        <div>Kosten (€)</div>
+                        <div>Zielwert</div>
+                        <div>Kritisch</div>
+                        <div>Mein Wert</div>
+                        <div>Aktuelle Einnahme</div>
+                        <div>Behandlung</div>
+                        <div>Notizen</div>
+                    </div>
+                    <div class="biomarker-row">
+                        <div><strong>Lead (Blei)</strong></div>
+                        <div><input type="checkbox" class="hausarzt-check"></div>
+                        <div><input type="number" class="biomarker-input cost-input" value="25.00" step="0.01"></div>
+                        <div><input type="text" class="biomarker-input" value="&lt;5 µg/dl"></div>
+                        <div><input type="text" class="biomarker-input" value="&gt;10 µg/dl"></div>
+                        <div><input type="text" class="biomarker-input value-input"></div>
+                        <div><input type="text" class="biomarker-input supplement-input" placeholder="Keine direkte Einnahme"></div>
+                        <div><input type="text" class="biomarker-input" value="Chelation Therapy, Sauna"></div>
+                        <div><input type="text" class="biomarker-input notes-input" placeholder="Environmental exposure..."></div>
+                    </div>
+                    <div class="biomarker-row">
+                        <div><strong>Mercury (Quecksilber)</strong></div>
+                        <div><input type="checkbox" class="hausarzt-check"></div>
+                        <div><input type="number" class="biomarker-input cost-input" value="25.00" step="0.01"></div>
+                        <div><input type="text" class="biomarker-input" value="&lt;5 µg/L"></div>
+                        <div><input type="text" class="biomarker-input" value="&gt;10 µg/L"></div>
+                        <div><input type="text" class="biomarker-input value-input"></div>
+                        <div><input type="text" class="biomarker-input supplement-input" placeholder="Keine direkte Einnahme"></div>
+                        <div><input type="text" class="biomarker-input" value="Cilantro, Chlorella, DMSA"></div>
+                        <div><input type="text" class="biomarker-input notes-input" placeholder="Fish consumption..."></div>
                     </div>
                 </div>
             </div>
         </div>
 
-        <!-- Add New Category Button -->
-        <div class="text-center mb-8">
-            <button onclick="addNewCategory()" class="bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 px-6 rounded-lg transition duration-300">
-                <i class="fas fa-plus-circle mr-2"></i>
-                Neue Kategorie hinzufügen
+        <!-- Cost Summary -->
+        <div class="cost-summary">
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                <div class="text-center">
+                    <h3 class="text-lg font-bold text-gray-700">Tests Ausgefüllt</h3>
+                    <p class="text-2xl font-bold text-blue-600" id="completedTests">0</p>
+                </div>
+                <div class="text-center">
+                    <h3 class="text-lg font-bold text-gray-700">Geschätzte Kosten</h3>
+                    <p class="text-2xl font-bold text-green-600" id="totalCost">€1285.30</p>
+                </div>
+                <div class="text-center">
+                    <h3 class="text-lg font-bold text-gray-700">Durchschnitt pro Test</h3>
+                    <p class="text-2xl font-bold text-purple-600" id="avgCost">€38.95</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Add Category Button -->
+        <div class="text-center mt-8">
+            <button onclick="addNewCategory()" class="bg-blue-500 hover:bg-blue-600 text-white font-bold py-3 px-6 rounded-lg">
+                <i class="fas fa-plus mr-2"></i>Neue Kategorie hinzufügen
             </button>
-        </div>
-
-        <!-- Footer -->
-        <div class="text-center text-gray-500 text-sm mt-12">
-            <p>BLUEPRINT Health Optimizer - Entwickelt für systematische Gesundheits-Optimierung</p>
-            <p class="mt-2">⚠️ Dieses Tool ersetzt keine medizinische Beratung. Konsultiere immer einen Arzt.</p>
-            <p class="mt-2">📧 Bei Fragen zu Eliquis-Interaktionen: Sofort Arzt kontaktieren!</p>
         </div>
     </div>
 
     <script>
-        // Auto-Save and Data Management
-        let data = {};
+        let categoryCount = 10;
 
-        // Load data from localStorage on page load
-        function loadData() {
-            const savedData = localStorage.getItem('blueprint-health-data');
-            if (savedData) {
-                data = JSON.parse(savedData);
-                restoreInputs();
-            }
-            updateCosts();
-            updateProgress();
-            updateSupplementStack();
-        }
-
-        // Save data to localStorage
-        function saveData() {
-            localStorage.setItem('blueprint-health-data', JSON.stringify(data));
-        }
-
-        // Restore all inputs from saved data
-        function restoreInputs() {
-            // Restore all input values
-            document.querySelectorAll('input, textarea').forEach(input => {
-                const key = getInputKey(input);
-                if (data[key] !== undefined) {
-                    if (input.type === 'checkbox') {
-                        input.checked = data[key];
-                    } else {
-                        input.value = data[key];
-                    }
-                }
-            });
-        }
-
-        // Get unique key for input element
-        function getInputKey(input) {
-            const row = input.closest('.biomarker-row');
-            const category = input.closest('.category')?.dataset.category || 'general';
-            const parameterName = row?.querySelector('[data-label="Parameter"]')?.textContent || 'unknown';
-            const inputType = input.closest('[data-label]')?.dataset.label || input.className;
-            return `${category}-${parameterName}-${inputType}`;
-        }
-
-        // Auto-save on input change
-        function setupAutoSave() {
-            document.addEventListener('input', function(e) {
-                if (e.target.matches('input, textarea')) {
-                    const key = getInputKey(e.target);
-                    if (e.target.type === 'checkbox') {
-                        data[key] = e.target.checked;
-                    } else {
-                        data[key] = e.target.value;
-                    }
-                    saveData();
-                    
-                    // Update costs if it's a cost input
-                    if (e.target.classList.contains('cost-input')) {
-                        updateCosts();
-                    }
-                    
-                    // Update progress if it's a value input
-                    if (e.target.classList.contains('my-value')) {
-                        updateProgress();
-                    }
-                    
-                    // Update supplement stack if it's current intake
-                    if (e.target.classList.contains('current-intake')) {
-                        updateSupplementStack();
-                    }
-                }
-            });
-        }
-
-        // Toggle category visibility
-        function toggleCategory(categoryId) {
-            const content = document.getElementById(`content-${categoryId}`);
-            const icon = document.getElementById(`icon-${categoryId}`);
+        // Auto-save functionality
+        function saveToLocalStorage() {
+            const data = {};
             
-            if (content.style.display === 'none') {
-                content.style.display = 'block';
-                icon.style.transform = 'rotate(180deg)';
-            } else {
-                content.style.display = 'none';
-                icon.style.transform = 'rotate(0deg)';
-            }
+            // Save all input values
+            document.querySelectorAll('input').forEach(input => {
+                if (input.id || input.name || input.className.includes('biomarker-input')) {
+                    const key = input.id || input.name || `input_${Array.from(document.querySelectorAll('input')).indexOf(input)}`;
+                    if (input.type === 'checkbox') {
+                        data[key] = input.checked;
+                    } else {
+                        data[key] = input.value;
+                    }
+                }
+            });
+            
+            localStorage.setItem('healthOptimizerPro', JSON.stringify(data));
         }
 
-        // Update cost calculations
-        function updateCosts() {
-            let totalCost = 0;
-            let hausarztCost = 0;
-            let privatCost = 0;
-
-            document.querySelectorAll('.category').forEach(category => {
-                let categoryCost = 0;
-                const categoryId = category.dataset.category;
+        function loadFromLocalStorage() {
+            const saved = localStorage.getItem('healthOptimizerPro');
+            if (saved) {
+                const data = JSON.parse(saved);
                 
-                category.querySelectorAll('.biomarker-row').forEach(row => {
-                    if (row.classList.contains('biomarker-header')) return;
-                    
-                    const costInput = row.querySelector('.cost-input');
-                    const hausarztCheck = row.querySelector('.hausarzt-check');
-                    
-                    if (costInput && costInput.value) {
-                        const cost = parseFloat(costInput.value) || 0;
-                        categoryCost += cost;
-                        totalCost += cost;
-                        
-                        if (hausarztCheck && hausarztCheck.checked) {
-                            hausarztCost += cost;
+                document.querySelectorAll('input').forEach(input => {
+                    const key = input.id || input.name || `input_${Array.from(document.querySelectorAll('input')).indexOf(input)}`;
+                    if (data.hasOwnProperty(key)) {
+                        if (input.type === 'checkbox') {
+                            input.checked = data[key];
                         } else {
-                            privatCost += cost;
+                            input.value = data[key];
                         }
                     }
                 });
                 
-                // Update category cost display
-                const categoryDisplay = document.getElementById(`cost-${categoryId}`);
-                if (categoryDisplay) {
-                    categoryDisplay.textContent = `€${categoryCost.toFixed(2)}`;
-                }
-            });
-
-            // Update total cost displays
-            document.getElementById('total-cost').textContent = `€${totalCost.toFixed(2)}`;
-            document.getElementById('hausarzt-cost').textContent = `€${hausarztCost.toFixed(2)}`;
-            document.getElementById('privat-cost').textContent = `€${privatCost.toFixed(2)}`;
+                updateAllCalculations();
+            }
         }
 
-        // Update progress tracking
+        // Cost calculation functions
+        function calculateCategoryCost(categoryId) {
+            const category = document.getElementById(categoryId + '-content');
+            if (!category) return 0;
+            
+            let total = 0;
+            const costInputs = category.querySelectorAll('.cost-input');
+            
+            costInputs.forEach(input => {
+                const value = parseFloat(input.value) || 0;
+                total += value;
+            });
+            
+            // Update category cost display
+            const costDisplay = document.getElementById(categoryId + '-cost');
+            if (costDisplay) {
+                costDisplay.textContent = '€' + total.toFixed(2);
+            }
+            
+            return total;
+        }
+
+        function updateTotalCosts() {
+            let grandTotal = 0;
+            
+            // Calculate total for all categories
+            for (let i = 1; i <= categoryCount; i++) {
+                grandTotal += calculateCategoryCost('cat' + i);
+            }
+            
+            // Update total cost display
+            const totalCostElement = document.getElementById('totalCost');
+            if (totalCostElement) {
+                totalCostElement.textContent = '€' + grandTotal.toFixed(2);
+            }
+            
+            // Update average cost
+            const completedCount = document.querySelectorAll('.value-input').length;
+            const avgCostElement = document.getElementById('avgCost');
+            if (avgCostElement && completedCount > 0) {
+                avgCostElement.textContent = '€' + (grandTotal / completedCount).toFixed(2);
+            }
+        }
+
         function updateProgress() {
-            const totalParameters = document.querySelectorAll('.my-value').length;
-            const filledParameters = Array.from(document.querySelectorAll('.my-value')).filter(input => input.value.trim() !== '').length;
+            const allValueInputs = document.querySelectorAll('.value-input');
+            const filledInputs = Array.from(allValueInputs).filter(input => input.value.trim() !== '');
             
-            const percentage = totalParameters > 0 ? Math.round((filledParameters / totalParameters) * 100) : 0;
+            const percentage = allValueInputs.length > 0 ? (filledInputs.length / allValueInputs.length) * 100 : 0;
             
-            document.getElementById('progress-text').textContent = `${percentage}% (${filledParameters}/${totalParameters} Parameter)`;
-            document.getElementById('progress-fill').style.width = `${percentage}%`;
+            document.getElementById('progressBar').style.width = percentage + '%';
+            document.getElementById('progressText').textContent = 
+                Math.round(percentage) + '% (' + filledInputs.length + '/' + allValueInputs.length + ' Tests)';
+            document.getElementById('completedTests').textContent = filledInputs.length;
         }
 
-        // Update supplement stack display
         function updateSupplementStack() {
-            // Find specific supplement intakes and update display
-            const intakeInputs = document.querySelectorAll('.current-intake');
+            // Update supplement stack based on current supplement inputs
+            const supplementInputs = document.querySelectorAll('.supplement-input');
+            const stacks = {
+                'd3': 'D3: 3000 IU täglich',
+                'k2': 'K2: 60µg täglich', 
+                'mg': 'Magnesium: 375mg täglich',
+                'zn': 'Zink: 10mg täglich',
+                'b6': 'B6: 1,4mg täglich'
+            };
             
-            intakeInputs.forEach(input => {
-                const parameterName = input.closest('.biomarker-row')?.querySelector('[data-label="Parameter"]')?.textContent || '';
-                
-                if (parameterName.includes('Vitamin D3') && input.value) {
-                    document.getElementById('current-d3').textContent = input.value;
-                } else if (parameterName.includes('Vitamin K2') && input.value) {
-                    document.getElementById('current-k2').textContent = input.value;
-                } else if (parameterName.includes('Magnesium') && input.value) {
-                    document.getElementById('current-mg').textContent = input.value;
-                } else if (parameterName.includes('Zink') && input.value) {
-                    document.getElementById('current-zn').textContent = input.value;
-                } else if (parameterName.includes('Vitamin B6') && input.value) {
-                    document.getElementById('current-b6').textContent = input.value;
+            supplementInputs.forEach(input => {
+                if (input.value.toLowerCase().includes('d3')) {
+                    document.getElementById('d3-display').textContent = input.value;
+                }
+                if (input.value.toLowerCase().includes('k2')) {
+                    document.getElementById('k2-display').textContent = input.value;
+                }
+                if (input.value.toLowerCase().includes('magnesium')) {
+                    document.getElementById('mg-display').textContent = input.value;
+                }
+                if (input.value.toLowerCase().includes('zink')) {
+                    document.getElementById('zn-display').textContent = input.value;
+                }
+                if (input.value.toLowerCase().includes('b6')) {
+                    document.getElementById('b6-display').textContent = input.value;
                 }
             });
         }
 
-        // Add new category
+        function updateAllCalculations() {
+            updateTotalCosts();
+            updateProgress();
+            updateSupplementStack();
+        }
+
+        // Event listeners for real-time updates
+        function addEventListeners() {
+            // Add event listeners to all inputs
+            document.querySelectorAll('input').forEach(input => {
+                input.addEventListener('input', function() {
+                    saveToLocalStorage();
+                    updateAllCalculations();
+                });
+                
+                input.addEventListener('change', function() {
+                    saveToLocalStorage();
+                    updateAllCalculations();
+                });
+            });
+        }
+
+        function toggleCategory(categoryId) {
+            const content = document.getElementById(categoryId + '-content');
+            const icon = document.getElementById(categoryId + '-icon');
+            
+            if (content.classList.contains('hidden')) {
+                content.classList.remove('hidden');
+                icon.style.transform = 'rotate(180deg)';
+            } else {
+                content.classList.add('hidden');
+                icon.style.transform = 'rotate(0deg)';
+            }
+        }
+
         function addNewCategory() {
-            const categoryName = prompt('Name der neuen Kategorie:');
-            if (!categoryName) return;
-            
-            const categoryId = categoryName.toLowerCase().replace(/[^a-z0-9]/g, '');
-            const categoryCount = document.querySelectorAll('.category').length + 1;
-            
-            const categoryHTML = `
-                <div class="category" data-category="${categoryId}">
-                    <div class="category-header" onclick="toggleCategory('${categoryId}')" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);">
+            categoryCount++;
+            const categoryHtml = `
+                <div class="category-content">
+                    <div class="category-header category-${(categoryCount % 10) + 1}" onclick="toggleCategory('cat${categoryCount}')">
                         <div class="flex justify-between items-center">
-                            <div>
-                                <i class="fas fa-plus"></i>
-                                ${categoryCount}. ${categoryName}
-                            </div>
+                            <span><i class="fas fa-plus mr-2"></i>${categoryCount}. Neue Kategorie</span>
                             <div class="flex items-center space-x-4">
-                                <span class="category-cost" id="cost-${categoryId}">€0,00</span>
-                                <i class="fas fa-chevron-down transition-transform" id="icon-${categoryId}"></i>
+                                <span class="category-cost" id="cat${categoryCount}-cost">€0,00</span>
+                                <i class="fas fa-chevron-down transition-transform" id="cat${categoryCount}-icon"></i>
                             </div>
                         </div>
                     </div>
-                    <div class="category-content" id="content-${categoryId}" style="display: none;">
-                        <div class="biomarker-row biomarker-header">
+                    <div class="category-body hidden" id="cat${categoryCount}-content">
+                        <div class="biomarker-row font-semibold bg-gray-100">
                             <div>Parameter</div>
                             <div>Hausarzt</div>
                             <div>Kosten (€)</div>
@@ -1169,66 +1067,47 @@
                             <div>Kritisch</div>
                             <div>Mein Wert</div>
                             <div>Aktuelle Einnahme</div>
-                            <div>Empf. Behandlung</div>
+                            <div>Behandlung</div>
                             <div>Notizen</div>
                         </div>
-                        <div class="text-center p-4">
-                            <button onclick="addNewParameter('${categoryId}')" class="bg-green-600 hover:bg-green-700 text-white py-2 px-4 rounded">
-                                <i class="fas fa-plus mr-2"></i>Parameter hinzufügen
-                            </button>
+                        <div class="biomarker-row">
+                            <div><input type="text" class="biomarker-input" placeholder="Parameter Name"></div>
+                            <div><input type="checkbox" class="hausarzt-check"></div>
+                            <div><input type="number" class="biomarker-input cost-input" value="0.00" step="0.01"></div>
+                            <div><input type="text" class="biomarker-input" placeholder="Zielwert"></div>
+                            <div><input type="text" class="biomarker-input" placeholder="Kritischer Wert"></div>
+                            <div><input type="text" class="biomarker-input value-input"></div>
+                            <div><input type="text" class="biomarker-input supplement-input" placeholder="Aktuelle Einnahme"></div>
+                            <div><input type="text" class="biomarker-input" placeholder="Behandlung"></div>
+                            <div><input type="text" class="biomarker-input notes-input" placeholder="Notizen..."></div>
                         </div>
                     </div>
                 </div>
             `;
             
-            document.getElementById('categories-container').insertAdjacentHTML('beforeend', categoryHTML);
+            document.getElementById('categories').insertAdjacentHTML('beforeend', categoryHtml);
+            addEventListeners();
+            saveToLocalStorage();
         }
 
-        // Add new parameter to category
-        function addNewParameter(categoryId) {
-            const parameterName = prompt('Name des neuen Parameters:');
-            if (!parameterName) return;
-            
-            const parameterHTML = `
-                <div class="biomarker-row">
-                    <div data-label="Parameter">${parameterName}</div>
-                    <div data-label="Hausarzt"><input type="checkbox" class="hausarzt-check"></div>
-                    <div data-label="Kosten"><input type="number" class="cost-input" value="0.00" step="0.01"></div>
-                    <div data-label="Zielwert"><input type="text" value=""></div>
-                    <div data-label="Kritisch"><input type="text" value=""></div>
-                    <div data-label="Mein Wert"><input type="text" class="my-value"></div>
-                    <div data-label="Aktuelle Einnahme"><input type="text" class="current-intake"></div>
-                    <div data-label="Behandlung"><input type="text" value=""></div>
-                    <div data-label="Notizen"><textarea rows="1"></textarea></div>
-                </div>
-            `;
-            
-            const category = document.querySelector(`[data-category="${categoryId}"]`);
-            const addButton = category.querySelector('.text-center');
-            addButton.insertAdjacentHTML('beforebegin', parameterHTML);
-        }
-
-        // Initialize the application
+        // Initialize on page load
         document.addEventListener('DOMContentLoaded', function() {
-            loadData();
-            setupAutoSave();
+            loadFromLocalStorage();
+            addEventListeners();
+            updateAllCalculations();
             
-            // Initial cost calculation
-            updateCosts();
-            updateProgress();
-            updateSupplementStack();
-            
-            console.log('BLUEPRINT Health Optimizer loaded successfully!');
+            // Open first category by default
+            toggleCategory('cat1');
         });
     </script>
-</body>
-</html>
+
+
     <script id="html_badge_script1">
         window.__genspark_remove_badge_link = "https://www.genspark.ai/api/html_badge/" +
-            "remove_badge?token=To%2FBnjzloZ3UfQdcSaYfDlAv5Xg%2BbK26vt5Ulpymamje88EtWRt4v2hLVp4Mpp4O4XcWVCuF13mRg%2Bqja%2FZRJ9LuMbovZwS8KesL7SlQ6y7WqCtF4VS9IgiOTulqJRwtvx5HBUU65GQ5%2BWRSGa6a0dRlz%2BG9ldHiY%2F%2FkyCzPIxc0togHcLYe6tv6FFL3LitSjqhBDUg6%2BBPh1xlA9386%2FZUI8CqLhYNhVmuRwkvuOPzp1BodZKoLSnPBPHpLFal8GswkeN7QHeYDm1acTqlMp6wa5BeRx9nLvsPLpv4yHLsaGXWRZq1hDpLh21Kt5%2Fmx0FmkU5W01n19EMhzPedo2T9zXmM1ZuHQWiY1nga0Fs%2FoJe1CIaY2ogsgpJy%2BOu12tLt57D5BP0qhDjmoCh0szwuIzNzZzz2AEds4dSrOdg9DGrJk0bkLdos%2BHneLkXqDWe21E8ICsrGDqBq4%2FprIY99jQ5Htuf%2FgXT71RNYAqYEG8kN4KIL1UzTxCJis0u06omacduHxO9mIEwVB1BPTn%2BwjBt%2BqAA3TYjwzy%2FHAtvQ%3D";
+            "remove_badge?token=To%2FBnjzloZ3UfQdcSaYfDiN9hKiuizKWjVwIzORzoBFah1x6esqKxukJml3GANCKzbniliz4BEhC7c4rJWeifWo6L4ZBm95KtxBDjRkMZAHYxz%2FGtjA3S8YP%2Blblt81C1jHe2OPV4U%2FnNSKwncWEYDZPcx3HnmAGTSFMOA4p7HznuCLm3XGcoF00pB2PIpzH6I022PJd%2FHg7d750DvzvJAH2sXdnGHCXpdFG2k%2B7R9TqxeX3E%2BUc4WhRCpLHOJnxe2dJcjrNLT%2B3zsApykqgPnv3TXezfMvxBqy%2FKS5bHckhAaIk2KUbh9JNMa7vFFNEd4hyZy%2BErDnbj7Nr7ihL3N5yD%2FvqsLLAhu6JMJ5QCUbauLuATvqieL8cUjO0sVmaALWT%2FQI4oh2UeNgZnkqmjyaU%2BYtYy4eMCZTtyKDG8510w%2BFJf05sptHdVscyPAwXUGpd23FtKM5kji0euK81jfr1v3NvYF7Y0AK8ZWnUU0wRl36fBXnmOtyITrArZ2PPuhi%2F0XJ44YtdUcsRpRvQmnTRTcYUIpUb7Y%2BIQst%2Bsxg%3D";
         window.__genspark_locale = "de-DE";
-        window.__genspark_token = "To/BnjzloZ3UfQdcSaYfDlAv5Xg+bK26vt5Ulpymamje88EtWRt4v2hLVp4Mpp4O4XcWVCuF13mRg+qja/ZRJ9LuMbovZwS8KesL7SlQ6y7WqCtF4VS9IgiOTulqJRwtvx5HBUU65GQ5+WRSGa6a0dRlz+G9ldHiY//kyCzPIxc0togHcLYe6tv6FFL3LitSjqhBDUg6+BPh1xlA9386/ZUI8CqLhYNhVmuRwkvuOPzp1BodZKoLSnPBPHpLFal8GswkeN7QHeYDm1acTqlMp6wa5BeRx9nLvsPLpv4yHLsaGXWRZq1hDpLh21Kt5/mx0FmkU5W01n19EMhzPedo2T9zXmM1ZuHQWiY1nga0Fs/oJe1CIaY2ogsgpJy+Ou12tLt57D5BP0qhDjmoCh0szwuIzNzZzz2AEds4dSrOdg9DGrJk0bkLdos+HneLkXqDWe21E8ICsrGDqBq4/prIY99jQ5Htuf/gXT71RNYAqYEG8kN4KIL1UzTxCJis0u06omacduHxO9mIEwVB1BPTn+wjBt+qAA3TYjwzy/HAtvQ=";
+        window.__genspark_token = "To/BnjzloZ3UfQdcSaYfDiN9hKiuizKWjVwIzORzoBFah1x6esqKxukJml3GANCKzbniliz4BEhC7c4rJWeifWo6L4ZBm95KtxBDjRkMZAHYxz/GtjA3S8YP+lblt81C1jHe2OPV4U/nNSKwncWEYDZPcx3HnmAGTSFMOA4p7HznuCLm3XGcoF00pB2PIpzH6I022PJd/Hg7d750DvzvJAH2sXdnGHCXpdFG2k+7R9TqxeX3E+Uc4WhRCpLHOJnxe2dJcjrNLT+3zsApykqgPnv3TXezfMvxBqy/KS5bHckhAaIk2KUbh9JNMa7vFFNEd4hyZy+ErDnbj7Nr7ihL3N5yD/vqsLLAhu6JMJ5QCUbauLuATvqieL8cUjO0sVmaALWT/QI4oh2UeNgZnkqmjyaU+YtYy4eMCZTtyKDG8510w+FJf05sptHdVscyPAwXUGpd23FtKM5kji0euK81jfr1v3NvYF7Y0AK8ZWnUU0wRl36fBXnmOtyITrArZ2PPuhi/0XJ44YtdUcsRpRvQmnTRTcYUIpUb7Y+IQst+sxg=";
     </script>
     
-    <script id="html_notice_dialog_script" src="https://www.genspark.ai/notice_dialog.js"></script>
-    
+    <script id="html_notice_dialog_script" src="./index_files/notice_dialog.js.Download"></script>
+    </body></html>
